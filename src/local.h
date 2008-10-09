@@ -1187,7 +1187,7 @@ char *rptfmt2(char *);
 char *rptfmti(char *, unsigned short int);
 char *rptfmtni(char *, unsigned short int);
  
-char *strnstr(char *, char *, size_t);
+// char *strnstr(char *, char *, size_t);
  
 int stregion(int);
 int ccregion(char *);

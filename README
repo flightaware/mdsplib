@@ -1,0 +1,49 @@
+METAR Decoder Software Package Library
+
+
+
+ABOUT THE MDSP LIBRARY
+
+The MDSP Library provides a programmer with two functions, the major one
+being DcdMETAR, which decodes a METAR into structures provided by the
+library. Also prtDMETR, which prints out a decoded METAR structure.
+
+The MDSP was written by Carl McCalla and released to the public by the
+US National Weather Service. The MDSP Library is the original MDSP
+modified to compile and run on *NIX systems.
+
+Please read the file README.MDSP included in this package. It's the
+README that comes with the original MDSP from the NWS. You must read the
+LICENSE before using this program (it's the LGPL).
+
+
+
+COMPILING
+
+Switch into the mdsplib directory and run "make". If you also want the
+test program to be produced, run "make dmetar" instead. Both commands
+will produce "metar.a". This is the library. The header file for this
+library is "metar.h". The test application will be named "dmetar", it
+takes no parameters.
+
+
+
+USING
+
+Copy the header file "metar.h" and the library "metar.a" into your
+project's directory. Include "metar.h", and use the functions and
+structures as defined in that file. Or do a "make install" as root, and
+it will install the library in /usr/local/lib and the header in
+/usr/local/include.
+
+
+
+CONTACT
+
+If you find any bugs/errors or otherwise have questions about the MDSP
+Library let me know. I'd also welcome any changes and additions to the
+code.
+
+Eric McCarthy <eric@limulus.net>
+
+

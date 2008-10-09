@@ -1,0 +1,36 @@
+Version History of the MDSP Library
+
+December 10, 2003 - Ver. 0.11
+-----------------------------------
+Added "dmetar" and "libmetar.a" to 'make clean'.
+
+Added the LGPL notice to all source files and added "LICENSE".
+
+Added up-to-date contact information to "README".
+
+
+October 19, 2001 - Ver. 0.11
+-----------------------------------
+Added 'make install'. It copies metar.h to /usr/local/include and copies
+libmetar.a to /usr/local/lib. Also chmods them to 0664.
+
+Changed the "bool" typdef to "MDSP_BOOL" to avoid problems with C++ and
+Objective C.
+
+Added function sprint_metar. It's just prtDMTAR(), but made so that it
+prints to a string. I changed prtDMTAR() so that it calls
+sprint_metar().
+
+Added function dcdNetMETAR. It decodes the METARs that the NWS provides
+on their servers.
+
+Fixed bug with printing METARs, where it would print the charVertVsby
+field of decoded_METAR. This field is never set, and never used. Just
+commented out the code that prints it in prtdmetr.c.
+
+
+July 6, 2001 - Ver. 0.1
+-----------------------------------
+First release, based on the METAR Decoder Software Package version 1.8.
+
+Made it compile and function properly with gcc.

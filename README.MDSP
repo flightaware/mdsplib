@@ -1,0 +1,365 @@
+METAR DECODER SOFTWARE PACKAGE (MDSP)
+
+Update History:     
+
+NEW
+
+29 June 1998    (Posting of METAR Decoder,
+                                      Upgrade,Version 1.8)
+
+15 July 1996      (Posting of METAR Decoder,
+                                       Upgrade,Version 1.7)
+
+                         1)   METAR date/time groups that are not
+                              postfixed with 'Z' will be
+                              recognized and decoded along with 
+                              date/time groups that are correctly
+                              encoded.
+                         2)   Station identifiers that include a
+                              mix of alphanumeric characters
+                              following the first alpha character
+                              will be accepted as a valid station
+                              ID.
+                         3)   Incorrectly coded prevailing
+                              visibility groups (e.g. 1/SM) will
+                              be ignored as spurious or
+                              extraneous groups.
+                         4)   Indeterminant 3/6-HR precipitation 
+                              groups (i.e. 6////) are flagged
+                              using a boolean variable.  The
+                              boolean variable is TRUE, if 6////
+                              appears in the observation
+                              or FALSE, if 6//// does not appear
+                              in the observation.
+                         5)   The keyword 'COR', a positionally
+                              dependent METAR group, will be
+                              recognized and decoded whether it
+                              appears before or after the
+                              date/time group.
+                         6)   Spurious or extraneous groups that
+                              occur within the body of a METAR
+                              observation will be skipped without
+                              compromising the positional
+                              integrity of groups that may
+                              follow.
+                         7)   Code has been added to the
+                              DCDMETAR.C and DCDMTRMK.C files
+                              to protect against attempts at
+                              using NULL pointers in string
+                              functions.
+
+     
+                    26 June 1996      (Posting of METAR Decoder,
+                                       Upgrade,Version 1.6)
+                    21 May 1996       (Posting of METAR Decoder,
+                                       Upgrade,Version 1.5)
+                    15 May 1996       (Posting of METAR Decoder,
+                                       Upgrade,Version 1.4)
+                    07 May 1996       (Posting of METAR Decoder,
+                                       Upgrade,Version 1.3)
+                    26 February 1996  (Posting of METAR Decoder, 
+                                       Upgrade,Version 1.2)
+                    20 December 1995  (Posting of METAR Decoder, 
+                                       Upgrade,Version 1.1)
+                    11 June 1995      (Posting of METAR Decoder, 
+                                       Version 1.0)
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+General Information:
+--------------------
+
+     The Systems Operations Center (SOC) of the National Weather
+Service (NWS) has developed a "C" language software package
+to decode WMO FM 15-IX Ext. (METAR) and FM 16-IX Ext. (SPECI)
+formatted reports.  The format specifications for these report
+types are described in the Federal Meteorological Handbook Number
+1 (FMH-1), Surface Weather Observations and Reports (December
+1995).  
+
+     A METAR report may consist of two parts - 
+
+     1)   the main body of the report consists of observational  
+          data that meets aviation requirements (e.g. wind speed
+          and direction, sky condition, temperature and dew
+          point temperature, etc.)
+
+     2)   the remarks section may consist of one or more sections
+          (i.e. Automated and Manual, Plain Language (Manual     
+          Only), and Additive Data and Automated Maintenance)    
+
+     The MDSP is specifically designed to meet SOC operational 
+requirements.  Nevertheless, it is a comprehensive decoder.  As a
+result, SOC management decided to make the MDSP available to any
+interested party via the Internet.  However, as the SOC makes this
+software available, it neither implies or guarantees the accuracy
+or dependability of the MDSP.
+
+     The MDSP makes no attempt to decode any METAR/SPECI group
+that does not conform to the METAR/SPECI format outlined in FMH-1
+(METAR).
+
+
+
+
+
+
+
+
+
+
+
+
+
+How Do You Use It?:
+-------------------
+
+     The METAR Decoder (DCDMETAR) is a "C" language routine that
+takes two arguments.  The 1st argument is a pointer to a METAR
+report character string.  The 2nd argument is a pointer to a
+Decoded_METAR data type (defined in METAR.H).  DCDMETAR returns
+12, if it encounters an invalid station ID (i.e. a station that
+does not contains 4 characters statino ID and/or whose first
+character is not alpha).  Otherwise, it returns 0.  
+
+     All decoded groups/elements are assigned to members of the
+structure whose address is that of the 2nd input argument.  If
+the decoder encounters a multiple instance of the same
+group/element in the Remarks section of the Decoder, then that
+group/element is not decoded.
+
+     The input METAR report must be a character string that is
+terminated by a sentinel (i.e. '\0').  The report string should
+also be free of any communication transmission characters (e.g.
+carriage returns, linefeeds, etc.).  Each group in the report
+must be separated by at least one blank character.
+
+     The decoded groups/elements of the METAR report are
+evaluated as one of 4 basic data types - int, bool, char, or
+float.  All decoded METAR structure members are initialized prior
+to decoding each input METAR report.  All int variables are set
+to MAXINT ( defined in LOCAL.H).  All bool variables are set to
+FALSE (i.e. 0).  All char and char strings are set to '\0'(s). 
+All float variables are set to (float) MAXINT.
+
+     METAR decoded structure members retain their initialization
+values, if no groups/elements were decoded from the METAR report
+and assigned to those members. 
+
+     The METAR Decoder has the following function prototype:     
+
+   
+        int DcdMETAR( char *observation, Decoded_METAR *Mptr ),
+
+     The following program segment illustrates how the DcdMETAR
+function might be invoked:
+
+
+
+
+     #include <metar h>
+        main()
+        {
+                /***************************/
+                /* DECLARE LOCAL VARIABLES */
+                /***************************/
+
+                Decoded_METAR MetarStruct,
+                              *Mptr = &MetarStruct;
+                char *observation;
+                .
+                .
+                .
+                if ( (observation = getMETAR( selectionParms ))  
+
+                                 != NULL ) { 
+                        if( DcdMETAR( observation, Mptr) != 0 )  
+
+                              printf("Error Msg\m");             
+
+                        else {                           
+                                'Process decoded METAR           
+
+                                       groups/elements'
+                             }
+                }
+                .
+                .
+                .
+
+
+     Within the routine that calls DcdMETAR, a variable must be
+declared as a Decoded_METAR type.  The address of that
+Decoded_METAR variable and a pointer to a METAR report string are
+then passed to the DcdMETAR routine.  The function getMETAR is
+for illustrative purposes only and simply represents a generic routine that the user must furnish in
+order to supply  METAR reports to the DcdMETAR routine.
+
+     All of the files listed below have been packaged as a single
+self-extracting file called DCDMETAR.EXE.  An ASCII version of
+these files is also available in the file DCDMETAR.SRC.  Each of
+the header files and functions in DCDMETAR.SRC are separated by
+the delimiter @@ and the name of the file (e.g. @@DRVMETAR.C
+would be followed by the DRVMETAR.C source code.
+
+     1)   DRVMETAR.C          6)   STSPACK2.C     11)  LOCAL.H
+     2)   DCDMETAR.C          7)   STSPACK3.C
+     3)   DCDMTRMK.C         8)   ANTOI.C    
+     4)   PRTDMETR.C           9)   CHARCMP.C
+     5)   FRACPART.C          10)   METAR.H   
+
+
+
+What's Included?:
+-----------------
+
+     The files that make up the MDSP are described below.  These
+files have been packaged as a single self-extracting file called
+DCDMETAR.EXE. If your system can not expand this file, then
+you will have to manually extract the individual source and
+header files from  the file called DCDMETAR.SRC.  Each source or
+header file within  DCDMETAR.SRC is delimited by the 2 characters
+"@@" followed by the name of the file (e.g. @@DRVMETAR.C or
+@@METAR.H).
+
+     1)  DRVMETAR.C - A main program that acts as a driver for   
+         the MDSP. In its current configuration, DRVMETAR
+         uses an array of pointers to METAR report character     
+         strings for input to the METAR Decoder.  The user may   
+         elect to continue with this configuration and provide   
+         his or her own METAR reports for testing or instead read
+         individual METAR reports in from a file or some other   
+         database.  The METAR report strings that are in DRVMETAR
+         are not meant to be reports that reflect physical       
+         reality, but rather reports that were designed to       
+         exercise various parts of the MDSP.
+
+     2)  DCDMETAR.C - A function that decodes the main body of   
+         the METAR report. The decoded groups/elements of the    
+         METAR report are stored in a structure of the type      
+         Decoded_METAR.
+
+     3)  DCDMTRMK.C - A function that decodes the remarks section
+         of the METAR report.  The decoded groups/elements of the
+         METAR report are also stored in a struture of the type  
+         Decoded_METAR.
+
+     4)  PRTDMETR.C - A function that prints the decoded METAR   
+         report groups/elements.
+
+     5)  FRACPART.C - A function that converts a character string
+         fraction (e.g. "1/4", "1/8", etc.) into a floating point
+         number.
+
+     6)  STSPACK2.C - A collection of routines written at the    
+         SOC to perform string evaluations that expand upon the  
+         standard C string functions.
+
+     6)  STSPACK3.C - A collection of routines written at the    
+         SOC to perform string evaluations that expand upon the  
+         standard C string functions.
+
+     7)  ANTOI.C    - A routine developed at the SOC to convert 
+         variable length numeric character strings into integers.
+
+     8)  CHARCMP.C  - A routine developed at the SOC to recognize
+         character patterns.  If a given string pattern is found
+         in a given character string, CHARCMP returns TRUE.      
+
+         Otherwise, it returns FALSE.    
+
+     9)  METAR.H    - An MDSP header file.  This header file     
+         contains the definition of the decoded METAR structure  
+         members.
+                  
+    10)  LOCAL.H    - A "general purpose" header file developed  
+         at the SOC.  LOCAL.H is referenced in METAR.H.  LOCAL.H 
+         includes a number of locally defined variables that are 
+         used in the MDSP.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Printing The METAR Report and/or Decoded METAR Report:
+------------------------------------------------------
+
+        The routine PRTDMETR may be used to print the decoded
+METAR report.  PRTDMETR prints the decoded groups/elements in the
+order in which they would appear according to the format
+described in FMH-1 (METAR).  The DRVMETAR module contains a print
+statement to print the input METAR report and it also calls the
+PRTDMETR routine that prints the decoded METAR data.
+
+
+MDSP Updates:
+-------------
+
+     All updates to the MDSP are based upon:
+          
+          1)   meeting all METAR decoding specifications by July
+               1, 1996
+
+          2)   responding to decoding problems or errors 
+               that have been demonstrated to exist in the
+               MDSP
+
+     Areas of on-going MDSP refinement and documentation:
+
+          1)   internal/external documentation
+
+     
+
+Inquires:
+---------
+
+        Questions, comments, or problems regarding the MDSP,
+should be directed to Carl McCalla at -
+
+     NOAA/National Weather Service
+     1325 East-West Highway
+     SSMC2, W/OSO242, Station 5114
+     Silver Spring, Maryland 20910
+
+     Work:                     (301) 713-0882, Ext 115
+
+     FAX:                      (301) 608-0911 
+        
+     E-Mail Address:     Carl.Mccalla@noaa.gov 

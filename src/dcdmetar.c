@@ -1574,6 +1574,13 @@ static MDSP_BOOL isRVR( char *token, Decoded_METAR *Mptr, int *NDEX,
       Mptr->RRVR[ndex].vrbl_visRange = TRUE;
       Mptr->RRVR[ndex].Min_visRange = antoi(slashPtr+1,
                               (vPtr-(slashPtr+1)) );
+
+      /* if the style was something like 5000VP6000, skip the P
+       * before looking for the max
+       */
+      if (isalpha(*(vPtr + 1))) {
+	  vPtr++;
+      }
       Mptr->RRVR[ndex].Max_visRange = antoi(vPtr+1,
                               (FT_ptr - (vPtr+1)) );
       (*NDEX)++;

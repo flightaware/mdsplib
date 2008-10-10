@@ -2494,7 +2494,7 @@ int DcdMETAR( char *string , Decoded_METAR *Mptr )
    /* ONLY PARSE OR DECOCODE NON-NULL METAR REPORT STRINGS */
    /********************************************************/
  
-   if( string == NULL )
+   if( string == NULL || *string == '\0' )
       return 8;
  
  
@@ -2538,7 +2538,7 @@ int DcdMETAR( char *string , Decoded_METAR *Mptr )
    IS_NOT_RMKS = TRUE;
  
 #ifdef DEBUGZZ
-printf("DcdMETAR: token[0] = %s\n",token[0]);
+    printf("DcdMETAR: token[0] = %s\n",token[0]);
 #endif
  
    while( token[NDEX] != NULL && IS_NOT_RMKS ) {

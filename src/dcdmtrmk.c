@@ -5363,8 +5363,12 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
             Mptr->DVR.above_max_DVR = FALSE;
          }
       }
-      else
+      else {
+#ifdef DEBUGZZ
+   printf("DcdMTRmk:  PUNTING ON RMKS: token[%d] = %s\n",NDEX,token[NDEX]);
+#endif
          NDEX++;
+      }
  
    }
  

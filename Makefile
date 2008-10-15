@@ -1,5 +1,7 @@
+# $Id$
+
 CC = gcc
-CFLAGS = -O3
+CFLAGS = -g -O2 -fPIC -DDEBUGZZ
 LIBS = 
 
 library: libmetar.a

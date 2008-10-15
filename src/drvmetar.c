@@ -64,6 +64,11 @@ main()
 {
    static char *string[] =
   {
+  "KNFW 072252Z 34015G21KT 10SM CLR 25/03 A3010 RMK AO2 PK WND 34029/2156 SLP176 T02500033 CHINO N VISNO N $",
+  "KBIL 101707Z 02012KT 3SM UP BR SCT002 BKN008 OVC029 00/M01 A3008 RMK AO2 UPB07SNE07 P0001 $",
+  "KFOD 072355Z AUTO 00000KT 10SM CLR 11/07 A2996 RMK AO2 60003 10130 20100 402100100 57003 PWINO FZRANO RVRNO",
+
+  "KRNO 101655Z 36010KT 10SM SCT050 BKN070 OVC100 03/M07 A2994 RMK AO2 SLP134 VCSH MTNS OBSCD SW-NW T00331067",
 
 "KMKG 18022G29KT 3SM BR BKN018 BR 24/22 A2995 RMK A02 VIS 2",
  
@@ -624,62 +629,7 @@ main()
             /*-- PRINT DECODED METAR REPORT ELEMENTS -----------------*/
       printf("\n\nFINAL DECODED PRODUCT...\n\n");
       prtDMETR( Mptr );
-#ifdef OLDSTUFF
-/************************************************/
-/*  Convert Decoded METAR into Synoptic format  */
-/************************************************/
- 
-      printf("Just after call to prtDMETR\n");
- 
-               sprintf( bltn_prefix, "AAXX YYGGi##," );
-               synopRTRN = BldSynop( Mptr, bltn_prefix );
-            printf("After BldSynop, SynopRep =:\n%s\n",synopRTRN);
-            /**********************************************************/
-            /*-- ENCODE SECTION 0 OF THE SYNTHETIC SYNOPTIC REPORT ---*/
-            /**********************************************************/
-      printf("Just before call to Sec0MeSM\n");
- 
-      if( (synopRTRN = Sec0MeSm( Mptr )) == NULL )
-         printf("Sec0MeSm returned a NULL pointer\n");
-      else
-         printf("After Sec0MeSm: %s\n",synopRTRN);
- 
-            /**********************************************************/
-            /*-- ENCODE SECTION 1 OF THE SYNTHETIC SYNOPTIC REPORT ---*/
-            /**********************************************************/
-      if( synopRTRN != NULL )
-         synopRTRN = Sec1MeSm( Mptr,synopRTRN );
-            printf("After Sec1MeSm: %s\n",synopRTRN);
- 
-            /**********************************************************/
-            /*-- ENCODE SECTION 3 OF THE SYNTHETIC SYNOPTIC REPORT ---*/
-            /**********************************************************/
- 
-      if( synopRTRN != NULL )
-         synopRTRN = Sec3MeSm( Mptr,synopRTRN );
-            printf("After Sec3MeSm: %s\n",synopRTRN);
- 
-            /**********************************************************/
-            /*-- ENCODE SECTION 5 OF THE SYNTHETIC SYNOPTIC REPORT ---*/
-            /**********************************************************/
- 
-      if( synopRTRN != NULL )
-         synopRTRN = Sec5MeSm( Mptr,synopRTRN);
-            printf("After Sec5MeSm: %s\n",synopRTRN);
- 
-            /**********************************************************/
-            /*-- PRINT THE ENCODED SYNTHETIC SYNOPTIC REPORT ---------*/
-            /**********************************************************/
- 
-      if( synopRTRN != NULL ) {
-         printf("\n\nOutput Synoptic Report:  %s\n\n",synopRTRN);
-         free( synopRTRN);
-      }
- 
-#endif
- 
       j++;
  
    }
- 
 }

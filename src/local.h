@@ -1175,7 +1175,7 @@ MDSP_BOOL std2ccap(Devaddr *, Diskaddr *, char *);
 char *strupr(char *);
 char *strlwr(char *);
 /* char *strdup(char *); */
-char *strndup(char *, int);
+//char *strndup(char *, int);
 int strcmpi(char *, char *);
  
 /* void *memccpy(void *, void *, int, unsigned); */

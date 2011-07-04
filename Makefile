@@ -46,7 +46,7 @@ clean:
 	rm -f src/*.o dmetar libmetar.a
 
 install: library
-	cp metar.h /usr/local/include/
+	cp include/metar.h /usr/local/include/
 	chmod 0644 /usr/local/include/metar.h
 	cp libmetar.a /usr/local/lib/
 	chmod 0644 /usr/local/lib/libmetar.a

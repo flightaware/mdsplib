@@ -37,8 +37,16 @@ it will install the library in /usr/local/lib and the header in
 /usr/local/include.
 
 
+FLIGHTAWARE
 
-CONTACT
+FlightAware has made a few bug fixes and/or improvements
+to MDPSLIB over the years.  As the sourceforge project that's reported
+to be its home seems pretty inactive and isn't configured to receive
+bug reports or patches, and as we're using git internally, making it 
+ever so easy to put this repo on github, we've done that.
+
+
+ORIGINAL CONTACT
 
 If you find any bugs/errors or otherwise have questions about the MDSP
 Library let me know. I'd also welcome any changes and additions to the

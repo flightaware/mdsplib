@@ -1869,7 +1869,13 @@ static MDSP_BOOL isVsby2ndSite( char **token, Decoded_METAR *Mptr,
                              (slash-*token)))
       {
          VSBY_2ndSite = fracPart(*token);
-         if( strncmp( *(++token), "RMY", 3 ) == 0) {
+
+	 (++token);
+ 
+	 if( *token == NULL )
+	     return FALSE;
+ 
+         if( strncmp( *token, "RMY", 3 ) == 0) {
             if( nisalnum( *token, strlen(*token) ) ) {
                Mptr->VSBY_2ndSite = VSBY_2ndSite;
                strcpy(Mptr->VSBY_2ndSite_LOC, *token);

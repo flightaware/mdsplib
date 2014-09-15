@@ -200,31 +200,31 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
    /* START BODY OF ROUTINE */
    /*************************/
  
-   memset(Mptr->TS_LOC,'\0',3);
-   memset(Mptr->TS_MOVMNT,'\0',3);
+   memset(Mptr->TS_LOC, '\0', sizeof(Mptr->TS_LOC));
+   memset(Mptr->TS_MOVMNT,'\0', sizeof(Mptr->TS_MOVMNT));
  
  
-   memset(Mptr->TornadicType,'\0',15);
-   memset(Mptr->TornadicLOC,'\0',10);
-   memset(Mptr->TornadicDIR,'\0',4);
-   memset(Mptr->TornadicMovDir,'\0',3);
+   memset(Mptr->TornadicType, '\0', sizeof(Mptr->TornadicType));
+   memset(Mptr->TornadicLOC, '\0', sizeof(Mptr->TornadicLOC));
+   memset(Mptr->TornadicDIR, '\0', sizeof(Mptr->TornadicDIR));
+   memset(Mptr->TornadicMovDir, '\0', sizeof(Mptr->TornadicMovDir));
    Mptr->BTornadicHour = MAXINT;
    Mptr->BTornadicMinute = MAXINT;
    Mptr->ETornadicHour = MAXINT;
    Mptr->ETornadicMinute = MAXINT;
    Mptr->TornadicDistance = MAXINT;
  
-   memset( Mptr->autoIndicator,'\0', 5 );
+   memset( Mptr->autoIndicator,'\0', sizeof(Mptr->autoIndicator));
  
    Mptr->RVRNO = FALSE;
    Mptr->GR = FALSE;
    Mptr->GR_Size = (float) MAXINT;
  
    Mptr->CHINO = FALSE;
-   memset(Mptr->CHINO_LOC, '\0', 6);
+   memset(Mptr->CHINO_LOC, '\0', sizeof(Mptr->CHINO_LOC));
  
    Mptr->VISNO = FALSE;
-   memset(Mptr->VISNO_LOC, '\0', 6);
+   memset(Mptr->VISNO_LOC, '\0', sizeof(Mptr->VISNO_LOC));
  
    Mptr->PNO = FALSE;
    Mptr->PWINO = FALSE;
@@ -234,29 +234,29 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
    Mptr->hourlyPrecip = (float) MAXINT;
  
    Mptr->ObscurAloftHgt = MAXINT;
-   memset(Mptr->ObscurAloft, '\0', 12);
-   memset(Mptr->ObscurAloftSkyCond, '\0', 12);
+   memset(Mptr->ObscurAloft, '\0', sizeof(Mptr->ObscurAloft));
+   memset(Mptr->ObscurAloftSkyCond, '\0', sizeof(Mptr->ObscurAloftSkyCond));
  
-   memset(Mptr->VrbSkyBelow, '\0', 4);
-   memset(Mptr->VrbSkyAbove, '\0', 4);
+   memset(Mptr->VrbSkyBelow, '\0', sizeof(Mptr->VrbSkyBelow));
+   memset(Mptr->VrbSkyAbove, '\0', sizeof(Mptr->VrbSkyAbove));
    Mptr->VrbSkyLayerHgt = MAXINT;
  
    Mptr->SectorVsby = (float) MAXINT;
-   memset( Mptr->SectorVsby_Dir, '\0', 3);
+   memset( Mptr->SectorVsby_Dir, '\0', sizeof(Mptr->SectorVsby_Dir));
  
-   memset(Mptr->codeName, '\0', 6);
-   memset(Mptr->stnid, '\0', 5);
+   memset(Mptr->codeName, '\0', sizeof(Mptr->codeName));
+   memset(Mptr->stnid, '\0', sizeof(Mptr->stnid));
    Mptr->ob_hour   = MAXINT;
    Mptr->ob_minute = MAXINT;
    Mptr->ob_date   = MAXINT;
  
-   memset(Mptr->synoptic_cloud_type, '\0', 6);
+   memset(Mptr->synoptic_cloud_type, '\0', sizeof(Mptr->synoptic_cloud_type));
  
    Mptr->CloudLow    = '\0';
    Mptr->CloudMedium = '\0';
    Mptr->CloudHigh   = '\0';
  
-   memset(Mptr->snow_depth_group, '\0', 6);
+   memset(Mptr->snow_depth_group, '\0', sizeof(Mptr->snow_depth_group));
    Mptr->snow_depth = MAXINT;
  
    Mptr->Temp_2_tenths    = (float) MAXINT;
@@ -276,12 +276,12 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
    Mptr->LightningVCTS = FALSE;
    Mptr->LightningTS   = FALSE;
  
-   memset( Mptr->LTG_DIR, '\0', 3);
+   memset( Mptr->LTG_DIR, '\0', sizeof(Mptr->LTG_DIR));
  
  
    for( i = 0; i < 3; i++)
    {
-      memset(Mptr->ReWx[i].Recent_weather, '\0', 5);
+      memset(Mptr->ReWx[i].Recent_weather, '\0', sizeof(Mptr->ReWx[i].Recent_weather));
  
       Mptr->ReWx[i].Bhh = MAXINT;
       Mptr->ReWx[i].Bmm = MAXINT;
@@ -299,19 +299,19 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
    Mptr->winData.windSpeed = MAXINT;
    Mptr->winData.windGust = MAXINT;
    Mptr->winData.windVRB  = FALSE;
-   memset(Mptr->winData.windUnits, '\0', 4);
+   memset(Mptr->winData.windUnits, '\0', sizeof(Mptr->winData.windUnits));
  
    Mptr->minWnDir = MAXINT;
    Mptr->maxWnDir = MAXINT;
  
-   memset(Mptr->horiz_vsby, '\0', 5);
-   memset(Mptr->dir_min_horiz_vsby, '\0', 3);
+   memset(Mptr->horiz_vsby, '\0', sizeof(Mptr->horiz_vsby));
+   memset(Mptr->dir_min_horiz_vsby, '\0', sizeof(Mptr->dir_min_horiz_vsby));
  
    Mptr->prevail_vsbySM = (float) MAXINT;
    Mptr->prevail_vsbyM  = (float) MAXINT;
    Mptr->prevail_vsbyKM = (float) MAXINT;
  
-   memset(Mptr->vsby_Dir, '\0', 3);
+   memset(Mptr->vsby_Dir, '\0', sizeof(Mptr->vsby_Dir));
  
    Mptr->CAVOK = FALSE;
  
@@ -348,11 +348,11 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
    /* PARTIAL OBSCURATION */
    /***********************/
  
-   memset( &(Mptr->PartialObscurationAmt[0][0]), '\0', 7 );
-   memset( &(Mptr->PartialObscurationPhenom[0][0]), '\0',12);
+   memset( &(Mptr->PartialObscurationAmt[0][0]), '\0', sizeof(Mptr->PartialObscurationAmt[0]));
+   memset( &(Mptr->PartialObscurationPhenom[0][0]), '\0', sizeof(Mptr->PartialObscurationPhenom[0]));
  
-   memset( &(Mptr->PartialObscurationAmt[1][0]), '\0', 7 );
-   memset( &(Mptr->PartialObscurationPhenom[1][0]), '\0',12);
+   memset( &(Mptr->PartialObscurationAmt[1][0]), '\0', sizeof(Mptr->PartialObscurationAmt[1]));
+   memset( &(Mptr->PartialObscurationPhenom[1][0]), '\0', sizeof(Mptr->PartialObscurationPhenom[1]));
  
  
    /***************************************************/
@@ -401,7 +401,7 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
    Mptr->min24temp     = (float) MAXINT;
  
    Mptr->VIRGA         = FALSE;
-   memset( Mptr->VIRGA_DIR, '\0', 3 );
+   memset( Mptr->VIRGA_DIR, '\0', sizeof(Mptr->VIRGA_DIR));
  
    Mptr->VOLCASH       = FALSE;
  
@@ -409,15 +409,15 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
    Mptr->maxCeiling    = MAXINT;
  
    Mptr->CIG_2ndSite_Meters = MAXINT;
-   memset(Mptr->CIG_2ndSite_LOC, '\0', 10 );
+   memset(Mptr->CIG_2ndSite_LOC, '\0', sizeof(Mptr->CIG_2ndSite_LOC));
  
    Mptr->minVsby = (float) MAXINT;
    Mptr->maxVsby = (float) MAXINT;
    Mptr->VSBY_2ndSite = (float) MAXINT;
-   memset(Mptr->VSBY_2ndSite_LOC,'\0',10);
+   memset(Mptr->VSBY_2ndSite_LOC, '\0', sizeof(Mptr->VSBY_2ndSite_LOC));
  
    for( i = 0; i < 6; i++ )
-      memset (&(Mptr->SfcObscuration[i][0]), '\0', 10);
+      memset (&(Mptr->SfcObscuration[i][0]), '\0', sizeof(Mptr->SfcObscuration[i]));
  
    Mptr->Num8thsSkyObscured = MAXINT;
  
@@ -1062,8 +1062,8 @@ static float prevailVSBY( char *visibility )
    }
    else
    {
-      memset(numerator,   '\0', 3);
-      memset(denominator, '\0', 3);
+      memset(numerator,   '\0', sizeof(numerator));
+      memset(denominator, '\0', sizeof(denominator));
  
       strncpy(numerator, visibility, (Slash_ptr - visibility));
  
@@ -1248,42 +1248,42 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
    {
       if( strcmp(*visblty+4,"NE") == 0 )
       {
-         memset(Mptr->vsby_Dir,'\0',3);
-         strcpy(Mptr->vsby_Dir,*visblty+4);
+         memset(Mptr->vsby_Dir, '\0', sizeof(Mptr->vsby_Dir));
+         strcpy(Mptr->vsby_Dir, *visblty+4);
       }
       if( strcmp(*visblty+4,"NW") == 0 )
       {
-         memset(Mptr->vsby_Dir,'\0',3);
+         memset(Mptr->vsby_Dir, '\0', sizeof(Mptr->vsby_Dir));
          strcpy(Mptr->vsby_Dir,*visblty+4);
       }
       if( strcmp(*visblty+4,"SE") == 0 )
       {
-         memset(Mptr->vsby_Dir,'\0',3);
+         memset(Mptr->vsby_Dir, '\0', sizeof(Mptr->vsby_Dir));
          strcpy(Mptr->vsby_Dir,*visblty+4);
       }
       if( strcmp(*visblty+4,"SW") == 0 )
       {
-         memset(Mptr->vsby_Dir,'\0',3);
+         memset(Mptr->vsby_Dir, '\0', sizeof(Mptr->vsby_Dir));
          strcpy(Mptr->vsby_Dir,*visblty+4);
       }
       if( strcmp(*visblty+4,"N") == 0 )
       {
-         memset(Mptr->vsby_Dir,'\0',3);
+         memset(Mptr->vsby_Dir, '\0', sizeof(Mptr->vsby_Dir));
          strcpy(Mptr->vsby_Dir,*visblty+4);
       }
       if( strcmp(*visblty+4,"S") == 0 )
       {
-         memset(Mptr->vsby_Dir,'\0',3);
+         memset(Mptr->vsby_Dir, '\0', sizeof(Mptr->vsby_Dir));
          strcpy(Mptr->vsby_Dir,*visblty+4);
       }
       if( strcmp(*visblty+4,"E") == 0 )
       {
-         memset(Mptr->vsby_Dir,'\0',3);
+         memset(Mptr->vsby_Dir, '\0', sizeof(Mptr->vsby_Dir));
          strcpy(Mptr->vsby_Dir,*visblty+4);
       }
       if( strcmp(*visblty+4,"W") == 0 )
       {
-         memset(Mptr->vsby_Dir,'\0',3);
+         memset(Mptr->vsby_Dir, '\0', sizeof(Mptr->vsby_Dir));
          strcpy(Mptr->vsby_Dir,*visblty+4);
       }
  
@@ -1395,7 +1395,7 @@ static MDSP_BOOL vrblVsby( char *string1, char *string2,
    {
       if(nisdigit(string1,V_char-string1))
       {
-         memset(buf, '\0', 6);
+         memset(buf, '\0', sizeof(buf));
          strncpy(buf, string1, V_char-string1);
  
          if( Mptr->minVsby != (float) MAXINT )
@@ -1403,7 +1403,7 @@ static MDSP_BOOL vrblVsby( char *string1, char *string2,
          else
             Mptr->minVsby  = (float) atoi(buf);
  
-         memset(buf, '\0', 6);
+         memset(buf, '\0', sizeof(buf));
          strncpy(buf, V_char+1, 5);
          Mptr->maxVsby = (float) atoi(buf);
  
@@ -1659,7 +1659,7 @@ static MDSP_BOOL isAltimStng( char *token, Decoded_METAR *Mptr, int *NDEX )
  
             if( strchr(token,'.') != NULL)
             {
-               memset(dummy, '\0', 6);
+               memset(dummy, '\0',  sizeof(dummy));
                strncpy(dummy,token+1,4);
                Mptr->hectoPasc_altstng = atoi(dummy);
             }
@@ -2300,7 +2300,7 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
    if( strlen(wind) < 7 )
       return FALSE;
  
-   memset(dummy,'\0',8);
+   memset(dummy,'\0', sizeof(dummy));
  
    /***************************************/
    /* CHECK FOR WIND SPEED UNITS OF KNOTS */
@@ -2325,7 +2325,7 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
    if( charcmp(wind,"'V''R''B'dd'K''T'")) {
       Mptr->winData.windVRB = TRUE;
       Mptr->winData.windSpeed = antoi(wind+3,2);
-      memset(Mptr->winData.windUnits, '\0', 4);
+      memset(Mptr->winData.windUnits, '\0', sizeof(Mptr->winData.windUnits));
       strcpy(Mptr->winData.windUnits,"KT");
       (*NDEX)++;
 /*
@@ -2337,7 +2337,7 @@ printf("isWindData:  Passed VRBddKT test - wind = %s\n",wind);
    if( charcmp(wind,"'V''R''B'ddd'K''T'")) {
       Mptr->winData.windVRB = TRUE;
       Mptr->winData.windSpeed = antoi(wind+3,3);
-      memset(Mptr->winData.windUnits, '\0', 4);
+      memset(Mptr->winData.windUnits, '\0', sizeof(Mptr->winData.windUnits));
       strcpy(Mptr->winData.windUnits,"KT");
       (*NDEX)++;
 /*
@@ -2351,7 +2351,7 @@ printf("isWindData:  Passed VRBdddKT test - wind = %s\n",wind);
       Mptr->winData.windSpeed = antoi(wind+3,3);
       Mptr->winData.windGust = antoi(wind+7,3);
  
-      memset(Mptr->winData.windUnits, '\0', 4);
+      memset(Mptr->winData.windUnits, '\0', sizeof(Mptr->winData.windUnits));
       strcpy(Mptr->winData.windUnits,"KT");
       (*NDEX)++;
       return TRUE;
@@ -2362,7 +2362,7 @@ printf("isWindData:  Passed VRBdddKT test - wind = %s\n",wind);
       Mptr->winData.windSpeed = antoi(wind+3,2);
       Mptr->winData.windGust = antoi(wind+6,2);
  
-      memset(Mptr->winData.windUnits, '\0', 4);
+      memset(Mptr->winData.windUnits, '\0', sizeof(Mptr->winData.windUnits));
       strcpy(Mptr->winData.windUnits,"KT");
       (*NDEX)++;
       return TRUE;
@@ -2373,7 +2373,7 @@ printf("isWindData:  Passed VRBdddKT test - wind = %s\n",wind);
       Mptr->winData.windSpeed = antoi(wind+3,2);
       Mptr->winData.windGust = antoi(wind+6,3);
  
-      memset(Mptr->winData.windUnits, '\0', 4);
+      memset(Mptr->winData.windUnits, '\0', sizeof(Mptr->winData.windUnits));
       strcpy(Mptr->winData.windUnits,"KT");
       (*NDEX)++;
       return TRUE;

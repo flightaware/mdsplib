@@ -386,10 +386,10 @@ static MDSP_BOOL isTornadicActiv( char **string, Decoded_METAR *Mptr,
             return FALSE;
          }
          else
-               strcpy(Mptr->TornadicType,"FUNNEL CLOUD");
+               strncpy(Mptr->TornadicType, "FUNNEL CLOUD", sizeof(Mptr->TornadicType));
       }
       else {
-         strcpy(Mptr->TornadicType, *string);
+         strncpy(Mptr->TornadicType, *string, sizeof(Mptr->TornadicType));
          (*NDEX)++;
          (++string);
       }
@@ -1351,6 +1351,9 @@ static MDSP_BOOL isSurfaceVsby( char **token, Decoded_METAR *Mptr,
    else
       (++token);
  
+   if( *token == NULL )
+      return FALSE;
+
    if( strcmp(*token,"VIS") != 0) {
       (*NDEX)++;
       return FALSE;
@@ -2975,7 +2978,7 @@ static MDSP_BOOL isSectorVsby( char **string, Decoded_METAR *Mptr,
    if( *string == NULL )
       return FALSE;
  
-   memset( dd, '\0', 3 );
+   memset( dd, '\0', sizeof(dd));
  
    if( strcmp(*string, "VIS") != 0 )
       return FALSE;
@@ -4280,7 +4283,7 @@ static MDSP_BOOL isMaxTemp(char *string, Decoded_METAR *Mptr, int *NDEX)
    {
       if(nisdigit(string+2,3))
       {
-         memset(buf,'\0',6);
+         memset(buf, '\0', sizeof(buf));
          strncpy(buf,string+2,3);
          Mptr->maxtemp = ( (float) atoi(buf))/10.;
  
@@ -4344,7 +4347,7 @@ static MDSP_BOOL isMinTemp(char *string, Decoded_METAR *Mptr, int *NDEX)
    {
       if(nisdigit(string+2,3))
       {
-         memset(buf,'\0',6);
+         memset(buf,'\0', sizeof(buf));
          strncpy(buf,string+2,3);
          Mptr->mintemp = ( (float) atoi(buf) )/10.;
  
@@ -4413,7 +4416,7 @@ static MDSP_BOOL isT24MaxMinTemp( char *string, Decoded_METAR *Mptr,
       if(nisdigit(string+1,4) && (*(string+1) == '0' ||
                                   *(string+1) == '1')   )
       {
-         memset(buf, '\0', 6);
+         memset(buf, '\0', sizeof(buf));
          strncpy(buf, string+2, 3);
          Mptr->max24temp = ( (float) atoi( buf ) )/10.;
  
@@ -4427,7 +4430,7 @@ static MDSP_BOOL isT24MaxMinTemp( char *string, Decoded_METAR *Mptr,
       if(nisdigit(string+5,4) && (*(string+5) == '0' ||
                                   *(string+5) == '1' )  )
       {
-         memset(buf, '\0', 6);
+         memset(buf, '\0', sizeof(buf));
          strncpy(buf, string+6, 3);
          Mptr->min24temp = ( (float) atoi(buf) )/10.;
  
@@ -4486,7 +4489,7 @@ static MDSP_BOOL isPtendency(char *string, Decoded_METAR *Mptr, int *NDEX)
    {
       if( !(nisdigit(string+2,3)) )
       {
-         memset(buf,'\0',6);
+         memset(buf, '\0', sizeof(buf));
          strncpy(buf,(string+1),1);
          Mptr->char_prestndcy = atoi(buf);
          (*NDEX)++;
@@ -4494,7 +4497,7 @@ static MDSP_BOOL isPtendency(char *string, Decoded_METAR *Mptr, int *NDEX)
       }
       else
       {
-         memset(buf,'\0',6);
+         memset(buf, '\0', sizeof(buf));
          strncpy(buf,(string+1),1);
          Mptr->char_prestndcy = atoi(buf);
  
@@ -5046,9 +5049,9 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
       if( isTornadicActiv( &(token[NDEX]), Mptr, &NDEX ) ) {
          TornadicActvty++;
          if( TornadicActvty > 1 ) {
-            memset(Mptr->TornadicType,'\0',15);
-            memset(Mptr->TornadicLOC,'\0',10);
-            memset(Mptr->TornadicDIR,'\0',4);
+            memset(Mptr->TornadicType, '\0', sizeof(Mptr->TornadicType));
+            memset(Mptr->TornadicLOC, '\0', sizeof(Mptr->TornadicLOC));
+            memset(Mptr->TornadicDIR, '\0', sizeof(Mptr->TornadicDIR));
             Mptr->BTornadicHour = MAXINT;
             Mptr->BTornadicMinute = MAXINT;
             Mptr->ETornadicHour = MAXINT;
@@ -5058,7 +5061,7 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
       else if( isA0indicator( token[NDEX], Mptr, &NDEX ) ) {
          A0indicator++;
          if( A0indicator > 1 )
-            memset(Mptr->autoIndicator,'\0',5);
+            memset(Mptr->autoIndicator, '\0', sizeof(Mptr->autoIndicator));
       }
       else if( isPeakWind( &(token[NDEX]), Mptr, &NDEX ) ) {
          peakwind++;
@@ -5097,7 +5100,7 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
          Vsby2ndSite++;
          if( Vsby2ndSite > 1 ) {
             Mptr->VSBY_2ndSite = (float) MAXINT;
-            memset(Mptr->VSBY_2ndSite_LOC,'\0',10);
+            memset(Mptr->VSBY_2ndSite_LOC, '\0', sizeof(Mptr->VSBY_2ndSite_LOC));
          }
       }
       else if( isLTGfreq( &(token[NDEX]), Mptr, &NDEX ) ) {
@@ -5115,14 +5118,14 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
             Mptr->VcyStn_LTG = FALSE;
             Mptr->LightningVCTS = FALSE;
             Mptr->LightningTS = FALSE;
-            memset(Mptr->LTG_DIR,'\0',3 );
+            memset(Mptr->LTG_DIR, '\0', sizeof(Mptr->LTG_DIR));
          }
       }
       else if( isTS_LOC( &(token[NDEX]), Mptr, &NDEX ) ) {
          TS_LOC++;
          if( TS_LOC > 1 ) {
-            memset(Mptr->TS_LOC, '\0', 3);
-            memset(Mptr->TS_MOVMNT, '\0', 3);
+            memset(Mptr->TS_LOC, '\0', sizeof(Mptr->TS_LOC));
+            memset(Mptr->TS_MOVMNT, '\0', sizeof(Mptr->TS_MOVMNT));
          }
       }
       else if( isRecentWX( &(token[NDEX]), Mptr, &recentWX ) ) {
@@ -5139,7 +5142,7 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
          CIG2ndSite++;
          if( CIG2ndSite > 1) {
             Mptr->CIG_2ndSite_Meters = MAXINT;
-            memset( Mptr->CIG_2ndSite_LOC, '\0', 10);
+            memset(Mptr->CIG_2ndSite_LOC, '\0', sizeof(Mptr->CIG_2ndSite_LOC));
          }
       }
       else if( isPRESFR( token[NDEX], Mptr, &NDEX ) ) {
@@ -5161,18 +5164,18 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
                &NDEX ) ) {
          PartObscur++;
          if( PartObscur > 2 ) {
-            memset(&(Mptr->PartialObscurationAmt[0][0]), '\0', 7 );
-            memset(&(Mptr->PartialObscurationPhenom[0][0]),'\0',12 );
+            memset(&(Mptr->PartialObscurationAmt[0][0]), '\0', sizeof(Mptr->PartialObscurationAmt[0]) );
+            memset(&(Mptr->PartialObscurationPhenom[0][0]),'\0', sizeof(Mptr->PartialObscurationPhenom[0]));
  
-            memset(&(Mptr->PartialObscurationAmt[1][0]), '\0', 7 );
-            memset(&(Mptr->PartialObscurationPhenom[1][0]),'\0',12 );
+            memset(&(Mptr->PartialObscurationAmt[1][0]), '\0', sizeof(Mptr->PartialObscurationAmt[1]));
+            memset(&(Mptr->PartialObscurationPhenom[1][0]),'\0', sizeof(Mptr->PartialObscurationPhenom[1]));
          }
       }
       else if( isSectorVsby( &(token[NDEX]), Mptr, &NDEX ) ) {
          SectorVsby++;
          if( SectorVsby > 1 ) {
             Mptr->SectorVsby = (float) MAXINT;
-            memset(Mptr->SectorVsby_Dir, '\0', 3);
+            memset(Mptr->SectorVsby_Dir, '\0', sizeof(Mptr->SectorVsby_Dir));
          }
       }
       else if( isGR( &(token[NDEX]), Mptr, &NDEX ) ) {
@@ -5186,14 +5189,14 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
          Virga++;
          if( Virga > 1 ) {
             Mptr->VIRGA = FALSE;
-            memset(Mptr->VIRGA_DIR, '\0', 3);
+            memset(Mptr->VIRGA_DIR, '\0', sizeof(Mptr->VIRGA_DIR));
          }
       }
       else if( isSfcObscuration( token[NDEX], Mptr, &NDEX ) ) {
          SfcObscur++;
          if( SfcObscur > 1 ) {
             for( i = 0; i < 6; i++ ) {
-               memset(&(Mptr->SfcObscuration[i][0]), '\0', 10);
+               memset(&(Mptr->SfcObscuration[i][0]), '\0', sizeof(Mptr->SfcObscuration[i]));
                Mptr->Num8thsSkyObscured = MAXINT;
             }
          }
@@ -5209,8 +5212,8 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
       else if( isVrbSky( &(token[NDEX]), Mptr, &NDEX ) ) {
          VrbSkyCond++;
          if( VrbSkyCond > 1 ) {
-            memset(Mptr->VrbSkyBelow, '\0', 4);
-            memset(Mptr->VrbSkyAbove, '\0', 4);
+            memset(Mptr->VrbSkyBelow, '\0', sizeof(Mptr->VrbSkyBelow));
+            memset(Mptr->VrbSkyAbove, '\0', sizeof(Mptr->VrbSkyAbove));
             Mptr->VrbSkyLayerHgt = MAXINT;
          }
       }
@@ -5218,8 +5221,8 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
          ObscurAloft++;
          if( ObscurAloft > 1 ) {
             Mptr->ObscurAloftHgt = MAXINT;
-            memset( Mptr->ObscurAloft, '\0', 12 );
-            memset( Mptr->ObscurAloftSkyCond, '\0', 12 );
+            memset( Mptr->ObscurAloft, '\0', sizeof(Mptr->ObscurAloft));
+            memset( Mptr->ObscurAloftSkyCond, '\0', sizeof(Mptr->ObscurAloftSkyCond));
          }
       }
       else if( isNOSPECI( token[NDEX], Mptr, &NDEX ) ) {
@@ -5235,7 +5238,7 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
       else if( isSynopClouds( token[NDEX], Mptr, &NDEX ) ) {
          SynopClouds++;
          if( SynopClouds > 1 ) {
-            memset( Mptr->synoptic_cloud_type, '\0', 6 );
+            memset( Mptr->synoptic_cloud_type, '\0', sizeof(Mptr->synoptic_cloud_type));
             Mptr->CloudLow    = '\0';
             Mptr->CloudMedium = '\0';
             Mptr->CloudHigh   = '\0';
@@ -5251,7 +5254,7 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
       else if( isSnowDepth( token[NDEX], Mptr, &NDEX ) ) {
          SnowDepth++;
          if( SnowDepth > 1 ) {
-            memset( Mptr->snow_depth_group, '\0', 6 );
+            memset( Mptr->snow_depth_group, '\0', sizeof(Mptr->snow_depth_group));
             Mptr->snow_depth = MAXINT;
          }
       }
@@ -5348,14 +5351,14 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
          VISNO++;
          if( VISNO > 1 ) {
             Mptr->VISNO = FALSE;
-            memset(Mptr->VISNO_LOC, '\0', 6);
+            memset(Mptr->VISNO_LOC, '\0', sizeof(Mptr->VISNO_LOC));
          }
       }
       else if( isCHINO( &(token[NDEX]), Mptr, &NDEX ) ) {
          CHINO++;
          if( CHINO > 1 ) {
             Mptr->CHINO = FALSE;
-            memset(Mptr->CHINO_LOC, '\0', 6);
+            memset(Mptr->CHINO_LOC, '\0', sizeof(Mptr->CHINO_LOC));
          }
       }
       else if( isDVR( token[NDEX], Mptr, &NDEX ) ) {

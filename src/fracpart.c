@@ -65,12 +65,12 @@ float fracPart( char *string )
  
    slash = strchr(string, '/');
  
-   memset(buf , '\0', 6);
+   memset(buf , '\0', sizeof(buf));
    strncpy( buf, string, slash-string);
  
    numerator = (float) atoi(buf);
  
-   memset(buf , '\0', 6);
+   memset(buf , '\0', sizeof(buf));
    strcpy( buf, slash+1);
  
    denominator = (float) atoi(buf);

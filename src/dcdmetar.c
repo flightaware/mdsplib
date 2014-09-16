@@ -69,24 +69,11 @@ void prtDMETR( Decoded_METAR * );
  
 static char **SaveTokenString ( char *string , char *delimeters )
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    int NDEX;
-   static char *token[ MAXTOKENS ],
-        *TOKEN;
+   static char *token[ MAXTOKENS ], *TOKEN;
  
- 
-   /*********************************/
-   /* BEGIN THE BODY OF THE ROUTINE */
-   /*********************************/
- 
-   /******************************************/
    /* TOKENIZE THE INPUT CHARACTER STRING    */
    /* AND SAVE THE TOKENS TO THE token ARRAY */
-   /******************************************/
  
    NDEX = 0;
    TOKEN = strtok(string, delimeters);
@@ -185,20 +172,7 @@ static void freeTokens( char **token )
 #pragma page(1)
 static void InitDcdMETAR( Decoded_METAR *Mptr )
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
- 
-   int i,
-       j;
- 
- 
- 
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
+   int i, j;
  
    memset(Mptr->TS_LOC, '\0', sizeof(Mptr->TS_LOC));
    memset(Mptr->TS_MOVMNT,'\0', sizeof(Mptr->TS_MOVMNT));
@@ -344,9 +318,7 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
          Mptr->WxObstruct[i][j] = '\0';
    }
  
-   /***********************/
-   /* PARTIAL OBSCURATION */
-   /***********************/
+   // partial obscuration
  
     for (i = 0; i < MAX_PARTIAL_OBSCURATIONS; i++) {
        memset( Mptr->PartialObscurationAmt[i], '\0', sizeof(Mptr->PartialObscurationAmt[i]));
@@ -354,9 +326,7 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
     }
  
  
-   /***************************************************/
-   /* CLOUD TYPE, CLOUD LEVEL, AND SIGNIFICANT CLOUDS */
-   /***************************************************/
+   // cloud type, cloud level, and significant clouds
  
  
    for ( i = 0; i < MAX_CLOUD_GROUPS; i++ )
@@ -562,15 +532,15 @@ static int CodedHgt2Meters( char *token, Decoded_METAR *Mptr )
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isPartObscur                                     */
+/*  Title:         isPartialObscuration                             */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
 /*  Language:      C/370                                            */
 /*                                                                  */
-/*  Abstract:  isPartObscur determines whether or not the METAR     */
-/*             report element that is passed to it is or is not     */
-/*             a partial obscuration indicator for an amount of     */
+/*  Abstract:  isPartialObscuration determines whether or not the   */
+/*             METAR report element that is passed to it is or is   */
+/*             not a partial obscuration indicator for an amount of */
 /*             obscuration.                                         */
 /*                                                                  */
 /*                                                                  */
@@ -578,8 +548,9 @@ static int CodedHgt2Meters( char *token, Decoded_METAR *Mptr )
 /*                 None.                                            */
 /*                                                                  */
 /*  Input:         token - the address of a pointer to the group    */
-/*                         in the METAR report that isPartObscur    */
-/*                         determines is or is not a partial        */
+/*                         in the METAR report that                 */
+/*                         isPartialObscuration determines is       */
+/*                         or is not a partial                      */
 /*                         obscuration indicator.                   */
 /*                                                                  */
 /*                                                                  */
@@ -594,7 +565,7 @@ static int CodedHgt2Meters( char *token, Decoded_METAR *Mptr )
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-static MDSP_BOOL isPartObscur( char **string, Decoded_METAR *Mptr,
+static MDSP_BOOL isPartialObscuration( char **string, Decoded_METAR *Mptr,
                           int *NDEX )
 {
  
@@ -642,13 +613,13 @@ static MDSP_BOOL isPartObscur( char **string, Decoded_METAR *Mptr,
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isCldLayer                                       */
+/*  Title:         isCloudLayer                                     */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
 /*  Language:      C/370                                            */
 /*                                                                  */
-/*  Abstract:      isCldLayer determines whether or not the         */
+/*  Abstract:      isCloudLayer determines whether or not the       */
 /*                 current group has a valid cloud layer            */
 /*                 identifier.                                      */
 /*                                                                  */
@@ -671,7 +642,7 @@ static MDSP_BOOL isPartObscur( char **string, Decoded_METAR *Mptr,
 /********************************************************************/
 #pragma page(1)
  
-static MDSP_BOOL isCldLayer( char *token )
+static MDSP_BOOL isCloudLayer( char *token )
 {
    if( token == NULL )
       return FALSE;
@@ -742,7 +713,7 @@ static MDSP_BOOL isCAVOK( char *token, Decoded_METAR *Mptr, int *NDEX )
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         parseCldData                                     */
+/*  Title:         parseCloudData                                   */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -763,7 +734,7 @@ static MDSP_BOOL isCAVOK( char *token, Decoded_METAR *Mptr, int *NDEX )
 /********************************************************************/
 #pragma page(1)
  
-static void parseCldData( char *token, Decoded_METAR *Mptr, int next)
+static void parseCloudData( char *token, Decoded_METAR *Mptr, int next)
 {
  
  
@@ -790,7 +761,7 @@ static void parseCldData( char *token, Decoded_METAR *Mptr, int next)
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isSkyCond                                        */
+/*  Title:         isSkyConditions                                  */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -810,7 +781,7 @@ static void parseCldData( char *token, Decoded_METAR *Mptr, int next)
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
+static MDSP_BOOL isSkyConditions( char **skycond, Decoded_METAR *Mptr,
                         int *NDEX )
 {
  
@@ -822,9 +793,7 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
         sixth_layer;
    int next;
  
-      /********************************************************/
-      /* INTERROGATE skycond TO DETERMINE IF "CLR" IS PRESENT */
-      /********************************************************/
+      // interrogate skycond to determine if "CLR" is present
  
    if( *skycond == NULL )
       return FALSE;
@@ -842,9 +811,7 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
       return TRUE;
    }
  
-      /********************************************************/
-      /* INTERROGATE skycond TO DETERMINE IF "SKC" IS PRESENT */
-      /********************************************************/
+      // interrogate skycond to determine if "SKC" is present
  
    else if( strcmp(*skycond,"SKC") == 0)
    {
@@ -858,10 +825,8 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
       return TRUE;
    }
  
-      /****************************************/
-      /* INTERROGATE skycond TO DETERMINE IF  */
-      /*    VERTICAL VISIBILITY IS PRESENT    */
-      /****************************************/
+      // interrogate skycond to determine if
+      //    vertical visibility is present
  
    else if( strncmp(*skycond,"VV",2) == 0
              && strlen(*skycond) == 5 &&
@@ -873,16 +838,14 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
       return TRUE;
    }
  
-      /****************************************/
-      /* INTERROGATE skycond TO DETERMINE IF  */
-      /*    CLOUD LAYER DATA IS PRESENT       */
-      /****************************************/
+      // interrogate skycond to determine if
+      //    cloud layer data is present
  
-   else if( isCldLayer( *skycond ))
+   else if( isCloudLayer( *skycond ))
    {
       next = 0;
  
-      parseCldData( *skycond , Mptr, next );
+      parseCloudData( *skycond , Mptr, next );
       first_layer = TRUE;
       next++;
       (++skycond);
@@ -897,9 +860,9 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
       sixth_layer = FALSE;
  
  
-      if( isCldLayer( *skycond ) && first_layer )
+      if( isCloudLayer( *skycond ) && first_layer )
       {
-         parseCldData( *skycond, Mptr, next );
+         parseCloudData( *skycond, Mptr, next );
          second_layer = TRUE;
          next++;
          (++skycond);
@@ -909,10 +872,10 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
  
       }
  
-      if( isCldLayer( *skycond ) && first_layer &&
+      if( isCloudLayer( *skycond ) && first_layer &&
           second_layer )
       {
-         parseCldData( *skycond , Mptr, next );
+         parseCloudData( *skycond , Mptr, next );
          third_layer = TRUE;
          next++;
          (++skycond);
@@ -922,10 +885,10 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
  
       }
  
-      if( isCldLayer( *skycond ) && first_layer && second_layer &&
+      if( isCloudLayer( *skycond ) && first_layer && second_layer &&
                       third_layer )
       {
-         parseCldData( *skycond, Mptr, next );
+         parseCloudData( *skycond, Mptr, next );
          fourth_layer = TRUE;
          next++;
          (++skycond);
@@ -935,10 +898,10 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
  
       }
  
-      if( isCldLayer( *skycond ) && first_layer && second_layer &&
+      if( isCloudLayer( *skycond ) && first_layer && second_layer &&
           third_layer && fourth_layer )
       {
-         parseCldData( *skycond , Mptr, next );
+         parseCloudData( *skycond , Mptr, next );
          fifth_layer = TRUE;
          next++;
          (++skycond);
@@ -948,10 +911,10 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
  
       }
  
-      if( isCldLayer( *skycond ) && first_layer && second_layer &&
+      if( isCloudLayer( *skycond ) && first_layer && second_layer &&
           third_layer && fourth_layer && fifth_layer )
       {
-         parseCldData( *skycond , Mptr, next );
+         parseCloudData( *skycond , Mptr, next );
          sixth_layer = TRUE;
       }
  
@@ -1014,7 +977,7 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         prevailVSBY                                      */
+/*  Title:         prevailingVisibility                             */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -1034,7 +997,7 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-static float prevailVSBY( char *visibility )
+static float prevailingVisibility( char *visibility )
 {
    float Miles_vsby;
    char *temp,
@@ -1116,9 +1079,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
         *save_token;
  
  
-   /****************************************/
-   /* CHECK FOR VISIBILITY MEASURED <1/4SM */
-   /****************************************/
+   // CHECK FOR VISIBILITY MEASURED <1/4SM
  
    if( *visblty == NULL )
       return FALSE;
@@ -1131,16 +1092,14 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
       return TRUE;
    }
  
-   /***********************************************/
-   /* CHECK FOR VISIBILITY MEASURED IN KILOMETERS */
-   /***********************************************/
+   // CHECK FOR VISIBILITY MEASURED IN KILOMETERS
  
    if( (achar = strstr(*visblty, "KM")) != NULL )
    {
       if( nisdigit(*visblty,(achar - *visblty)) &&
                         (achar - *visblty) > 0 )
       {
-         Mptr->prevail_vsbyKM = prevailVSBY( *visblty );
+         Mptr->prevail_vsbyKM = prevailingVisibility( *visblty );
          (*NDEX)++;
          return TRUE;
       }
@@ -1148,10 +1107,8 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
          return FALSE;
    }
  
-   /***********************************/
-   /* CHECK FOR VISIBILITY MEASURED   */
-   /* IN A FRACTION OF A STATUTE MILE */
-   /***********************************/
+   // CHECK FOR VISIBILITY MEASURED
+   // IN A FRACTION OF A STATUTE MILE
  
    else if( (achar = strchr( *visblty, '/' )) !=
                     NULL &&
@@ -1163,7 +1120,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
                (astring - (achar+1)) > 0 &&
                 nisdigit(achar+1, (astring - (achar+1))) )
       {
-         Mptr->prevail_vsbySM = prevailVSBY (*visblty);
+         Mptr->prevail_vsbySM = prevailingVisibility (*visblty);
          (*NDEX)++;
          return TRUE;
       }
@@ -1171,29 +1128,24 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
          return FALSE;
    }
  
-   /***********************************/
-   /* CHECK FOR VISIBILITY MEASURED   */
-   /*     IN WHOLE STATUTE MILES      */
-   /***********************************/
+   // check for visibility measured
+   //     in whole statute miles
  
    else if( (astring = strstr(*visblty,"SM") ) != NULL )
    {
       if( nisdigit(*visblty,(astring - *visblty)) &&
                        (astring- *visblty) > 0 )
       {
-         Mptr->prevail_vsbySM = prevailVSBY (*visblty);
+         Mptr->prevail_vsbySM = prevailingVisibility (*visblty);
          (*NDEX)++;
          return TRUE;
       }
       else
          return FALSE;
    }
- 
-   /***********************************/
-   /* CHECK FOR VISIBILITY MEASURED   */
-   /* IN WHOLE AND FRACTIONAL STATUTE */
-   /*             MILES               */
-   /***********************************/
+
+   // check for visibility measured
+   // in whole and fractional statute miles
  
    else if( nisdigit( *visblty,
                strlen(*visblty)) &&
@@ -1217,7 +1169,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
                  (astring - (achar+1)) > 0 &&
              nisdigit(achar+1, (astring - (achar+1))) )
          {
-            Mptr->prevail_vsbySM = prevailVSBY (*visblty);
+            Mptr->prevail_vsbySM = prevailingVisibility (*visblty);
             Mptr->prevail_vsbySM +=
                                  (float) (atoi(save_token));
             free( save_token);
@@ -1236,11 +1188,8 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
  
    }
  
-   /***********************************/
-   /* CHECK FOR VISIBILITY MEASURED   */
-   /* IN METERS WITH OR WITHOUT DI-   */
-   /*     RECTION OF OBSERVATION      */
-   /***********************************/
+   // check for visibility measured
+   // in meters with or without direction of observation
  
    else if( nisdigit(*visblty,4) &&
                 strlen(*visblty) >= 4)
@@ -1354,7 +1303,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         vrblVsby                                         */
+/*  Title:         variableVisibility                               */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -1374,7 +1323,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-static MDSP_BOOL vrblVsby( char *string1, char *string2,
+static MDSP_BOOL variableVisibility( char *string1, char *string2,
                       Decoded_METAR *Mptr, int *NDEX )
 {
    char buf[ 6 ];
@@ -1607,7 +1556,7 @@ static MDSP_BOOL isRVR( char *token, Decoded_METAR *Mptr, int *NDEX,
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isAltimStng                                      */
+/*  Title:         isAltimeterString                                */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -1628,7 +1577,7 @@ static MDSP_BOOL isRVR( char *token, Decoded_METAR *Mptr, int *NDEX,
 /********************************************************************/
 #pragma page(1)
  
-static MDSP_BOOL isAltimStng( char *token, Decoded_METAR *Mptr, int *NDEX )
+static MDSP_BOOL isAltimeterString( char *token, Decoded_METAR *Mptr, int *NDEX )
 {
    char dummy[6];
  
@@ -2301,9 +2250,7 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
  
    memset(dummy,'\0', sizeof(dummy));
  
-   /***************************************/
    /* CHECK FOR WIND SPEED UNITS OF KNOTS */
-   /***************************************/
  
 /*
    if( ( unitsPtr = strstr( wind, "KMH" ) ) != NULL )
@@ -2317,9 +2264,7 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
    else
       return FALSE;
  
-   /*****************************************/
    /* CHECK FOR VARIABLE ("VRB") WIND SPEED */
-   /*****************************************/
  
    if( charcmp(wind,"'V''R''B'dd'K''T'")) {
       Mptr->winData.windVRB = TRUE;
@@ -2378,9 +2323,7 @@ printf("isWindData:  Passed VRBdddKT test - wind = %s\n",wind);
       return TRUE;
    }
  
-   /************************/
-   /* CHECK FOR WIND GUSTS */
-   /************************/
+   // check for wind gusts
  
    if( (GustPtr = strchr( wind, 'G' )) != NULL )
    {
@@ -2462,11 +2405,7 @@ printf("isWindData:  Passed dddff(f) test - wind = %s\n",wind);
  
 int DcdMETAR( char *string , Decoded_METAR *Mptr )
 {
- 
-   /***************************/
    /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
  
    enum METAR_obGroup { codename, stnid, NIL1, COR1, obDateTime, NIL2,
                         AUTO, COR, windData, MinMaxWinDir,
@@ -2492,22 +2431,14 @@ int DcdMETAR( char *string , Decoded_METAR *Mptr )
  
    MDSP_BOOL IS_NOT_RMKS;
  
-/*********************************/
-/* BEGIN THE BODY OF THE ROUTINE */
-/*********************************/
- 
-   /********************************************************/
    /* ONLY PARSE OR DECOCODE NON-NULL METAR REPORT STRINGS */
-   /********************************************************/
  
    if( string == NULL || *string == '\0' )
       return 8;
  
  
-   /*****************************************/
    /*   INITIALIZE STRUCTURE THAT HAS THE   */
    /*      VARIABLE TYPE Decoded_METAR      */
-   /*****************************************/
  
    InitDcdMETAR( Mptr );
  
@@ -2523,9 +2454,7 @@ int DcdMETAR( char *string , Decoded_METAR *Mptr )
 	strcpy(stringCpy, string);
 
  
-   /****************************************************/
    /* TOKENIZE AND STORE THE INPUT METAR REPORT STRING */
-   /****************************************************/
 #ifdef DEBUGZZ
    printf("DcdMETAR: Before start of tokenizing, string = %s\n",
              stringCpy);
@@ -2533,11 +2462,7 @@ int DcdMETAR( char *string , Decoded_METAR *Mptr )
  
    token = SaveTokenString( stringCpy, delimeters );
  
- 
- 
-   /*********************************************************/
    /* DECODE THE METAR REPORT (POSITIONAL ORDER PRECEDENCE) */
-   /*********************************************************/
  
    NDEX = 0;
    MetarGroup = codename;
@@ -2568,12 +2493,11 @@ if( strcmp(token[0],"OPKC") == 0 || strcmp(token[0],"TAPA") == 0 ) {
 }
 #endif
  
-      /**********************************************/
       /* SET ID_break_CODE TO ITS DEFAULT VALUE OF  */
       /* 99, WHICH MEANS THAT NO SUCCESSFUL ATTEMPT */
       /* WAS MADE TO DECODE ANY METAR CODED GROUP   */
       /* FOR THIS PASS THROUGH THE DECODING LOOP    */
-      /**********************************************/
+
       switch( MetarGroup ) {
          case( codename ):
             if( isCodeName( token[NDEX], Mptr, &NDEX ) )
@@ -2665,12 +2589,12 @@ printf("DcdMETAR:  token[%d] = %s\n",NDEX,token[NDEX]);
             }
             break;
          case( PartialObscur ):
-            if( isPartObscur( &(token[NDEX]), Mptr, &NDEX ) )
+            if( isPartialObscuration( &(token[NDEX]), Mptr, &NDEX ) )
                SaveStartGroup = StartGroup = PartialObscur;
             MetarGroup = skyCond;
             break;
          case( skyCond ):
-            if( isSkyCond( &(token[NDEX]), Mptr, &NDEX ) )
+            if( isSkyConditions( &(token[NDEX]), Mptr, &NDEX ) )
                SaveStartGroup = StartGroup = skyCond;
             MetarGroup = tempGroup;
             break;
@@ -2680,7 +2604,7 @@ printf("DcdMETAR:  token[%d] = %s\n",NDEX,token[NDEX]);
             MetarGroup = altimStng;
             break;
          case( altimStng ):
-            if( isAltimStng( token[NDEX], Mptr, &NDEX ) )
+            if( isAltimeterString( token[NDEX], Mptr, &NDEX ) )
                SaveStartGroup = StartGroup = altimStng;
             MetarGroup = NotIDed;
             break;
@@ -2704,11 +2628,10 @@ if( strcmp(token[0],"OPKC") == 0 || strcmp(token[0],"TAPA") == 0 ) {
                   NDEX,token[NDEX]);
 }
 #endif
-                                     /******************************/
-                                     /* DECODE GROUPS FOUND IN THE */
-                                     /*  REMARKS SECTION OF THE    */
-                                     /*       METAR REPORT         */
-                                     /******************************/
+	 /* DECODE GROUPS FOUND IN THE */
+	 /*  REMARKS SECTION OF THE    */
+	 /*       METAR REPORT         */
+
 #ifdef PRTMETAR
 printf("DCDMETAR:  Print DECODED METAR, before leaving "
        "DCDMETAR Routine, but before possible call to DcdMTRmk\n\n");
@@ -2725,11 +2648,9 @@ printf("DCDMETAR:  Print DECODED METAR, after possible DcdMTRmk "
 prtDMETR( Mptr );
 #endif
  
-                           /****************************************/
    freeTokens( token );    /* FREE THE STORAGE ALLOCATED FOR THE   */
                            /* ARRAY USED TO HOLD THE METAR REPORT  */
                            /*                GROUPS                */
-                           /****************************************/
    free(stringCpy);
    
    return 0;

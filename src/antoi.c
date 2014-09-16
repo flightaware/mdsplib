@@ -58,19 +58,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  
 int antoi(char * string, int len)
 {
- 
-    /*******************/
-    /* local variables */
-    /*******************/
- 
     char * tmpstr;
-    int i,
-        retval;
- 
- 
-    /*****************/
-    /* function body */
-    /*****************/
+    int i, retval;
  
     tmpstr = malloc((len+1) * sizeof(char));
  

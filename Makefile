@@ -4,6 +4,7 @@ CC = gcc
 
 #CFLAGS = -g -O2 -fPIC -DDEBUGZZ
 CFLAGS = -g -O2 -fPIC
+#CFLAGS = -g -O0 -fPIC
 
 LIBS = 
 

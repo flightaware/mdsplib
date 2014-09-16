@@ -59,20 +59,16 @@ MDSP_BOOL charcmp(char *str, char *pattern)
 {
  
  
-   /**********************************************************/
    /* Loop while str and pattern is not equal to null, then  */
    /* inscreases str and pattern by one                      */
-   /**********************************************************/
  
    for (; *pattern != '\0'; pattern++)
    {
       if (*str == '\0')
          return FALSE;
  
-      /************************************************************/
       /* If pattern match str, then increase str and jump out the */
       /* case and read next char of the str and pattern           */
-      /************************************************************/
  
       if ( isspace(*pattern) )
          pattern = nxtalpha(pattern);

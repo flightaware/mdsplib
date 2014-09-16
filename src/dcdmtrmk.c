@@ -69,22 +69,12 @@ float fracPart( char * );
 static MDSP_BOOL isTS_LOC( char **string, Decoded_METAR *Mptr,
                            int *NDEX )
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    int i;
  
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
-   /*******************************************/
    /* COMPARE THE INPUT CHARACTER STRING WITH */
    /* VALID AUTOMATED STATION CODE TYPE.  IF  */
    /* A MATCH IS FOUND, RETURN TRUE.  OTHER-  */
    /*           WISE, RETURN FALSE            */
-   /*******************************************/
  
    if( *string == NULL )
       return FALSE;
@@ -303,7 +293,7 @@ static MDSP_BOOL isRADAT( char **string, Decoded_METAR *Mptr,
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isTornadicActiv                                  */
+/*  Title:         isTornadicActivity                               */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -343,7 +333,7 @@ static MDSP_BOOL isRADAT( char **string, Decoded_METAR *Mptr,
 /********************************************************************/
 #pragma page(1)
  
-static MDSP_BOOL isTornadicActiv( char **string, Decoded_METAR *Mptr,
+static MDSP_BOOL isTornadicActivity( char **string, Decoded_METAR *Mptr,
                              int *NDEX )
 {
    int saveNdex,
@@ -351,12 +341,6 @@ static MDSP_BOOL isTornadicActiv( char **string, Decoded_METAR *Mptr,
    MDSP_BOOL Completion_flag;
    char *B_stringPtr,
         *E_stringPtr;
- 
- 
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
- 
  
    saveNdex = *NDEX;
  
@@ -617,7 +601,7 @@ static MDSP_BOOL isTornadicActiv( char **string, Decoded_METAR *Mptr,
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isPartObscur                                     */
+/*  Title:         isPartialObscuration                             */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -658,14 +642,9 @@ static MDSP_BOOL isTornadicActiv( char **string, Decoded_METAR *Mptr,
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-static MDSP_BOOL isPartObscur( char **string, Decoded_METAR *Mptr,
+static MDSP_BOOL isPartialObscuration( char **string, Decoded_METAR *Mptr,
                           int ndex, int *NDEX )
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    int i;
  
    static char *phenom[] = {"-DZ", "DZ", "+DZ",
@@ -685,8 +664,8 @@ static MDSP_BOOL isPartObscur( char **string, Decoded_METAR *Mptr,
  
  
 #ifdef DEBUGXX
-   printf("isPartObscur:  Routine Entered...\n");
-   printf("isPartObscur:  *string = %s\n",*string);
+   printf("isPartialObscuration:  Routine Entered...\n");
+   printf("isPartialObscuration:  *string = %s\n",*string);
    if( Mptr->PartialObscurationAmt[ndex][0] != '\0' ) {
       printf("PartialObscurationAmt = %s\n",
                 Mptr->PartialObscurationAmt[ndex]);
@@ -698,7 +677,7 @@ static MDSP_BOOL isPartObscur( char **string, Decoded_METAR *Mptr,
           strcmp( *string, "BKN000" ) == 0   ) {
  
           --string;
-         printf("isPartObscur:  Preceding group = %s\n",
+         printf("isPartialObscuration:  Preceding group = %s\n",
                   *string);
          ++string;
       }
@@ -806,24 +785,14 @@ static MDSP_BOOL isPartObscur( char **string, Decoded_METAR *Mptr,
 static MDSP_BOOL isA0indicator( char *indicator, Decoded_METAR *Mptr,
                            int *NDEX )
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    char *autoFlag[] = {"A01", "A01A", "A02", "A02A", "AOA",
                        "A0A", "AO1", "AO1A", "AO2", "AO2A", NULL};
    int i;
  
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
-   /*******************************************/
    /* COMPARE THE INPUT CHARACTER STRING WITH */
    /* VALID AUTOMATED STATION CODE TYPE.  IF  */
    /* A MATCH IS FOUND, RETURN TRUE.  OTHER-  */
    /*           WISE, RETURN FALSE            */
-   /*******************************************/
  
    if( indicator == NULL )
       return FALSE;
@@ -890,28 +859,15 @@ static MDSP_BOOL isA0indicator( char *indicator, Decoded_METAR *Mptr,
 static MDSP_BOOL isPeakWind( char **string, Decoded_METAR *Mptr,
                         int *NDEX )
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    char buf[ 6 ];
    char *slash;
    int temp;
    MDSP_BOOL PK_WND_FLAG;
  
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
- 
- 
- 
-   /******************************************************/
    /* IF THE CURRENT AND NEXT GROUPS ARE "PK WND", THEN  */
    /* DETERMINE WHETHER OR NOT THE GROUP THAT FOLLOWS IS */
    /* A VALID PK WND GROUP.  IF IT IS, THEN DECODE THE   */
    /* GROUP AND RETURN TRUE.  OTHERWISE, RETURN FALSE.   */
-   /******************************************************/
  
    PK_WND_FLAG = TRUE;
  
@@ -937,11 +893,9 @@ static MDSP_BOOL isPeakWind( char **string, Decoded_METAR *Mptr,
       return FALSE;
  
    if( (slash = strchr(*string,'/')) == NULL ) {
-                              /********************************/
                               /* INVALID PEAK WIND. BUMP PAST */
                               /* PK AND WND GROUP AND RETURN  */
                               /*             FALSE.           */
-                              /********************************/
       (*NDEX)++;
  
       if( PK_WND_FLAG )
@@ -973,11 +927,9 @@ static MDSP_BOOL isPeakWind( char **string, Decoded_METAR *Mptr,
       }
       else
          Mptr->PKWND_minute =  atoi( buf );
-                              /********************************/
                               /* VALID PEAK WIND FOUND.  BUMP */
                               /* PAST PK, WND, AND PEAK WIND  */
                               /* GROUPS AND RETURN TRUE.      */
-                              /********************************/
       (*NDEX)++;
       (*NDEX)++;
  
@@ -1035,24 +987,12 @@ static MDSP_BOOL isPeakWind( char **string, Decoded_METAR *Mptr,
 static MDSP_BOOL isWindShift( char **string, Decoded_METAR *Mptr,
                         int *NDEX)
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    int temp;
  
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
- 
- 
-   /****************************************************/
    /* IF THE CURRENT GROUP IS "WSHFT", THEN DETERMINE  */
    /* WHETHER OR NOT THE GROUP THAT FOLLOWS IS A VALID */
    /* WSHFT GROUP.  IF IT IS, THEN DECODE THE GROUP    */
    /* GROUP AND RETURN TRUE.  OTHERWISE, RETURN FALSE. */
-   /****************************************************/
  
    if( *string == NULL )
       return FALSE;
@@ -1082,7 +1022,6 @@ static MDSP_BOOL isWindShift( char **string, Decoded_METAR *Mptr,
       if( *string == NULL )
          return FALSE;
  
- 
       if( **string == '\0') {
          (*NDEX)++;
          (*NDEX)++;
@@ -1091,32 +1030,26 @@ static MDSP_BOOL isWindShift( char **string, Decoded_METAR *Mptr,
       else if( strcmp( *string, "FROPA") == 0 )
       {
          Mptr->Wshft_FROPA = TRUE;
-                              /********************************/
                               /* VALID WIND SHIFT FOUND. BUMP */
                               /* PAST WSHFT, WSHFT GROUP, AND */
                               /* FROPA GROUPS AND RETURN TRUE.*/
-                              /********************************/
          (*NDEX)++;
          (*NDEX)++;
          (*NDEX)++;
          return TRUE;
       }
       else {
-                              /********************************/
                               /* VALID WIND SHIFT FOUND. BUMP */
                               /* PAST WSHFT AND WSHFT GROUP   */
                               /*       AND RETURN TRUE.       */
-                              /********************************/
          (*NDEX)++;
          (*NDEX)++;
          return TRUE;
       }
    }
    else {
-                              /**********************************/
                               /* INVALID WIND SHIFT FOUND. BUMP */
                               /* PAST WSHFT AND RETURN FALSE.   */
-                              /********************************/
       (*NDEX)++;
       return FALSE;
    }
@@ -1126,7 +1059,7 @@ static MDSP_BOOL isWindShift( char **string, Decoded_METAR *Mptr,
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isTowerVsby                                      */
+/*  Title:         isTowerVisibility                                */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -1163,27 +1096,15 @@ static MDSP_BOOL isWindShift( char **string, Decoded_METAR *Mptr,
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-static MDSP_BOOL isTowerVsby( char **token, Decoded_METAR *Mptr, int *NDEX)
+static MDSP_BOOL isTowerVisibility( char **token, Decoded_METAR *Mptr, int *NDEX)
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    char *slash;
    float T_vsby;
  
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
- 
- 
-   /****************************************************************/
    /* IF THE CURRENT AND NEXT GROUPS ARE "TWR VIS", THEN DETERMINE */
    /* WHETHER OR NOT THE GROUP(S) THAT FOLLOWS IS(ARE) A VALID     */
    /* TOWER VISIBILITY  GROUP.  IF IT IS, THEN DECODE THE GROUP    */
    /* GROUP AND RETURN TRUE.  OTHERWISE, RETURN FALSE.             */
-   /****************************************************************/
  
    if( *token == NULL )
       return FALSE;
@@ -1282,7 +1203,7 @@ static MDSP_BOOL isTowerVsby( char **token, Decoded_METAR *Mptr, int *NDEX)
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isSurfaceVsby                                    */
+/*  Title:         isSurfaceVisibility                              */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -1319,29 +1240,16 @@ static MDSP_BOOL isTowerVsby( char **token, Decoded_METAR *Mptr, int *NDEX)
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-static MDSP_BOOL isSurfaceVsby( char **token, Decoded_METAR *Mptr,
+static MDSP_BOOL isSurfaceVisibility( char **token, Decoded_METAR *Mptr,
                            int *NDEX)
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    char *slash;
    float S_vsby;
  
- 
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
- 
- 
-   /****************************************************************/
    /* IF THE CURRENT AND NEXT GROUPS ARE "SFC VIS", THEN DETERMINE */
    /* WHETHER OR NOT THE GROUP(S) THAT FOLLOWS IS(ARE) A VALID     */
    /* SURFACE VISIBILITY  GROUP.  IF IT IS, THEN DECODE THE GROUP  */
    /* GROUP AND RETURN TRUE.  OTHERWISE, RETURN FALSE.             */
-   /****************************************************************/
  
    if( *token == NULL )
       return FALSE;
@@ -1443,7 +1351,7 @@ static MDSP_BOOL isSurfaceVsby( char **token, Decoded_METAR *Mptr,
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isVariableVsby                                   */
+/*  Title:         isVariableVisibility                             */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          21 Nov 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -1481,14 +1389,9 @@ static MDSP_BOOL isSurfaceVsby( char **token, Decoded_METAR *Mptr,
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-static MDSP_BOOL isVariableVsby( char **string, Decoded_METAR *Mptr,
+static MDSP_BOOL isVariableVisibility( char **string, Decoded_METAR *Mptr,
                               int *NDEX )
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    char *slash,
         *slash1,
         *slash2,
@@ -1497,20 +1400,11 @@ static MDSP_BOOL isVariableVsby( char **string, Decoded_METAR *Mptr,
    float minimumVsby,
          maximumVsby;
  
- 
- 
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
- 
- 
-   /***************************************************/
    /* IF THE CURRENT GROUP IS  "VIS", THEN DETERMINE  */
    /* WHETHER OR NOT THE GROUPS THAT FOLLOW ARE VALID */
    /* VARIABLE PREVAILING VSBY.  IF THEY ARE, THEN    */
    /* DECODE THE GROUPS AND RETURN TRUE.  OTHERWISE,  */
    /* RETURN FALSE.                                   */
-   /***************************************************/
  
    if( *string == NULL )
       return FALSE;
@@ -1695,7 +1589,7 @@ static MDSP_BOOL isVariableVsby( char **string, Decoded_METAR *Mptr,
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isVsby2ndSite                                    */
+/*  Title:         isVisibility2ndSite                              */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -1737,31 +1631,18 @@ static MDSP_BOOL isVariableVsby( char **string, Decoded_METAR *Mptr,
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-static MDSP_BOOL isVsby2ndSite( char **token, Decoded_METAR *Mptr,
+static MDSP_BOOL isVisibility2ndSite( char **token, Decoded_METAR *Mptr,
                            int *NDEX)
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    char *slash;
    float S_vsby,
          VSBY_2ndSite;
  
- 
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
- 	
-
-   /***************************************************/
    /* IF THE CURRENT GROUP IS  "VIS", THEN DETERMINE  */
    /* WHETHER OR NOT THE GROUPS THAT FOLLOW ARE VALID */
    /* VSBILITY AT A 2NDRY SITE.  IF THEY ARE, THEN    */
    /* DECODE THE GROUPS AND RETURN TRUE.  OTHERWISE,  */
    /* RETURN FALSE.                                   */
-   /***************************************************/
  
    if( *token == NULL )
       return FALSE;
@@ -1906,7 +1787,7 @@ static MDSP_BOOL isVsby2ndSite( char **token, Decoded_METAR *Mptr,
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isLTGfreq                                        */
+/*  Title:         isLightningFrequency                             */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -1949,13 +1830,8 @@ static MDSP_BOOL isVsby2ndSite( char **token, Decoded_METAR *Mptr,
 /********************************************************************/
 #pragma page(1)
  
-MDSP_BOOL static isLTGfreq( char **string, Decoded_METAR *Mptr, int *NDEX )
+MDSP_BOOL static isLightningFrequency( char **string, Decoded_METAR *Mptr, int *NDEX )
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    MDSP_BOOL LTG_FREQ_FLAG,
         LTG_TYPE_FLAG,
         LTG_LOC_FLAG,
@@ -1963,20 +1839,12 @@ MDSP_BOOL static isLTGfreq( char **string, Decoded_METAR *Mptr, int *NDEX )
         TYPE_NOT_FOUND;
    char *temp;
  
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
- 
- 
- 
-   /***************************************************/
    /* IF THE CURRENT GROUP IS  "LTG", THEN DETERMINE  */
    /* WHETHER OR NOT THE PREVIOUS GROUP AS WELL AS    */
    /* GROUPS THAT FOLLOW ARE VALID LIGHTNING REPORT   */
    /* PARAMETERS.  IF THEY ARE, THEN DECODE THE       */
    /* GROUPS AND RETURN TRUE.  OTHERWISE, RETURN      */
    /*                   FALSE.                        */
-   /***************************************************/
  
    if( *string == NULL )
       return FALSE;
@@ -2204,7 +2072,7 @@ MDSP_BOOL static isLTGfreq( char **string, Decoded_METAR *Mptr, int *NDEX )
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isRecentWx                                       */
+/*  Title:         isRecentWeather                                  */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -2214,7 +2082,7 @@ MDSP_BOOL static isLTGfreq( char **string, Decoded_METAR *Mptr, int *NDEX )
 /*             groups from the METAR report make up a valid report  */
 /*             recent weather.                                      */
 /*                                                                  */
-/*  Input:         token  - the addr of a ptr to a character token */
+/*  Input:         token  - the addr of a ptr to a character token  */
 /*                          that may or may not be a recent weather */
 /*                          group.                                  */
 /*                                                                  */
@@ -2885,17 +2753,8 @@ static MDSP_BOOL isPRESRR( char *string, Decoded_METAR *Mptr, int *NDEX)
  
 static MDSP_BOOL isSLP( char **token, Decoded_METAR *Mptr, int *NDEX )
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    int pressure,
        ndex;
- 
-   /*************************/
-   /* BEGIN BODY OF ROUTINE */
-   /*************************/
  
    if( *token == NULL )
       return FALSE;
@@ -2959,10 +2818,6 @@ static MDSP_BOOL isSLP( char **token, Decoded_METAR *Mptr, int *NDEX )
 static MDSP_BOOL isSectorVsby( char **string, Decoded_METAR *Mptr,
                           int  *NDEX )
 {
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    int result,
        tempstrlen = 20;
  
@@ -2970,10 +2825,6 @@ static MDSP_BOOL isSectorVsby( char **string, Decoded_METAR *Mptr,
    char  dd[3],
          temp[20],
          *slash;
- 
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
  
    if( *string == NULL )
       return FALSE;
@@ -3333,10 +3184,6 @@ static MDSP_BOOL isVIRGA( char **string, Decoded_METAR *Mptr, int *NDEX)
 static MDSP_BOOL isSfcObscuration( char *string, Decoded_METAR *Mptr,
                               int *NDEX )
 {
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    static char *WxSymbols[] = {"BCFG", "BLDU", "BLSA", "BLPY",
           "DRDU", "DRSA", "DRSN", "DZ", "DS", "FZFG", "FZDZ", "FZRA",
           "FG", "FC", "FU", "GS", "GR", "HZ", "IC", "MIFG",
@@ -3352,10 +3199,6 @@ static MDSP_BOOL isSfcObscuration( char *string, Decoded_METAR *Mptr,
         *temp;
  
    MDSP_BOOL IS_NOT_FOUND;
- 
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
  
    if( string == NULL )
       return FALSE;
@@ -3458,7 +3301,7 @@ static MDSP_BOOL isCeiling( char *string, Decoded_METAR *Mptr, int *NDEX )
  
 }
 #pragma page(1)
-static MDSP_BOOL isVrbSky( char **string, Decoded_METAR *Mptr, int *NDEX )
+static MDSP_BOOL isVariableSky( char **string, Decoded_METAR *Mptr, int *NDEX )
 {
    static char *cldPtr[] = {"FEW", "SCT", "BKN", "OVC", NULL };
    MDSP_BOOL IS_NOT_FOUND;
@@ -3476,7 +3319,7 @@ static MDSP_BOOL isVrbSky( char **string, Decoded_METAR *Mptr, int *NDEX )
  
    while( cldPtr[i] != NULL && IS_NOT_FOUND ) {
 #ifdef DEBUGQQ
-   printf("isVrbSky: *string = %s cldPtr[%d] = %s\n",
+   printf("isVariableSky: *string = %s cldPtr[%d] = %s\n",
                             *string,i,cldPtr[i]);
 #endif
       if( strncmp(*string, cldPtr[i], strlen(cldPtr[i])) != 0 )
@@ -3489,7 +3332,7 @@ static MDSP_BOOL isVrbSky( char **string, Decoded_METAR *Mptr, int *NDEX )
       return FALSE;
    else {
 #ifdef DEBUGQQ
-   printf("isVrbSky: *string = %s = cldPtr[%d] = %s\n",
+   printf("isVariableSky: *string = %s = cldPtr[%d] = %s\n",
                             *string,i,cldPtr[i]);
 #endif
       strcpy( SKY1, cldPtr[i] );
@@ -3512,7 +3355,7 @@ static MDSP_BOOL isVrbSky( char **string, Decoded_METAR *Mptr, int *NDEX )
          IS_NOT_FOUND = TRUE;
          while( cldPtr[i] != NULL && IS_NOT_FOUND ) {
 #ifdef DEBUGQQ
-   printf("isVrbSky: *string = %s cldPtr[%d] = %s\n",
+   printf("isVariableSky: *string = %s cldPtr[%d] = %s\n",
                             *string,i,cldPtr[i]);
 #endif
             if( strncmp(*string, cldPtr[i], strlen(cldPtr[i])) != 0 )
@@ -3562,14 +3405,9 @@ static MDSP_BOOL isVrbSky( char **string, Decoded_METAR *Mptr, int *NDEX )
 }
  
 #pragma page(1)
-static MDSP_BOOL isObscurAloft( char **string, Decoded_METAR *Mptr,
+static MDSP_BOOL isObscurationAloft( char **string, Decoded_METAR *Mptr,
                            int *NDEX )
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    static char *WxSymbols[] = {"BCFG", "BLDU", "BLSA", "BLPY",
           "DRDU", "DRSA", "DRSN", "DZ", "DS", "FZFG", "FZDZ", "FZRA",
           "FG", "FC", "FU", "GS", "GR", "HZ", "IC", "MIFG",
@@ -3583,10 +3421,6 @@ static MDSP_BOOL isObscurAloft( char **string, Decoded_METAR *Mptr,
         *temp;
  
    MDSP_BOOL IS_NOT_FOUND;
- 
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
  
    if( *string == NULL )
       return FALSE;
@@ -3872,7 +3706,7 @@ static MDSP_BOOL isSunshineDur( char *string, Decoded_METAR *Mptr,
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isHourlyPrecip                                   */
+/*  Title:         isHourlyPrecipitation                            */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          20 Nov 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -3920,7 +3754,7 @@ static MDSP_BOOL isSunshineDur( char *string, Decoded_METAR *Mptr,
 /********************************************************************/
 #pragma page(1)
  
-static MDSP_BOOL isHourlyPrecip( char **string, Decoded_METAR *Mptr,
+static MDSP_BOOL isHourlyPrecipitation( char **string, Decoded_METAR *Mptr,
                             int *NDEX)
 {
  
@@ -3970,7 +3804,7 @@ static MDSP_BOOL isHourlyPrecip( char **string, Decoded_METAR *Mptr,
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isP6Precip                                       */
+/*  Title:         isP6Precipitation                                */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          20 Nov 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -4018,7 +3852,7 @@ static MDSP_BOOL isHourlyPrecip( char **string, Decoded_METAR *Mptr,
 /********************************************************************/
 #pragma page(1)
  
-static MDSP_BOOL isP6Precip( char *string, Decoded_METAR *Mptr,
+static MDSP_BOOL isP6Precipitation( char *string, Decoded_METAR *Mptr,
                         int *NDEX )
 {
  
@@ -4184,11 +4018,6 @@ static MDSP_BOOL isP24Precip( char *string, Decoded_METAR *Mptr,
  
 static MDSP_BOOL isTTdTenths( char *token, Decoded_METAR *Mptr, int *NDEX)
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    MDSP_BOOL returnFlag = FALSE;
    float sign;
  
@@ -4246,7 +4075,7 @@ static MDSP_BOOL isTTdTenths( char *token, Decoded_METAR *Mptr, int *NDEX)
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isMaxTemp                                        */
+/*  Title:         isMaxTemperature                                 */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -4266,7 +4095,7 @@ static MDSP_BOOL isTTdTenths( char *token, Decoded_METAR *Mptr, int *NDEX)
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-static MDSP_BOOL isMaxTemp(char *string, Decoded_METAR *Mptr, int *NDEX)
+static MDSP_BOOL isMaxTemperature(char *string, Decoded_METAR *Mptr, int *NDEX)
 {
    char buf[ 6 ];
  
@@ -4954,11 +4783,6 @@ static MDSP_BOOL isDollarSign( char *indicator, Decoded_METAR *Mptr,
 #pragma page(1)
 void DcdMTRmk( char **token, Decoded_METAR *Mptr )
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    int TornadicActvty = 0, A0indicator = 0,
        peakwind = 0, windshift = 0, towerVsby = 0, surfaceVsby = 0,
        variableVsby = 0, LTGfreq = 0,
@@ -4989,15 +4813,9 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
  
    float T_vsby;
  
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
- 
    NDEX = 0;
  
-   /*************************************************/
-   /* LOCATE THE START OF THE METAR REMARKS SECTION */
-   /*************************************************/
+   /* locate the start of the metar remarks section */
  
    IS_NOT_RMKS = TRUE;
  
@@ -5011,10 +4829,8 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
          IS_NOT_RMKS = FALSE;
    }
  
-   /***********************************************/
-   /* IF THE METAR REPORT CONTAINS NO REMARKS     */
-   /* SECTION, THEN RETURN TO THE CALLING ROUTINE */
-   /***********************************************/
+   // if the metar report contains no remarks
+   // section, return
  
    if( token[ NDEX ] != NULL ) {
 #ifdef DEBUGZZ
@@ -5033,10 +4849,9 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
 #endif
       return;
    }
-   /*****************************************/
+
    /* IDENTIFY AND VALIDATE REMARKS SECTION */
    /*   DATA GROUPS FOR PARSING/DECODING    */
-   /*****************************************/
  
    while(token[NDEX] != NULL) {
  
@@ -5046,7 +4861,18 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
  
       isRADAT( &(token[NDEX]), Mptr, &NDEX );
  
-      if( isTornadicActiv( &(token[NDEX]), Mptr, &NDEX ) ) {
+      if( isTornadicActivity( &(token[NDEX]), Mptr, &NDEX ) ) {
+
+// NB temp
+#if 0
+char stupid[100];
+extern void sprint_tornadic_info (char * string, Decoded_METAR *Mptr);
+stupid[0] = '\0';
+sprintf_tornadic_info(stupid,Mptr);
+puts(stupid);
+#endif
+// end temp
+
          TornadicActvty++;
          if( TornadicActvty > 1 ) {
             memset(Mptr->TornadicType, '\0', sizeof(Mptr->TornadicType));
@@ -5079,31 +4905,31 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
             Mptr->WshfTime_minute = MAXINT;
          }
       }
-      else if( isTowerVsby( &(token[NDEX]), Mptr, &NDEX ) ) {
+      else if( isTowerVisibility( &(token[NDEX]), Mptr, &NDEX ) ) {
          towerVsby++;
          if( towerVsby > 1 )
             Mptr->TWR_VSBY = (float) MAXINT;
       }
-      else if( isSurfaceVsby( &(token[NDEX]), Mptr, &NDEX ) ) {
+      else if( isSurfaceVisibility( &(token[NDEX]), Mptr, &NDEX ) ) {
          surfaceVsby++;
          if( surfaceVsby > 1 )
             Mptr->SFC_VSBY = (float) MAXINT;
       }
-      else if( isVariableVsby( &(token[NDEX]), Mptr, &NDEX ) ) {
+      else if( isVariableVisibility( &(token[NDEX]), Mptr, &NDEX ) ) {
          variableVsby++;
          if( variableVsby > 1 ) {
             Mptr->minVsby = (float) MAXINT;
             Mptr->maxVsby = (float) MAXINT;
          }
       }
-      else if( isVsby2ndSite( &(token[NDEX]), Mptr, &NDEX ) ) {
+      else if( isVisibility2ndSite( &(token[NDEX]), Mptr, &NDEX ) ) {
          Vsby2ndSite++;
          if( Vsby2ndSite > 1 ) {
             Mptr->VSBY_2ndSite = (float) MAXINT;
             memset(Mptr->VSBY_2ndSite_LOC, '\0', sizeof(Mptr->VSBY_2ndSite_LOC));
          }
       }
-      else if( isLTGfreq( &(token[NDEX]), Mptr, &NDEX ) ) {
+      else if( isLightningFrequency( &(token[NDEX]), Mptr, &NDEX ) ) {
          LTGfreq++;
          if( LTGfreq > 1 ) {
             Mptr->OCNL_LTG = FALSE;
@@ -5160,7 +4986,7 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
          if( SLP > 1 )
             Mptr->SLP = (float) MAXINT;
       }
-      else if( isPartObscur( &(token[NDEX]), Mptr, PartObscur,
+      else if( isPartialObscuration( &(token[NDEX]), Mptr, PartObscur,
                &NDEX ) ) {
          PartObscur++;
          if( PartObscur > 2 ) {
@@ -5209,7 +5035,7 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
             Mptr->Estimated_Ceiling = FALSE;
          }
       }
-      else if( isVrbSky( &(token[NDEX]), Mptr, &NDEX ) ) {
+      else if( isVariableSky( &(token[NDEX]), Mptr, &NDEX ) ) {
          VrbSkyCond++;
          if( VrbSkyCond > 1 ) {
             memset(Mptr->VrbSkyBelow, '\0', sizeof(Mptr->VrbSkyBelow));
@@ -5217,7 +5043,7 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
             Mptr->VrbSkyLayerHgt = MAXINT;
          }
       }
-      else if( isObscurAloft( &(token[NDEX]), Mptr, &NDEX ) ) {
+      else if( isObscurationAloft( &(token[NDEX]), Mptr, &NDEX ) ) {
          ObscurAloft++;
          if( ObscurAloft > 1 ) {
             Mptr->ObscurAloftHgt = MAXINT;
@@ -5270,12 +5096,12 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
             Mptr->SunSensorOut = FALSE;
          }
       }
-      else if( isHourlyPrecip( &(token[NDEX]), Mptr, &NDEX ) ) {
+      else if( isHourlyPrecipitation( &(token[NDEX]), Mptr, &NDEX ) ) {
          hourlyPrecip++;
          if( hourlyPrecip > 1 )
             Mptr->hourlyPrecip = (float) MAXINT;
       }
-      else if( isP6Precip( token[NDEX], Mptr, &NDEX ) ) {
+      else if( isP6Precipitation( token[NDEX], Mptr, &NDEX ) ) {
          P6Precip++;
          if( P6Precip > 1 )
             Mptr->precip_amt = (float) MAXINT;
@@ -5292,7 +5118,7 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
             Mptr->DP_Temp_2_tenths = (float) MAXINT;
          }
       }
-      else if( isMaxTemp( token[NDEX], Mptr, &NDEX ) ) {
+      else if( isMaxTemperature( token[NDEX], Mptr, &NDEX ) ) {
          MaxTemp++;
          if( MaxTemp > 1 )
             Mptr->maxtemp = (float) MAXINT;

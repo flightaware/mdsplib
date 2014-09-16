@@ -19,20 +19,73 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "metar_structs.h"
 
+/* NB this is pretty insecure insofar as it blindly writes into string
+ * on the assuption that string can fit it all 
+ * */
+
+void sprintf_tornadic_info (char * string, Decoded_METAR *Mptr) {
+   char temp[100];
+ 
+   if ( Mptr->TornadicType[0] != '\0' ) {
+      sprintf(temp, "TORNADIC ACTVTY TYPE: %s\n",
+         Mptr->TornadicType );
+      strcat(string, temp);
+   }
+ 
+   if ( Mptr->BTornadicHour != MAXINT ) {
+      sprintf(temp, "TORN. ACTVTY BEGHOUR: %d\n",
+         Mptr->BTornadicHour );
+      strcat(string, temp);
+   }
+ 
+   if ( Mptr->BTornadicMinute != MAXINT ) {
+      sprintf(temp, "TORN. ACTVTY BEGMIN : %d\n",
+         Mptr->BTornadicMinute );
+      strcat(string, temp);
+   }
+ 
+   if ( Mptr->ETornadicHour != MAXINT ) {
+      sprintf(temp, "TORN. ACTVTY ENDHOUR: %d\n",
+         Mptr->ETornadicHour );
+      strcat(string, temp);
+   }
+ 
+   if ( Mptr->ETornadicMinute != MAXINT ) {
+      sprintf(temp, "TORN. ACTVTY ENDMIN : %d\n",
+         Mptr->ETornadicMinute );
+      strcat(string, temp);
+   }
+ 
+   if ( Mptr->TornadicDistance != MAXINT ) {
+      sprintf(temp, "TORN. DIST. FROM STN: %d\n",
+         Mptr->TornadicDistance );
+      strcat(string, temp);
+   }
+ 
+   if ( Mptr->TornadicLOC[0] != '\0' ) {
+      sprintf(temp, "TORNADIC LOCATION   : %s\n",
+         Mptr->TornadicLOC );
+      strcat(string, temp);
+   }
+ 
+   if ( Mptr->TornadicDIR[0] != '\0' ) {
+      sprintf(temp, "TORNAD. DIR FROM STN: %s\n",
+         Mptr->TornadicDIR );
+      strcat(string, temp);
+   }
+ 
+   if ( Mptr->TornadicMovDir[0] != '\0' ) {
+      sprintf(temp, "TORNADO DIR OF MOVM.: %s\n",
+         Mptr->TornadicMovDir );
+      strcat(string, temp);
+   }
+}
+ 
 
 void sprint_metar (char * string, Decoded_METAR *Mptr)
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    int i;
    char temp[100];
- 
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
  
    sprintf(string, "\n\n\n/*******************************************/\n");
    strcat(string, "/*    THE DECODED METAR REPORT FOLLOWS     */\n");
@@ -290,62 +343,9 @@ void sprint_metar (char * string, Decoded_METAR *Mptr)
          Mptr->hectoPasc_altstng );
       strcat(string, temp);
    }
- 
-   if ( Mptr->TornadicType[0] != '\0' ) {
-      sprintf(temp, "TORNADIC ACTVTY TYPE: %s\n",
-         Mptr->TornadicType );
-      strcat(string, temp);
-   }
- 
-   if ( Mptr->BTornadicHour != MAXINT ) {
-      sprintf(temp, "TORN. ACTVTY BEGHOUR: %d\n",
-         Mptr->BTornadicHour );
-      strcat(string, temp);
-   }
- 
-   if ( Mptr->BTornadicMinute != MAXINT ) {
-      sprintf(temp, "TORN. ACTVTY BEGMIN : %d\n",
-         Mptr->BTornadicMinute );
-      strcat(string, temp);
-   }
- 
-   if ( Mptr->ETornadicHour != MAXINT ) {
-      sprintf(temp, "TORN. ACTVTY ENDHOUR: %d\n",
-         Mptr->ETornadicHour );
-      strcat(string, temp);
-   }
- 
-   if ( Mptr->ETornadicMinute != MAXINT ) {
-      sprintf(temp, "TORN. ACTVTY ENDMIN : %d\n",
-         Mptr->ETornadicMinute );
-      strcat(string, temp);
-   }
- 
-   if ( Mptr->TornadicDistance != MAXINT ) {
-      sprintf(temp, "TORN. DIST. FROM STN: %d\n",
-         Mptr->TornadicDistance );
-      strcat(string, temp);
-   }
- 
-   if ( Mptr->TornadicLOC[0] != '\0' ) {
-      sprintf(temp, "TORNADIC LOCATION   : %s\n",
-         Mptr->TornadicLOC );
-      strcat(string, temp);
-   }
- 
-   if ( Mptr->TornadicDIR[0] != '\0' ) {
-      sprintf(temp, "TORNAD. DIR FROM STN: %s\n",
-         Mptr->TornadicDIR );
-      strcat(string, temp);
-   }
- 
-   if ( Mptr->TornadicMovDir[0] != '\0' ) {
-      sprintf(temp, "TORNADO DIR OF MOVM.: %s\n",
-         Mptr->TornadicMovDir );
-      strcat(string, temp);
-   }
- 
- 
+
+    sprintf_tornadic_info (string, Mptr);
+
    if ( Mptr->autoIndicator[0] != '\0' ) {
          sprintf(temp, "AUTO INDICATOR      : %s\n",
                           Mptr->autoIndicator);

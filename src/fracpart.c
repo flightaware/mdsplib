@@ -48,20 +48,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  
 float fracPart( char *string )
 {
- 
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    char buf[ 6 ],
         *slash;
  
    float numerator,
          denominator;
- 
-   /*************************/
-   /* START BODY OF ROUTINE */
-   /*************************/
  
    slash = strchr(string, '/');
 

@@ -315,10 +315,10 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
  
    Mptr->CAVOK = FALSE;
  
-   for ( i = 0; i < 12; i++ )
+   for ( i = 0; i < MAX_RUNWAYS; i++ )
    {
       memset(Mptr->RRVR[ i ].runway_designator,
-              '\0', 6);
+              '\0', sizeof(Mptr->RRVR[i].runway_designator));
  
       Mptr->RRVR[ i ].visRange = MAXINT;
  
@@ -360,18 +360,18 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
    /***************************************************/
  
  
-   for ( i = 0; i < 6; i++ )
+   for ( i = 0; i < MAX_CLOUD_GROUPS; i++ )
    {
-      memset(Mptr->cldTypHgt[ i ].cloud_type,
-              '\0', 5);
+      memset(Mptr->cloudGroup[ i ].cloud_type,
+              '\0', sizeof(Mptr->cloudGroup[i].cloud_type));
  
-      memset(Mptr->cldTypHgt[ i ].cloud_hgt_char,
-              '\0', 4);
+      memset(Mptr->cloudGroup[ i ].cloud_hgt_char,
+              '\0', sizeof(Mptr->cloudGroup[i].cloud_hgt_char));
  
-      Mptr->cldTypHgt[ i ].cloud_hgt_meters = MAXINT;
+      Mptr->cloudGroup[ i ].cloud_hgt_meters = MAXINT;
  
-      memset(Mptr->cldTypHgt[ i ].other_cld_phenom,
-              '\0', 4);
+      memset(Mptr->cloudGroup[ i ].other_cld_phenom,
+              '\0', sizeof(Mptr->cloudGroup[i].other_cld_phenom));
    }
  
    Mptr->VertVsby = MAXINT;
@@ -772,14 +772,14 @@ static void parseCldData( char *token, Decoded_METAR *Mptr, int next)
       return;
  
    if( strlen(token) > 6 )
-      strncpy(Mptr->cldTypHgt[next].other_cld_phenom,token+6,
+      strncpy(Mptr->cloudGroup[next].other_cld_phenom,token+6,
               (strlen(token)-6));
  
-   strncpy(Mptr->cldTypHgt[next].cloud_type,token,3);
+   strncpy(Mptr->cloudGroup[next].cloud_type,token,3);
  
-   strncpy(Mptr->cldTypHgt[next].cloud_hgt_char,token+3,3);
+   strncpy(Mptr->cloudGroup[next].cloud_hgt_char,token+3,3);
  
-   Mptr->cldTypHgt[next].cloud_hgt_meters =
+   Mptr->cloudGroup[next].cloud_hgt_meters =
                                CodedHgt2Meters( token+3, Mptr );
  
    return;
@@ -833,10 +833,10 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
  
    if( strcmp(*skycond,"CLR") == 0)
    {
-      strcpy(Mptr->cldTypHgt[0].cloud_type,"CLR");
+      strcpy(Mptr->cloudGroup[0].cloud_type,"CLR");
 /*
-      memset(Mptr->cldTypHgt[0].cloud_hgt_char,'\0',1);
-      memset(Mptr->cldTypHgt[0].other_cld_phenom,
+      memset(Mptr->cloudGroup[0].cloud_hgt_char,'\0',1);
+      memset(Mptr->cloudGroup[0].other_cld_phenom,
               '\0', 1);
 */
       (*NDEX)++;
@@ -849,10 +849,10 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
  
    else if( strcmp(*skycond,"SKC") == 0)
    {
-      strcpy(Mptr->cldTypHgt[0].cloud_type,"SKC");
+      strcpy(Mptr->cloudGroup[0].cloud_type,"SKC");
 /*
-      memset(Mptr->cldTypHgt[0].cloud_hgt_char,'\0',1);
-      memset(Mptr->cldTypHgt[0].other_cld_phenom,
+      memset(Mptr->cloudGroup[0].cloud_hgt_char,'\0',1);
+      memset(Mptr->cloudGroup[0].other_cld_phenom,
               '\0', 1);
 */
       (*NDEX)++;
@@ -869,7 +869,7 @@ static MDSP_BOOL isSkyCond( char **skycond, Decoded_METAR *Mptr,
                   nisdigit((*skycond+2),3) )
    {
       Mptr->VertVsby = CodedHgt2Meters( (*skycond+2), Mptr);
-      strncpy(Mptr->cldTypHgt[0].cloud_type,*skycond,2);
+      strncpy(Mptr->cloudGroup[0].cloud_type,*skycond,2);
       (*NDEX)++;
       return TRUE;
    }

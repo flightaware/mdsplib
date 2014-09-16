@@ -38,6 +38,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Used in the METAR structs. */
 typedef unsigned short int MDSP_BOOL;
 
+#define MAX_RUNWAYS 12
+#define MAX_CLOUD_GROUPS 6
  
 /*********************************************/
 /*                                           */
@@ -268,11 +270,11 @@ typedef struct decoded_METAR {
  
    double inches_altstng;
  
-   Runway_VisRange RRVR[12];
+   Runway_VisRange RRVR[MAX_RUNWAYS];
    Dispatch_VisRange DVR;
    Recent_Wx ReWx[3];
    WindStruct winData;
-   Cloud_Conditions cldTypHgt[6];
+   Cloud_Conditions cloudGroup[MAX_CLOUD_GROUPS];
  
 }  Decoded_METAR;
 

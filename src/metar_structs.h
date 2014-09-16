@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef METARX
 #define METARX
  
+/* this is alarmingly similar to include/metar.h */
+
 /********************************************************************/
 /*                                                                  */
 /*  Title:         METAR H                                          */
@@ -35,9 +37,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*                                                                  */
 /********************************************************************/
  
- 
 #include "local.h"     /* standard header file */
- 
 
 /*********************************************/
 /*                                           */
@@ -45,6 +45,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*       AND VARIABLE TYPE DEFINITION        */
 /*                                           */
 /*********************************************/
+ 
+#define MAX_RUNWAYS 12
  
 typedef struct runway_VisRange {
    char runway_designator[6];
@@ -79,6 +81,8 @@ typedef struct dispatch_VisRange {
 /*                                       */
 /*****************************************/
  
+#define MAX_CLOUD_GROUPS 6
+
 typedef struct cloud_Conditions {
    char cloud_type[5];
    char cloud_hgt_char[4];
@@ -268,16 +272,14 @@ typedef struct decoded_METAR {
  
    double inches_altstng;
  
-   Runway_VisRange RRVR[12];
+   Runway_VisRange RRVR[MAX_RUNWAYS];
    Dispatch_VisRange DVR;
    Recent_Wx ReWx[3];
    WindStruct winData;
-   Cloud_Conditions cldTypHgt[6];
+   Cloud_Conditions cloudGroup[MAX_CLOUD_GROUPS];
  
 }  Decoded_METAR;
- 
 #define MAXWXSYMBOLS 10       /*-- NOT TO EXCEED 10 PRES. WX GRPS --*/
 #define MAXTOKENS    500      /*--  RPT NOT TO EXCEED 500 GRPS   --*/
- 
  
 #endif

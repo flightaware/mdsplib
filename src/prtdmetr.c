@@ -143,7 +143,7 @@ void sprint_metar (char * string, Decoded_METAR *Mptr)
       strcat(string, temp);
    }
  
-   for ( i = 0; i < 12; i++ )
+   for ( i = 0; i < MAX_RUNWAYS; i++ )
    {
       if( Mptr->RRVR[i].runway_designator[0] != '\0' ) {
          sprintf(temp, "RUNWAY DESIGNATOR   : %s\n",
@@ -254,36 +254,32 @@ void sprint_metar (char * string, Decoded_METAR *Mptr)
       strcat(string, temp);
    }
  
-   i = 0;
-   while ( Mptr->cldTypHgt[ i ].cloud_type[0] != '\0' &&
-                     i < 6 )
+   for (i = 0;  Mptr->cloudGroup[ i ].cloud_type[0] != '\0' &&
+                     i < MAX_CLOUD_GROUPS; i++ )
    {
-      if ( Mptr->cldTypHgt[ i ].cloud_type[0] != '\0' ) {
+      if ( Mptr->cloudGroup[ i ].cloud_type[0] != '\0' ) {
          sprintf(temp, "CLOUD COVER         : %s\n",
-            Mptr->cldTypHgt[ i ].cloud_type);
+            Mptr->cloudGroup[ i ].cloud_type);
          strcat(string, temp);
       }
  
-      if ( Mptr->cldTypHgt[ i ].cloud_hgt_char[0] != '\0' ) {
+      if ( Mptr->cloudGroup[ i ].cloud_hgt_char[0] != '\0' ) {
          sprintf(temp, "CLOUD HGT (CHARAC.) : %s\n",
-            Mptr->cldTypHgt[ i ].cloud_hgt_char);
+            Mptr->cloudGroup[ i ].cloud_hgt_char);
          strcat(string, temp);
       }
  
-      if ( Mptr->cldTypHgt[ i ].cloud_hgt_meters != MAXINT) {
+      if ( Mptr->cloudGroup[ i ].cloud_hgt_meters != MAXINT) {
          sprintf(temp, "CLOUD HGT (METERS)  : %d\n",
-            Mptr->cldTypHgt[ i ].cloud_hgt_meters);
+            Mptr->cloudGroup[ i ].cloud_hgt_meters);
          strcat(string, temp);
       }
  
-      if ( Mptr->cldTypHgt[ i ].other_cld_phenom[0] != '\0' ) {
+      if ( Mptr->cloudGroup[ i ].other_cld_phenom[0] != '\0' ) {
          sprintf(temp, "OTHER CLOUD PHENOM  : %s\n",
-            Mptr->cldTypHgt[ i ].other_cld_phenom);
+            Mptr->cloudGroup[ i ].other_cld_phenom);
          strcat(string, temp);
       }
- 
-      i++;
- 
    }
  
    if ( Mptr->temp != MAXINT ) {

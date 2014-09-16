@@ -4823,39 +4823,37 @@ void decode_metar_remark( char **token, Decoded_METAR *Mptr )
          IS_NOT_RMKS = FALSE;
    }
  
-   // if the metar report contains no remarks
-   // section, return
+   // if the metar report contains no remarks section, return
  
-   if( token[ NDEX ] != NULL ) {
+	if (token[ NDEX ] != NULL) {
 #ifdef DEBUGZZ
-   printf("decode_metar_remark:  RMK found, token[%d] = %s\n",
+		printf("decode_metar_remark:  RMK found, token[%d] = %s\n",
                    NDEX,token[NDEX]);
 #endif
-      NDEX++;
+		NDEX++;
 #ifdef DEBUGZZ
-   printf("decode_metar_remark:  Bump NDEX, token[%d] = %s\n",
+		printf("decode_metar_remark:  Bump NDEX, token[%d] = %s\n",
                    NDEX,token[NDEX]);
 #endif
-   }
-   else {
+	} else {
 #ifdef DEBUGZZ
-   printf("decode_metar_remark:  No RMK found.  NULL ptr encountered\n");
+		printf("decode_metar_remark:  No RMK found.  NULL ptr encountered\n");
 #endif
-      return;
-   }
+		return;
+	}
 
    /* IDENTIFY AND VALIDATE REMARKS SECTION */
    /*   DATA GROUPS FOR PARSING/DECODING    */
  
-   while(token[NDEX] != NULL) {
+   while (token[NDEX] != NULL) {
  
 #ifdef DEBUGZZ
-   printf("decode_metar_remark:  decode RMK: token[%d] = %s\n",NDEX,token[NDEX]);
+		printf("decode_metar_remark:  decode RMK: token[%d] = %s\n",NDEX,token[NDEX]);
 #endif
  
-      isRADAT( &(token[NDEX]), Mptr, &NDEX );
+		isRADAT( &(token[NDEX]), Mptr, &NDEX );
  
-      if( isTornadicActivity( &(token[NDEX]), Mptr, &NDEX ) ) {
+		if (isTornadicActivity (&(token[NDEX]), Mptr, &NDEX)) {
 
 // NB temp
 #if 0
@@ -4867,339 +4865,308 @@ puts(stupid);
 #endif
 // end temp
 
-         TornadicActvty++;
-         if( TornadicActvty > 1 ) {
-            memset(Mptr->TornadicType, '\0', sizeof(Mptr->TornadicType));
-            memset(Mptr->TornadicLOC, '\0', sizeof(Mptr->TornadicLOC));
-            memset(Mptr->TornadicDIR, '\0', sizeof(Mptr->TornadicDIR));
-            Mptr->BTornadicHour = MAXINT;
-            Mptr->BTornadicMinute = MAXINT;
-            Mptr->ETornadicHour = MAXINT;
-            Mptr->ETornadicMinute = MAXINT;
-         }
-      }
-      else if( isA0indicator( token[NDEX], Mptr, &NDEX ) ) {
-         A0indicator++;
-         if( A0indicator > 1 )
-            memset(Mptr->autoIndicator, '\0', sizeof(Mptr->autoIndicator));
-      }
-      else if( isPeakWind( &(token[NDEX]), Mptr, &NDEX ) ) {
-         peakwind++;
-         if( peakwind > 1 ) {
-            Mptr->PKWND_dir = MAXINT;
-            Mptr->PKWND_speed = MAXINT;
-            Mptr->PKWND_hour = MAXINT;
-            Mptr->PKWND_minute = MAXINT;
-         }
-      }
-      else if( isWindShift( &(token[NDEX]), Mptr, &NDEX ) ) {
-         windshift++;
-         if( windshift > 1 ) {
-            Mptr->WshfTime_hour = MAXINT;
-            Mptr->WshfTime_minute = MAXINT;
-         }
-      }
-      else if( isTowerVisibility( &(token[NDEX]), Mptr, &NDEX ) ) {
-         towerVsby++;
-         if( towerVsby > 1 )
-            Mptr->TWR_VSBY = (float) MAXINT;
-      }
-      else if( isSurfaceVisibility( &(token[NDEX]), Mptr, &NDEX ) ) {
-         surfaceVsby++;
-         if( surfaceVsby > 1 )
-            Mptr->SFC_VSBY = (float) MAXINT;
-      }
-      else if( isVariableVisibility( &(token[NDEX]), Mptr, &NDEX ) ) {
-         variableVsby++;
-         if( variableVsby > 1 ) {
-            Mptr->minVsby = (float) MAXINT;
-            Mptr->maxVsby = (float) MAXINT;
-         }
-      }
-      else if( isVisibility2ndSite( &(token[NDEX]), Mptr, &NDEX ) ) {
-         Vsby2ndSite++;
-         if( Vsby2ndSite > 1 ) {
-            Mptr->VSBY_2ndSite = (float) MAXINT;
-            memset(Mptr->VSBY_2ndSite_LOC, '\0', sizeof(Mptr->VSBY_2ndSite_LOC));
-         }
-      }
-      else if( isLightningFrequency( &(token[NDEX]), Mptr, &NDEX ) ) {
-         LTGfreq++;
-         if( LTGfreq > 1 ) {
-            Mptr->OCNL_LTG = FALSE;
-            Mptr->FRQ_LTG = FALSE;
-            Mptr->CNS_LTG = FALSE;
-            Mptr->CG_LTG = FALSE;
-            Mptr->IC_LTG = FALSE;
-            Mptr->CC_LTG = FALSE;
-            Mptr->CA_LTG = FALSE;
-            Mptr->DSNT_LTG = FALSE;
-            Mptr->OVHD_LTG = FALSE;
-            Mptr->VcyStn_LTG = FALSE;
-            Mptr->LightningVCTS = FALSE;
-            Mptr->LightningTS = FALSE;
-            memset(Mptr->LTG_DIR, '\0', sizeof(Mptr->LTG_DIR));
-         }
-      }
-      else if( isTS_LOC( &(token[NDEX]), Mptr, &NDEX ) ) {
-         TS_LOC++;
-         if( TS_LOC > 1 ) {
-            memset(Mptr->TS_LOC, '\0', sizeof(Mptr->TS_LOC));
-            memset(Mptr->TS_MOVMNT, '\0', sizeof(Mptr->TS_MOVMNT));
-         }
-      }
-      else if( isRecentWX( &(token[NDEX]), Mptr, &recentWX ) ) {
-         NDEX++;
-      }
-      else if( isVariableCIG( &(token[NDEX]), Mptr, &NDEX ) ) {
-         variableCIG++;
-         if( variableCIG > 1) {
-            Mptr->minCeiling = MAXINT;
-            Mptr->maxCeiling = MAXINT;
-         }
-      }
-      else if( isCIG2ndSite( &(token[NDEX]), Mptr, &NDEX ) ) {
-         CIG2ndSite++;
-         if( CIG2ndSite > 1) {
-            Mptr->CIG_2ndSite_Meters = MAXINT;
-            memset(Mptr->CIG_2ndSite_LOC, '\0', sizeof(Mptr->CIG_2ndSite_LOC));
-         }
-      }
-      else if( isPRESFR( token[NDEX], Mptr, &NDEX ) ) {
-         PRESFR++;
-         if( PRESFR > 1 )
-            Mptr->PRESFR = FALSE;
-      }
-      else if( isPRESRR( token[NDEX], Mptr, &NDEX ) ) {
-         PRESRR++;
-         if( PRESRR > 1 )
-            Mptr->PRESRR = FALSE;
-      }
-      else if( isSLP( &(token[NDEX]), Mptr, &NDEX ) ) {
-         SLP++;
-         if( SLP > 1 )
-            Mptr->SLP = (float) MAXINT;
-      }
-      else if( isPartialObscuration( &(token[NDEX]), Mptr, PartObscur,
-               &NDEX ) ) {
-         PartObscur++;
-         if( PartObscur > 2 ) {
-            memset(Mptr->PartialObscurationAmt[0], '\0', sizeof(Mptr->PartialObscurationAmt[0]) );
-            memset(Mptr->PartialObscurationPhenom[0],'\0', sizeof(Mptr->PartialObscurationPhenom[0]));
- 
-            memset(Mptr->PartialObscurationAmt[1], '\0', sizeof(Mptr->PartialObscurationAmt[1]));
-            memset(Mptr->PartialObscurationPhenom[1],'\0', sizeof(Mptr->PartialObscurationPhenom[1]));
-         }
-      }
-      else if( isSectorVsby( &(token[NDEX]), Mptr, &NDEX ) ) {
-         SectorVsby++;
-         if( SectorVsby > 1 ) {
-            Mptr->SectorVsby = (float) MAXINT;
-            memset(Mptr->SectorVsby_Dir, '\0', sizeof(Mptr->SectorVsby_Dir));
-         }
-      }
-      else if( isGR( &(token[NDEX]), Mptr, &NDEX ) ) {
-         GR++;
-         if( GR > 1 ) {
-            Mptr->GR_Size = (float) MAXINT;
-            Mptr->GR = FALSE;
-         }
-      }
-      else if( isVIRGA( &(token[NDEX]), Mptr, &NDEX ) ) {
-         Virga++;
-         if( Virga > 1 ) {
-            Mptr->VIRGA = FALSE;
-            memset(Mptr->VIRGA_DIR, '\0', sizeof(Mptr->VIRGA_DIR));
-         }
-      }
-      else if( isSurfaceObscuration( token[NDEX], Mptr, &NDEX ) ) {
-         SfcObscur++;
-         if( SfcObscur > 1 ) {
-            for( i = 0; i < MAX_SURFACE_OBSCURATIONS; i++ ) {
-               memset(&(Mptr->SfcObscuration[i][0]), '\0', sizeof(Mptr->SfcObscuration[i]));
-               Mptr->Num8thsSkyObscured = MAXINT;
-            }
-         }
-      }
-      else if( isCeiling( token[NDEX], Mptr, &NDEX ) ) {
-         Ceiling++;
-         if( Ceiling > 1 ) {
-            Mptr->CIGNO = FALSE;
-            Mptr->Ceiling = MAXINT;
-            Mptr->Estimated_Ceiling = FALSE;
-         }
-      }
-      else if( isVariableSky( &(token[NDEX]), Mptr, &NDEX ) ) {
-         VrbSkyCond++;
-         if( VrbSkyCond > 1 ) {
-            memset(Mptr->VrbSkyBelow, '\0', sizeof(Mptr->VrbSkyBelow));
-            memset(Mptr->VrbSkyAbove, '\0', sizeof(Mptr->VrbSkyAbove));
-            Mptr->VrbSkyLayerHgt = MAXINT;
-         }
-      }
-      else if( isObscurationAloft( &(token[NDEX]), Mptr, &NDEX ) ) {
-         ObscurAloft++;
-         if( ObscurAloft > 1 ) {
-            Mptr->ObscurAloftHgt = MAXINT;
-            memset( Mptr->ObscurAloft, '\0', sizeof(Mptr->ObscurAloft));
-            memset( Mptr->ObscurAloftSkyCond, '\0', sizeof(Mptr->ObscurAloftSkyCond));
-         }
-      }
-      else if( isNOSPECI( token[NDEX], Mptr, &NDEX ) ) {
-         NoSPECI++;
-         if( NoSPECI > 1 )
-            Mptr->NOSPECI = FALSE;
-      }
-      else if( isLAST( token[NDEX], Mptr, &NDEX ) ) {
-         Last++;
-         if( Last > 1 )
-            Mptr->LAST = FALSE;
-      }
-      else if( isSynopClouds( token[NDEX], Mptr, &NDEX ) ) {
-         SynopClouds++;
-         if( SynopClouds > 1 ) {
-            memset( Mptr->synoptic_cloud_type, '\0', sizeof(Mptr->synoptic_cloud_type));
-            Mptr->CloudLow    = '\0';
-            Mptr->CloudMedium = '\0';
-            Mptr->CloudHigh   = '\0';
-         }
-      }
-      else if( isSNINCR( &(token[NDEX]), Mptr, &NDEX ) ) {
-         Snincr++;
-         if( Snincr > 1 ) {
-            Mptr->SNINCR = MAXINT;
-            Mptr->SNINCR_TotalDepth = MAXINT;
-         }
-      }
-      else if( isSnowDepth( token[NDEX], Mptr, &NDEX ) ) {
-         SnowDepth++;
-         if( SnowDepth > 1 ) {
-            memset( Mptr->snow_depth_group, '\0', sizeof(Mptr->snow_depth_group));
-            Mptr->snow_depth = MAXINT;
-         }
-      }
-      else if( isWaterEquivSnow( token[NDEX], Mptr, &NDEX ) ) {
-         WaterEquivSnow++;
-         if( WaterEquivSnow > 1 )
-            Mptr->WaterEquivSnow = (float) MAXINT;
-      }
-      else if( isSunshineDur( token[NDEX], Mptr, &NDEX ) ) {
-         SunshineDur++;
-         if( SunshineDur > 1 ) {
-            Mptr->SunshineDur = MAXINT;
-            Mptr->SunSensorOut = FALSE;
-         }
-      }
-      else if( isHourlyPrecipitation( &(token[NDEX]), Mptr, &NDEX ) ) {
-         hourlyPrecip++;
-         if( hourlyPrecip > 1 )
-            Mptr->hourlyPrecip = (float) MAXINT;
-      }
-      else if( isP6Precipitation( token[NDEX], Mptr, &NDEX ) ) {
-         P6Precip++;
-         if( P6Precip > 1 )
-            Mptr->precip_amt = (float) MAXINT;
-      }
-      else if( isP24Precip( token[NDEX], Mptr, &NDEX ) ) {
-         P24Precip++;
-         if( P24Precip > 1 )
-            Mptr->precip_24_amt = (float) MAXINT;
-      }
-      else  if( isTTdTenths( token[NDEX], Mptr, &NDEX ) ) {
-         TTdTenths++;
-         if( TTdTenths > 1 ) {
-            Mptr->Temp_2_tenths = (float) MAXINT;
-            Mptr->DP_Temp_2_tenths = (float) MAXINT;
-         }
-      }
-      else if( isMaxTemperature( token[NDEX], Mptr, &NDEX ) ) {
-         MaxTemp++;
-         if( MaxTemp > 1 )
-            Mptr->maxtemp = (float) MAXINT;
-      }
-      else if( isMinTemp( token[NDEX], Mptr, &NDEX ) ) {
-         MinTemp++;
-         if( MinTemp > 1 )
-            Mptr->mintemp = (float) MAXINT;
-      }
-      else if( isT24MaxMinTemp( token[NDEX],
-                                          Mptr, &NDEX ) ) {
-         T24MaxMinTemp++;
-         if( T24MaxMinTemp > 1 ) {
-            Mptr->max24temp = (float) MAXINT;
-            Mptr->min24temp = (float) MAXINT;
-         }
-      }
-      else if( isPtendency( token[NDEX], Mptr, &NDEX ) ) {
-         Ptendency++;
-         if( Ptendency > 1 ) {
-            Mptr->char_prestndcy = MAXINT;
-            Mptr->prestndcy = (float) MAXINT;
-         }
-      }
-      else if( isPWINO( token[NDEX], Mptr, &NDEX ) ) {
-         PWINO++;
-         if( PWINO > 1 )
-            Mptr->PWINO = FALSE;
-      }
-      else if( isFZRANO( token[NDEX], Mptr, &NDEX ) ) {
-         FZRANO++;
-         if( FZRANO > 1 )
-            Mptr->FZRANO = FALSE;
-      }
-      else if( isTSNO( token[NDEX], Mptr, &NDEX ) ) {
-         TSNO++;
-         if( TSNO > 1 )
-            Mptr->TSNO = FALSE;
-      }
-      else if( isDollarSign( token[NDEX], Mptr, &NDEX ) ) {
-         maintIndicator++;
-         if( maintIndicator > 1 )
-            Mptr->DollarSign = FALSE;
-      }
-      else if( isRVRNO( token[NDEX], Mptr, &NDEX ) ) {
-         RVRNO++;
-         if( RVRNO > 1 )
-            Mptr->RVRNO = FALSE;
-      }
-      else if( isPNO( token[NDEX], Mptr, &NDEX ) ) {
-         PNO++;
-         if( PNO > 1 )
-            Mptr->PNO = FALSE;
-      }
-      else if( isVISNO( &(token[NDEX]), Mptr, &NDEX ) ) {
-         VISNO++;
-         if( VISNO > 1 ) {
-            Mptr->VISNO = FALSE;
-            memset(Mptr->VISNO_LOC, '\0', sizeof(Mptr->VISNO_LOC));
-         }
-      }
-      else if( isCHINO( &(token[NDEX]), Mptr, &NDEX ) ) {
-         CHINO++;
-         if( CHINO > 1 ) {
-            Mptr->CHINO = FALSE;
-            memset(Mptr->CHINO_LOC, '\0', sizeof(Mptr->CHINO_LOC));
-         }
-      }
-      else if( isDVR( token[NDEX], Mptr, &NDEX ) ) {
-         DVR++;
-         if( DVR > 1 ) {
-            Mptr->DVR.Min_visRange = MAXINT;
-            Mptr->DVR.Max_visRange = MAXINT;
-            Mptr->DVR.visRange = MAXINT;
-            Mptr->DVR.vrbl_visRange = FALSE;
-            Mptr->DVR.below_min_DVR = FALSE;
-            Mptr->DVR.above_max_DVR = FALSE;
-         }
-      }
-      else {
+			TornadicActvty++;
+			if( TornadicActvty > 1 ) {
+				memset(Mptr->TornadicType, '\0', sizeof(Mptr->TornadicType));
+				memset(Mptr->TornadicLOC, '\0', sizeof(Mptr->TornadicLOC));
+				memset(Mptr->TornadicDIR, '\0', sizeof(Mptr->TornadicDIR));
+				Mptr->BTornadicHour = MAXINT;
+				Mptr->BTornadicMinute = MAXINT;
+				Mptr->ETornadicHour = MAXINT;
+				Mptr->ETornadicMinute = MAXINT;
+			}
+		} else if (isA0indicator( token[NDEX], Mptr, &NDEX)) {
+			A0indicator++;
+			if( A0indicator > 1 )
+			memset(Mptr->autoIndicator, '\0', sizeof(Mptr->autoIndicator));
+		} else if (isPeakWind( &(token[NDEX]), Mptr, &NDEX)) {
+			peakwind++;
+			if( peakwind > 1 ) {
+				Mptr->PKWND_dir = MAXINT;
+				Mptr->PKWND_speed = MAXINT;
+				Mptr->PKWND_hour = MAXINT;
+				Mptr->PKWND_minute = MAXINT;
+			}
+		} else if (isWindShift( &(token[NDEX]), Mptr, &NDEX)) {
+			windshift++;
+			if (windshift > 1) {
+				Mptr->WshfTime_hour = MAXINT;
+				Mptr->WshfTime_minute = MAXINT;
+			}
+		} else if (isTowerVisibility( &(token[NDEX]), Mptr, &NDEX)) {
+			towerVsby++;
+			if (towerVsby > 1) {
+				Mptr->TWR_VSBY = (float) MAXINT;
+			}
+		} else if (isSurfaceVisibility( &(token[NDEX]), Mptr, &NDEX)) {
+			surfaceVsby++;
+			if (surfaceVsby > 1) {
+				Mptr->SFC_VSBY = (float) MAXINT;
+			}
+		} else if (isVariableVisibility( &(token[NDEX]), Mptr, &NDEX)) {
+			variableVsby++;
+			if (variableVsby > 1) {
+				Mptr->minVsby = (float) MAXINT;
+				Mptr->maxVsby = (float) MAXINT;
+			}
+		} else if (isVisibility2ndSite(&(token[NDEX]), Mptr, &NDEX)) {
+			Vsby2ndSite++;
+			if (Vsby2ndSite > 1) {
+				Mptr->VSBY_2ndSite = (float) MAXINT;
+				memset(Mptr->VSBY_2ndSite_LOC, '\0', sizeof(Mptr->VSBY_2ndSite_LOC));
+			}
+		} else if (isLightningFrequency( &(token[NDEX]), Mptr, &NDEX)) {
+			LTGfreq++;
+			if (LTGfreq > 1) {
+				Mptr->OCNL_LTG = FALSE;
+				Mptr->FRQ_LTG = FALSE;
+				Mptr->CNS_LTG = FALSE;
+				Mptr->CG_LTG = FALSE;
+				Mptr->IC_LTG = FALSE;
+				Mptr->CC_LTG = FALSE;
+				Mptr->CA_LTG = FALSE;
+				Mptr->DSNT_LTG = FALSE;
+				Mptr->OVHD_LTG = FALSE;
+				Mptr->VcyStn_LTG = FALSE;
+				Mptr->LightningVCTS = FALSE;
+				Mptr->LightningTS = FALSE;
+				memset(Mptr->LTG_DIR, '\0', sizeof(Mptr->LTG_DIR));
+			}
+		} else if (isTS_LOC( &(token[NDEX]), Mptr, &NDEX)) {
+			TS_LOC++;
+			if (TS_LOC > 1) {
+				memset(Mptr->TS_LOC, '\0', sizeof(Mptr->TS_LOC));
+				memset(Mptr->TS_MOVMNT, '\0', sizeof(Mptr->TS_MOVMNT));
+			}
+		} else if (isRecentWX( &(token[NDEX]), Mptr, &recentWX)) {
+			NDEX++;
+		} else if (isVariableCIG( &(token[NDEX]), Mptr, &NDEX)) {
+			variableCIG++;
+			if( variableCIG > 1) {
+				Mptr->minCeiling = MAXINT;
+				Mptr->maxCeiling = MAXINT;
+			}
+		} else if (isCIG2ndSite( &(token[NDEX]), Mptr, &NDEX)) {
+			CIG2ndSite++;
+			if (CIG2ndSite > 1) {
+				Mptr->CIG_2ndSite_Meters = MAXINT;
+				memset(Mptr->CIG_2ndSite_LOC, '\0', sizeof(Mptr->CIG_2ndSite_LOC));
+			}
+		} else if (isPRESFR( token[NDEX], Mptr, &NDEX)) {
+			PRESFR++;
+			if (PRESFR > 1) {
+				Mptr->PRESFR = FALSE;
+			}
+		} else if (isPRESRR( token[NDEX], Mptr, &NDEX)) {
+			PRESRR++;
+			if (PRESRR > 1) {
+				Mptr->PRESRR = FALSE;
+			}
+		} else if (isSLP( &(token[NDEX]), Mptr, &NDEX)) {
+			SLP++;
+			if (SLP > 1) {
+				Mptr->SLP = (float) MAXINT;
+			}
+		} else if (isPartialObscuration( &(token[NDEX]), Mptr, PartObscur,
+               &NDEX)) {
+			PartObscur++;
+			if (PartObscur > 2) {
+				memset(Mptr->PartialObscurationAmt[0], '\0', sizeof(Mptr->PartialObscurationAmt[0]) );
+				memset(Mptr->PartialObscurationPhenom[0],'\0', sizeof(Mptr->PartialObscurationPhenom[0]));
+
+				memset(Mptr->PartialObscurationAmt[1], '\0', sizeof(Mptr->PartialObscurationAmt[1]));
+				memset(Mptr->PartialObscurationPhenom[1],'\0', sizeof(Mptr->PartialObscurationPhenom[1]));
+			}
+		} else if (isSectorVsby( &(token[NDEX]), Mptr, &NDEX)) {
+			SectorVsby++;
+			if( SectorVsby > 1 ) {
+				Mptr->SectorVsby = (float) MAXINT;
+				memset(Mptr->SectorVsby_Dir, '\0', sizeof(Mptr->SectorVsby_Dir));
+			}
+		} else if (isGR( &(token[NDEX]), Mptr, &NDEX)) {
+			GR++;
+			if( GR > 1 ) {
+				Mptr->GR_Size = (float) MAXINT;
+				Mptr->GR = FALSE;
+			}
+		} else if (isVIRGA( &(token[NDEX]), Mptr, &NDEX)) {
+			Virga++;
+			if( Virga > 1 ) {
+				Mptr->VIRGA = FALSE;
+				memset(Mptr->VIRGA_DIR, '\0', sizeof(Mptr->VIRGA_DIR));
+			}
+		} else if (isSurfaceObscuration( token[NDEX], Mptr, &NDEX)) {
+			SfcObscur++;
+			if (SfcObscur > 1) {
+				for (i = 0; i < MAX_SURFACE_OBSCURATIONS; i++) {
+					memset(&(Mptr->SfcObscuration[i][0]), '\0', sizeof(Mptr->SfcObscuration[i]));
+					Mptr->Num8thsSkyObscured = MAXINT;
+				}
+			}
+		} else if (isCeiling( token[NDEX], Mptr, &NDEX)) {
+			Ceiling++;
+			if (Ceiling > 1) {
+				Mptr->CIGNO = FALSE;
+				Mptr->Ceiling = MAXINT;
+				Mptr->Estimated_Ceiling = FALSE;
+			}
+		} else if (isVariableSky( &(token[NDEX]), Mptr, &NDEX)) {
+			VrbSkyCond++;
+			if( VrbSkyCond > 1 ) {
+				memset(Mptr->VrbSkyBelow, '\0', sizeof(Mptr->VrbSkyBelow));
+				memset(Mptr->VrbSkyAbove, '\0', sizeof(Mptr->VrbSkyAbove));
+				Mptr->VrbSkyLayerHgt = MAXINT;
+			}
+		} else if (isObscurationAloft( &(token[NDEX]), Mptr, &NDEX)) {
+			ObscurAloft++;
+			if( ObscurAloft > 1 ) {
+				Mptr->ObscurAloftHgt = MAXINT;
+				memset( Mptr->ObscurAloft, '\0', sizeof(Mptr->ObscurAloft));
+				memset( Mptr->ObscurAloftSkyCond, '\0', sizeof(Mptr->ObscurAloftSkyCond));
+			}
+		} else if (isNOSPECI( token[NDEX], Mptr, &NDEX)) {
+			NoSPECI++;
+			if (NoSPECI > 1) {
+				Mptr->NOSPECI = FALSE;
+			}
+		} else if (isLAST( token[NDEX], Mptr, &NDEX)) {
+			Last++;
+			if (Last > 1) {
+				Mptr->LAST = FALSE;
+			}
+		} else if (isSynopClouds( token[NDEX], Mptr, &NDEX)) {
+			SynopClouds++;
+			if( SynopClouds > 1 ) {
+				memset( Mptr->synoptic_cloud_type, '\0', sizeof(Mptr->synoptic_cloud_type));
+				Mptr->CloudLow    = '\0';
+				Mptr->CloudMedium = '\0';
+				Mptr->CloudHigh   = '\0';
+			}
+		} else if (isSNINCR( &(token[NDEX]), Mptr, &NDEX)) {
+			Snincr++;
+			if( Snincr > 1 ) {
+				Mptr->SNINCR = MAXINT;
+				Mptr->SNINCR_TotalDepth = MAXINT;
+			}
+		} else if (isSnowDepth( token[NDEX], Mptr, &NDEX)) {
+			SnowDepth++;
+			if (SnowDepth > 1) {
+				memset(Mptr->snow_depth_group, '\0', sizeof(Mptr->snow_depth_group));
+				Mptr->snow_depth = MAXINT;
+			}
+		} else if (isWaterEquivSnow( token[NDEX], Mptr, &NDEX)) {
+			WaterEquivSnow++;
+			if (WaterEquivSnow > 1) {
+				Mptr->WaterEquivSnow = (float) MAXINT;
+			}
+		} else if (isSunshineDur( token[NDEX], Mptr, &NDEX)) {
+			SunshineDur++;
+			if (SunshineDur > 1) {
+				Mptr->SunshineDur = MAXINT;
+				Mptr->SunSensorOut = FALSE;
+			}
+		} else if (isHourlyPrecipitation( &(token[NDEX]), Mptr, &NDEX)) {
+			hourlyPrecip++;
+			if (hourlyPrecip > 1) {
+				Mptr->hourlyPrecip = (float) MAXINT;
+			}
+		} else if (isP6Precipitation( token[NDEX], Mptr, &NDEX)) {
+			P6Precip++;
+			if(P6Precip > 1) {
+				Mptr->precip_amt = (float) MAXINT;
+			}
+		} else if (isP24Precip( token[NDEX], Mptr, &NDEX)) {
+			P24Precip++;
+			if (P24Precip > 1) {
+				Mptr->precip_24_amt = (float) MAXINT;
+			}
+		} else if (isTTdTenths(token[NDEX], Mptr, &NDEX)) {
+			TTdTenths++;
+			if( TTdTenths > 1 ) {
+				Mptr->Temp_2_tenths = (float) MAXINT;
+				Mptr->DP_Temp_2_tenths = (float) MAXINT;
+			}
+		} else if (isMaxTemperature( token[NDEX], Mptr, &NDEX)) {
+			MaxTemp++;
+			if ( MaxTemp > 1) {
+				Mptr->maxtemp = (float) MAXINT;
+			}
+		} else if (isMinTemp( token[NDEX], Mptr, &NDEX)) {
+			MinTemp++;
+			if (MinTemp > 1) {
+				Mptr->mintemp = (float) MAXINT;
+			}
+		} else if (isT24MaxMinTemp( token[NDEX], Mptr, &NDEX)) {
+			T24MaxMinTemp++;
+			if( T24MaxMinTemp > 1 ) {
+				Mptr->max24temp = (float) MAXINT;
+				Mptr->min24temp = (float) MAXINT;
+			}
+		} else if (isPtendency( token[NDEX], Mptr, &NDEX)) {
+			Ptendency++;
+			if (Ptendency > 1) {
+				Mptr->char_prestndcy = MAXINT;
+				Mptr->prestndcy = (float) MAXINT;
+			}
+		} else if (isPWINO(token[NDEX], Mptr, &NDEX)) {
+			PWINO++;
+			if (PWINO > 1) {
+				Mptr->PWINO = FALSE;
+			}
+		} else if (isFZRANO(token[NDEX], Mptr, &NDEX)) {
+			FZRANO++;
+			if (FZRANO > 1) {
+				Mptr->FZRANO = FALSE;
+			}
+		} else if (isTSNO( token[NDEX], Mptr, &NDEX )) {
+			TSNO++;
+			if (TSNO > 1) {
+				Mptr->TSNO = FALSE;
+			}
+		} else if (isDollarSign( token[NDEX], Mptr, &NDEX)) {
+			maintIndicator++;
+			if (maintIndicator > 1) {
+				Mptr->DollarSign = FALSE;
+			}
+		} else if( isRVRNO( token[NDEX], Mptr, &NDEX ) ) {
+			RVRNO++;
+			if (RVRNO > 1) {
+				Mptr->RVRNO = FALSE;
+			}
+		} else if (isPNO( token[NDEX], Mptr, &NDEX)) {
+			PNO++;
+			if (PNO > 1) {
+				Mptr->PNO = FALSE;
+			}
+		} else if (isVISNO( &(token[NDEX]), Mptr, &NDEX)) {
+			VISNO++;
+			if (VISNO > 1) {
+				Mptr->VISNO = FALSE;
+				memset(Mptr->VISNO_LOC, '\0', sizeof(Mptr->VISNO_LOC));
+			}
+		} else if (isCHINO( &(token[NDEX]), Mptr, &NDEX)) {
+			CHINO++;
+			if (CHINO > 1) {
+				Mptr->CHINO = FALSE;
+				memset(Mptr->CHINO_LOC, '\0', sizeof(Mptr->CHINO_LOC));
+			}
+		} else if (isDVR( token[NDEX], Mptr, &NDEX)) {
+			DVR++;
+			if (DVR > 1) {
+				Mptr->DVR.Min_visRange = MAXINT;
+				Mptr->DVR.Max_visRange = MAXINT;
+				Mptr->DVR.visRange = MAXINT;
+				Mptr->DVR.vrbl_visRange = FALSE;
+				Mptr->DVR.below_min_DVR = FALSE;
+				Mptr->DVR.above_max_DVR = FALSE;
+			}
+		} else {
 #ifdef DEBUGZZ
-   printf("decode_metar_remark:  punting on RMKS: token[%d] = %s\n",NDEX,token[NDEX]);
+			printf("decode_metar_remark:  punting on RMKS: token[%d] = %s\n",NDEX,token[NDEX]);
 #endif
-         NDEX++;
-      }
- 
-   }
+			NDEX++;
+		}
+	}
  
    return;
 }

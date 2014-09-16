@@ -1840,12 +1840,14 @@ MDSP_BOOL static isLightningFrequency( char **string, Decoded_METAR *Mptr, int *
         TYPE_NOT_FOUND;
    char *temp;
  
-   /* IF THE CURRENT GROUP IS  "LTG", THEN DETERMINE  */
-   /* WHETHER OR NOT THE PREVIOUS GROUP AS WELL AS    */
-   /* GROUPS THAT FOLLOW ARE VALID LIGHTNING REPORT   */
-   /* PARAMETERS.  IF THEY ARE, THEN DECODE THE       */
-   /* GROUPS AND RETURN TRUE.  OTHERWISE, RETURN      */
-   /*                   FALSE.                        */
+   // if the current group is "LTG", then determine
+   // whether or not the previous group as well as
+   // groups that follow are valid lightning report
+   // parameters.  if they are, then decode the
+   // groups and return true.  otherwise, return
+   //                   false.
+ 
+       // printf("isLightningFrequency:  current *string = %s, NDEX = %d\n", *string, *NDEX);
  
    if( *string == NULL )
       return FALSE;
@@ -1872,7 +1874,8 @@ MDSP_BOOL static isLightningFrequency( char **string, Decoded_METAR *Mptr, int *
  
  
       LTG_FREQ_FLAG = FALSE;
-                        /*-- CHECK FOR LIGHTNING FREQUENCY -----------*/
+
+    // check for lightning frequency
       if( strcmp( *string, "OCNL" ) == 0 ) {
          Mptr->OCNL_LTG = TRUE;
          LTG_FREQ_FLAG = TRUE;
@@ -1902,7 +1905,8 @@ MDSP_BOOL static isLightningFrequency( char **string, Decoded_METAR *Mptr, int *
          (*NDEX)++;
  
          LTG_LOC_FLAG = FALSE;
-                        /*-- CHECK FOR LIGHTNING LOCATION ------------*/
+
+	// check for lightning location
          if( strcmp( *string, "DSNT" ) == 0 ) {
             Mptr->DSNT_LTG = TRUE;
             LTG_LOC_FLAG = TRUE;
@@ -1932,7 +1936,7 @@ MDSP_BOOL static isLightningFrequency( char **string, Decoded_METAR *Mptr, int *
          }
  
          LTG_DIR_FLAG = FALSE;
-                        /*-- CHECK FOR LIGHTNING DIRECTION -----------*/
+	// check for lightning direction
          if( strcmp( *string, "N" ) == 0 ||
              strcmp( *string, "NE" ) == 0 ||
              strcmp( *string, "NW" ) == 0 ||
@@ -1956,7 +1960,7 @@ MDSP_BOOL static isLightningFrequency( char **string, Decoded_METAR *Mptr, int *
       else {
  
          LTG_TYPE_FLAG = FALSE;
-                        /*-- CHECK FOR LIGHTNING TYPE ----------------*/
+	// check for lightning type
          TYPE_NOT_FOUND = FALSE;
          temp = (*string) + 3;
          while( *temp != '\0' && !TYPE_NOT_FOUND ) {
@@ -1998,7 +2002,7 @@ MDSP_BOOL static isLightningFrequency( char **string, Decoded_METAR *Mptr, int *
             (*NDEX)++;   TURNED OFF 07-24-97  */
  
          LTG_LOC_FLAG = FALSE;
-                        /*-- CHECK FOR LIGHTNING LOCATION ------------*/
+	// check for lightning location
          if( strcmp( *string, "DSNT" ) == 0 ) {
             Mptr->DSNT_LTG = TRUE;
             LTG_LOC_FLAG = TRUE;
@@ -2029,7 +2033,7 @@ MDSP_BOOL static isLightningFrequency( char **string, Decoded_METAR *Mptr, int *
          }
  
          LTG_DIR_FLAG = FALSE;
-                        /*-- CHECK FOR LIGHTNING DIRECTION -----------*/
+	// check for lightning direction
          if( strcmp( *string, "N" ) == 0 ||
              strcmp( *string, "NE" ) == 0 ||
              strcmp( *string, "NW" ) == 0 ||

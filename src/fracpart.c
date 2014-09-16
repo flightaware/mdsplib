@@ -64,6 +64,10 @@ float fracPart( char *string )
    /*************************/
  
    slash = strchr(string, '/');
+
+   if (slash == NULL) {
+    return ((float) atoi(string));
+   }
  
    memset(buf , '\0', sizeof(buf));
    strncpy( buf, string, slash-string);

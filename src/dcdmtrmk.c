@@ -383,7 +383,7 @@ static MDSP_BOOL isTornadicActivity( char **string, Decoded_METAR *Mptr,
       if( *string == NULL )
          return FALSE;
  
-      while( !Completion_flag ) {
+      while( !Completion_flag && *string != NULL) {
  
 /*       printf("isTornadicActivity:  current *string = %s\n",
                         *string);    */

@@ -79,3 +79,5 @@ int antoi(char * string, int len)
 } /* end antoi */
  
 #pragma page(1)
+
+// vim: set ts=4 sw=4 sts=4 noet :

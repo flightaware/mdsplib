@@ -185,3 +185,5 @@ MDSP_BOOL charcmp(char *str, char *pattern)
  
    return (TRUE);
 }
+
+// vim: set ts=4 sw=4 sts=4 noet :

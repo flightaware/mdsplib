@@ -2715,4 +2715,4 @@ int decode_net_metar (char *string, Decoded_METAR *Mptr)
 	return result;
 }
 
-
+// vim: set ts=4 sw=4 sts=4 noet :

@@ -228,3 +228,5 @@ int nisxdigi(char *s, int n) {
 } /* end nisxdigi */
  
 #pragma page(1)
+
+// vim: set ts=4 sw=4 sts=4 noet :

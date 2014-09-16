@@ -347,255 +347,239 @@ static MDSP_BOOL isTornadicActivity( char **string, Decoded_METAR *Mptr,
    B_stringPtr = NULL;
    E_stringPtr = NULL;
  
-   if( *string == NULL )
-      return FALSE;
+	if (*string == NULL) {
+		return FALSE;
+	}
  
-   if( !( strcmp(*string, "TORNADO")         == 0 ||
+   if (!( strcmp(*string, "TORNADO")         == 0 ||
           strcmp(*string, "TORNADOS")        == 0 ||
           strcmp(*string, "TORNADOES")       == 0 ||
           strcmp(*string, "WATERSPOUT")      == 0 ||
           strcmp(*string, "WATERSPOUTS")     == 0 ||
-          strcmp(*string, "FUNNEL")     == 0  ) )
-         return FALSE;
-   else {
-      if( strcmp(*string, "FUNNEL") == 0 ) {
-         (++string);
- 
-         if( *string == NULL )
-            return FALSE;
- 
-         if( !(strcmp(*string,"CLOUD") == 0 ||
-               strcmp(*string,"CLOUDS") == 0 ) ) {
-            (*NDEX)++;
-            return FALSE;
-         }
-         else
-               strncpy(Mptr->TornadicType, "FUNNEL CLOUD", sizeof(Mptr->TornadicType));
-      }
-      else {
-         strncpy(Mptr->TornadicType, *string, sizeof(Mptr->TornadicType));
-         (*NDEX)++;
-         (++string);
-      }
- 
-      Completion_flag = FALSE;
- 
-      if( *string == NULL )
-         return FALSE;
- 
-      while( !Completion_flag && *string != NULL) {
- 
+          strcmp(*string, "FUNNEL")     == 0  ) ) {
+		return FALSE;
+	}
+
+    if (strcmp(*string, "FUNNEL") == 0) {
+		 ++string;
+
+		if (*string == NULL) {
+			return FALSE;
+		}
+
+		if (!(strcmp(*string,"CLOUD") == 0 || strcmp(*string,"CLOUDS") == 0)) {
+			(*NDEX)++;
+			return FALSE;
+		 } else {
+			strncpy(Mptr->TornadicType, "FUNNEL CLOUD", sizeof(Mptr->TornadicType));
+		}
+    } else {
+		strncpy(Mptr->TornadicType, *string, sizeof(Mptr->TornadicType));
+		(*NDEX)++;
+		++string;
+    }
+
+    Completion_flag = FALSE;
+
+    if (*string == NULL) {
+		return FALSE;
+    }
+
+    while (!Completion_flag && *string != NULL) {
+
 /*       printf("isTornadicActivity:  current *string = %s\n",
-                        *string);    */
- 
-         if( *(*string) =='B' || *(*string) == 'E') {
-            if( *(*string) == 'B' ) {
-               B_stringPtr = *string;
-               E_stringPtr = strchr((*string)+1,'E');
-            }
-            else {
-               B_stringPtr = strchr((*string)+1,'B');
-               E_stringPtr = *string;
-            }
+		    *string);    */
+
+		if (*(*string) =='B' || *(*string) == 'E') {
+			if (*(*string) == 'B' ) {
+				B_stringPtr = *string;
+				E_stringPtr = strchr((*string)+1,'E');
+			} else {
+			   B_stringPtr = strchr((*string)+1,'B');
+			   E_stringPtr = *string;
+			}
 /*
-         if( B_stringPtr != NULL )
-            printf("isTornadicActivity:  B_stringPtr = %x\n",
-                        B_stringPtr);
-         else
-            printf("isTornadicActivity:  B_stringPtr = NULL\n");
- 
-         if( E_stringPtr != NULL )
-            printf("isTornadicActivity:  E_stringPtr = %x\n",
-                        E_stringPtr);
-         else
-            printf("isTornadicActivity:  E_stringPtr = NULL\n");
+			if (B_stringPtr != NULL) {
+				printf("isTornadicActivity:  B_stringPtr = %x\n", B_stringPtr);
+			} else {
+				printf("isTornadicActivity:  B_stringPtr = NULL\n");
+			}
+
+			if (E_stringPtr != NULL) {
+				printf("isTornadicActivity:  E_stringPtr = %x\n", E_stringPtr);
+			} else {
+				printf("isTornadicActivity:  E_stringPtr = NULL\n");
+			}
 */
-            if( B_stringPtr != NULL && E_stringPtr == NULL ) {
-               if( nisdigit((*string)+1, strlen((*string)+1)) &&
-                     strlen((*string)+1) <= 4 ) {
-                  TornadicTime = antoi((*string)+1,
-                                      strlen((*string)+1));
-                  if( TornadicTime > 99 ) {
-                     Mptr->BTornadicHour = TornadicTime / 100;
-                     Mptr->BTornadicMinute = TornadicTime % 100;
-                     (*NDEX)++;
-                     (++string);
-                  }
-                  else {
-                     Mptr->BTornadicHour = TornadicTime;
-                     (*NDEX)++;
-                     (++string);
-                  }
-               }
-               else {
-                  (*NDEX)++;
-                  (++string);
-               }
-            }
-            else if( B_stringPtr == NULL && E_stringPtr != NULL ) {
-               if( nisdigit((*string)+1,strlen((*string)+1)) &&
-                        strlen((*string)+1) <= 4 ) {
-                  TornadicTime = antoi((*string)+1,
-                                     strlen((*string)+1));
-                  if( TornadicTime > 99 ) {
-                     Mptr->ETornadicHour = TornadicTime / 100;
-                     Mptr->ETornadicMinute = TornadicTime % 100;
-                     (*NDEX)++;
-                     (++string);
-                  }
-                  else {
-                     Mptr->ETornadicHour = TornadicTime;
-                     (*NDEX)++;
-                     (++string);
-                  }
-               }
-               else {
-                  (*NDEX)++;
-                  (++string);
-               }
-            }
-            else {
-/*          printf("isTornadicActivity:  B_stringPtr != NULL"
-                   " and E_stringPtr != NULL\n");  */
-               if( nisdigit((B_stringPtr+1),(E_stringPtr -
-                                     (B_stringPtr+1)))) {
-                  TornadicTime = antoi(( B_stringPtr+1),
-                                     (E_stringPtr-(B_stringPtr+1)));
-                  if( TornadicTime > 99 ) {
-                     Mptr->BTornadicHour = TornadicTime / 100;
-                     Mptr->BTornadicMinute = TornadicTime % 100;
-                     (*NDEX)++;
-                     (++string);
-                  }
-                  else {
-                     Mptr->BTornadicHour = TornadicTime;
-                     (*NDEX)++;
-                     (++string);
-                  }
- 
-                  TornadicTime = antoi(( E_stringPtr+1),
-                                        strlen(E_stringPtr+1));
- 
-                  if( TornadicTime > 99 ) {
-                     Mptr->ETornadicHour = TornadicTime / 100;
-                     Mptr->ETornadicMinute = TornadicTime % 100;
-                     (*NDEX)++;
-                     (++string);
-                  }
-                  else {
-                     Mptr->ETornadicHour = TornadicTime;
-                     (*NDEX)++;
-                     (++string);
-                  }
-               }
-               else {
-                  (*NDEX)++;
-                  (++string);
-               }
-            }
-         }
-         else if( nisdigit(*string, strlen(*string))) {
-            (++string);
- 
-            if( *string == NULL )
-               return FALSE;
- 
-            if(  strcmp(*string,"N")  == 0  ||
-                 strcmp(*string,"NE") == 0  ||
-                 strcmp(*string,"NW") == 0  ||
-                 strcmp(*string,"S")  == 0  ||
-                 strcmp(*string,"SE") == 0  ||
-                 strcmp(*string,"SW") == 0  ||
-                 strcmp(*string,"E")  == 0  ||
-                 strcmp(*string,"W")  == 0   ) {
-                 (--string);
-                 Mptr->TornadicDistance = antoi(*string,
-                                  strlen(*string));
-                 (*NDEX)++;
-                 (++string);
-            }
-            else {
-               (--string);
- 
-               if( saveNdex == *NDEX )
-                  return FALSE;
-               else
-                  return TRUE;
-            }
- 
-         }
-         else if(strcmp(*string,"DSNT")  == 0 ||
-                 strcmp(*string,"VC")    == 0 ||
-                 strcmp(*string,"VCY")   == 0 ) {
-            if( strcmp(*string,"VCY") == 0 ||
-                  strcmp(*string,"VC") == 0  ) {
-               (++string);
- 
-               if( *string == NULL )
-                  return FALSE;
- 
-               if( strcmp(*string,"STN") == 0 ){
-                  strcpy(Mptr->TornadicLOC,"VC STN");
-                  (*NDEX)++;
-                  (*NDEX)++;
-                  (++string);
-               }
-               else {
-                  strcpy(Mptr->TornadicLOC,"VC");
-                  (*NDEX)++;
-               }
-            }
-            else {
-               strcpy(Mptr->TornadicLOC,"DSNT");
-               (*NDEX)++;
-               (++string);
-            }
-         }
-         else if(strcmp(*string,"N")  == 0  ||
-                 strcmp(*string,"NE") == 0  ||
-                 strcmp(*string,"NW") == 0  ||
-                 strcmp(*string,"S")  == 0  ||
-                 strcmp(*string,"SE") == 0  ||
-                 strcmp(*string,"SW") == 0  ||
-                 strcmp(*string,"E")  == 0  ||
-                 strcmp(*string,"W")  == 0   ) {
-            strcpy(Mptr->TornadicDIR, *string);
-            (*NDEX)++;
-            (++string);
-         }
-         else if( strcmp(*string, "MOV" ) == 0 ) {
-            (*NDEX)++;
-            (++string);
- 
-            if( *string == NULL )
-               return FALSE;
- 
-            if(   strcmp(*string, "N")  == 0  ||
-                  strcmp(*string, "S")  == 0  ||
-                  strcmp(*string, "E")  == 0  ||
-                  strcmp(*string, "W")  == 0  ||
-                  strcmp(*string, "NE")  == 0 ||
-                  strcmp(*string, "NW")  == 0 ||
-                  strcmp(*string, "SE")  == 0 ||
-                  strcmp(*string, "SW")  == 0     ) {
-               strcpy( Mptr->TornadicMovDir, *string );
-               (*NDEX)++;
-               (++string);
- 
-            }
-         }
-         else
-            Completion_flag = TRUE;
-      }
- 
-      if( saveNdex == *NDEX )
-         return FALSE;
-      else
-         return TRUE;
- 
-   }
- 
+			if (B_stringPtr != NULL && E_stringPtr == NULL) {
+				if (nisdigit((*string)+1, strlen((*string)+1)) &&
+					 strlen((*string)+1) <= 4 ) {
+						TornadicTime = antoi((*string)+1, strlen((*string)+1));
+						if (TornadicTime > 99) {
+							Mptr->BTornadicHour = TornadicTime / 100;
+							Mptr->BTornadicMinute = TornadicTime % 100;
+							(*NDEX)++;
+							++string;
+						} else {
+						   Mptr->BTornadicHour = TornadicTime;
+						   (*NDEX)++;
+						   ++string;
+						}
+					} else {
+						(*NDEX)++;
+						++string;
+					}
+			} else if (B_stringPtr == NULL && E_stringPtr != NULL) {
+				if (nisdigit((*string) + 1, strlen((*string) + 1)) &&
+					strlen((*string) + 1) <= 4) {
+					TornadicTime = antoi((*string) + 1, strlen((*string) + 1));
+					if (TornadicTime > 99) {
+						Mptr->ETornadicHour = TornadicTime / 100;
+						Mptr->ETornadicMinute = TornadicTime % 100;
+						(*NDEX)++;
+						++string;
+					} else {
+						Mptr->ETornadicHour = TornadicTime;
+						(*NDEX)++;
+						++string;
+					}
+				} else {
+					(*NDEX)++;
+					++string;
+				}
+			} else {
+/*				printf("isTornadicActivity:  B_stringPtr != NULL"
+					" and E_stringPtr != NULL\n");  */
+				if (nisdigit((B_stringPtr+1), 
+				  (E_stringPtr - (B_stringPtr+1)))) {
+					TornadicTime = antoi(( B_stringPtr + 1),
+						(E_stringPtr - (B_stringPtr + 1)));
+
+					if (TornadicTime > 99) {
+						Mptr->BTornadicHour = TornadicTime / 100;
+						Mptr->BTornadicMinute = TornadicTime % 100;
+						(*NDEX)++;
+						(++string);
+					} else {
+						Mptr->BTornadicHour = TornadicTime;
+						(*NDEX)++;
+						++string;
+					}
+
+					TornadicTime = antoi((E_stringPtr + 1), strlen(E_stringPtr + 1));
+
+					if (TornadicTime > 99) {
+						Mptr->ETornadicHour = TornadicTime / 100;
+						Mptr->ETornadicMinute = TornadicTime % 100;
+						(*NDEX)++;
+						++string;
+					} else {
+						Mptr->ETornadicHour = TornadicTime;
+						(*NDEX)++;
+						++string;
+					}
+				} else {
+					(*NDEX)++;
+					++string;
+				}
+			}
+		} else if (nisdigit(*string, strlen(*string))) {
+			++string;
+
+			if (*string == NULL) {
+				return FALSE;
+			}
+
+			if  (strcmp(*string,"N")  == 0  ||
+				 strcmp(*string,"NE") == 0  ||
+				 strcmp(*string,"NW") == 0  ||
+				 strcmp(*string,"S")  == 0  ||
+				 strcmp(*string,"SE") == 0  ||
+				 strcmp(*string,"SW") == 0  ||
+				 strcmp(*string,"E")  == 0  ||
+				 strcmp(*string,"W")  == 0   ) {
+				 --string;
+				 Mptr->TornadicDistance = antoi(*string, strlen(*string));
+				 (*NDEX)++;
+				 ++string;
+			} else {
+				--string;
+
+				if( saveNdex == *NDEX ) {
+					return FALSE;
+				} else {
+				  return TRUE;
+				}
+			}
+		} else if (strcmp(*string,"DSNT")  == 0 ||
+				   strcmp(*string,"VC")    == 0 ||
+				   strcmp(*string,"VCY")   == 0 ) {
+
+				if (strcmp(*string,"VCY") == 0 ||
+					strcmp(*string,"VC") == 0  ) {
+					   ++string;
+
+						if (*string == NULL) {
+							return FALSE;
+						}
+
+					if (strcmp(*string,"STN") == 0) {
+						strcpy(Mptr->TornadicLOC,"VC STN");
+						(*NDEX)++;
+						(*NDEX)++;
+						++string;
+					} else {
+						strcpy(Mptr->TornadicLOC,"VC");
+						(*NDEX)++;
+					}
+				} else {
+					strcpy(Mptr->TornadicLOC,"DSNT");
+					(*NDEX)++;
+					++string;
+				}
+		 } else if (strcmp(*string,"N")  == 0  ||
+					strcmp(*string,"NE") == 0  ||
+					strcmp(*string,"NW") == 0  ||
+					strcmp(*string,"S")  == 0  ||
+					strcmp(*string,"SE") == 0  ||
+					strcmp(*string,"SW") == 0  ||
+					strcmp(*string,"E")  == 0  ||
+					strcmp(*string,"W")  == 0   ) {
+						strcpy(Mptr->TornadicDIR, *string);
+						(*NDEX)++;
+						++string;
+		} else if (strcmp(*string, "MOV" ) == 0) {
+			(*NDEX)++;
+			++string;
+
+			if (string == NULL) {
+				return FALSE;
+			}
+
+			if (strcmp(*string, "N")  == 0  ||
+				strcmp(*string, "S")  == 0  ||
+				strcmp(*string, "E")  == 0  ||
+				strcmp(*string, "W")  == 0  ||
+				strcmp(*string, "NE")  == 0 ||
+				strcmp(*string, "NW")  == 0 ||
+				strcmp(*string, "SE")  == 0 ||
+				strcmp(*string, "SW")  == 0) {
+					strcpy( Mptr->TornadicMovDir, *string );
+					(*NDEX)++;
+					++string;
+			}
+		} else {
+			Completion_flag = TRUE;
+		}
+	}
+
+	if (saveNdex == *NDEX) {
+		return FALSE;
+	} else {
+		return TRUE;
+	}
 }
+
 #pragma subtitle(" ")
 #pragma page(1)
 #pragma subtitle("subtitle - description                       ")
@@ -3191,7 +3175,7 @@ static MDSP_BOOL isVIRGA( char **string, Decoded_METAR *Mptr, int *NDEX)
 }
  
 #pragma page(1)
-static MDSP_BOOL isSfcObscuration( char *string, Decoded_METAR *Mptr,
+static MDSP_BOOL isSurfaceObscuration( char *string, Decoded_METAR *Mptr,
                               int *NDEX )
 {
    static char *WxSymbols[] = {"BCFG", "BLDU", "BLSA", "BLPY",
@@ -4866,7 +4850,7 @@ void decode_metar_remark( char **token, Decoded_METAR *Mptr )
    while(token[NDEX] != NULL) {
  
 #ifdef DEBUGZZ
-   printf("decode_metar_remark:  DECODE RMKS: token[%d] = %s\n",NDEX,token[NDEX]);
+   printf("decode_metar_remark:  decode RMK: token[%d] = %s\n",NDEX,token[NDEX]);
 #endif
  
       isRADAT( &(token[NDEX]), Mptr, &NDEX );
@@ -5028,7 +5012,7 @@ puts(stupid);
             memset(Mptr->VIRGA_DIR, '\0', sizeof(Mptr->VIRGA_DIR));
          }
       }
-      else if( isSfcObscuration( token[NDEX], Mptr, &NDEX ) ) {
+      else if( isSurfaceObscuration( token[NDEX], Mptr, &NDEX ) ) {
          SfcObscur++;
          if( SfcObscur > 1 ) {
             for( i = 0; i < MAX_SURFACE_OBSCURATIONS; i++ ) {
@@ -5210,7 +5194,7 @@ puts(stupid);
       }
       else {
 #ifdef DEBUGZZ
-   printf("decode_metar_remark:  PUNTING ON RMKS: token[%d] = %s\n",NDEX,token[NDEX]);
+   printf("decode_metar_remark:  punting on RMKS: token[%d] = %s\n",NDEX,token[NDEX]);
 #endif
          NDEX++;
       }
@@ -5219,3 +5203,5 @@ puts(stupid);
  
    return;
 }
+
+// vim: set ts=4 sw=4 sts=4 noet :

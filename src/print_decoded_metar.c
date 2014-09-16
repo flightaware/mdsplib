@@ -892,4 +892,4 @@ void print_decoded_metar (Decoded_METAR *Mptr)
 	printf(string);
 }
 
-
+// vim: set ts=4 sw=4 sts=4 noet :

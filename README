@@ -5,8 +5,8 @@ METAR Decoder Software Package Library
 ABOUT THE MDSP LIBRARY
 
 The MDSP Library provides a programmer with two functions, the major one
-being DcdMETAR, which decodes a METAR into structures provided by the
-library. Also prtDMETR, which prints out a decoded METAR structure.
+being decode_metar, which decodes a METAR into structures provided by the
+library. Also print_decoded_metar, which prints out a decoded METAR structure.
 
 The MDSP was written by Carl McCalla and released to the public by the
 US National Weather Service. The MDSP Library is the original MDSP

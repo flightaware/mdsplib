@@ -22,6 +22,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define SKY1_len 50
 float fracPart( char * );
  
+#ifdef DEBUGZZ
+# define DEBUG_PRINTF(x) printf x
+#else
+# define DEBUG_PRINTF(x)
+#endif
+
 #pragma subtitle(" ")
 #pragma page(1)
 #pragma subtitle("subtitle - description                       ")
@@ -3414,101 +3420,101 @@ static MDSP_BOOL isObscurationAloft( char **string, Decoded_METAR *Mptr,
    char *saveTemp,
         *temp;
  
-   MDSP_BOOL IS_NOT_FOUND;
- 
-   if( *string == NULL )
-      return FALSE;
+	if (*string == NULL) {
+		return FALSE;
+	}
  
    saveTemp = temp = *string;
  
-   if( *temp == '\0' )
-      return FALSE;
+	if (*temp == '\0') {
+		return FALSE;
+	}
  
-   while( *temp != '\0' ) {
-      i = 0;
+	while (*temp != '\0') {
+		i = 0;
  
-      IS_NOT_FOUND = TRUE;
- 
-      while( WxSymbols[i] != NULL && IS_NOT_FOUND ) {
-         if( strncmp(temp,WxSymbols[i],strlen(WxSymbols[i])) != 0 )
-            i++;
-         else
-            IS_NOT_FOUND = FALSE;
-      }
- 
-      if( WxSymbols[i] == NULL ) {
-         return FALSE;
-      }
-      else
-         temp += strlen(WxSymbols[i]);
-   }
- 
-   (++string);
- 
-   if( *string == NULL )
-      return FALSE;
- 
-   if( strlen(*string) != 6 )
-      return FALSE;
-   else {
-      if((strncmp(*string,"FEW",3) == 0 ||
-          strncmp(*string,"SCT",3) == 0 ||
-          strncmp(*string,"BKN",3) == 0 ||
-          strncmp(*string,"OVC",3) == 0  ) &&
-                 (nisdigit(*string+3,3) &&
-                  strcmp(*string+3,"000") != 0  )) {
-         strcpy(Mptr->ObscurAloft,saveTemp);
-         strncpy(Mptr->ObscurAloftSkyCond, *string,3);
-         Mptr->ObscurAloftHgt = atoi(*string+3)*100;
-         (*NDEX)++;
-         (*NDEX)++;
-         (*NDEX)++;
-         return TRUE;
-      }
-      else {
-         (*NDEX)++;
-         return TRUE;
-      }
- 
-   }
- 
+		// try to match temp to one of the WxSymbols
+		for (i = 0; WxSymbols[i] != NULL; i++) {
+			if (strncmp(temp, WxSymbols[i], strlen(WxSymbols[i])) == 0) {
+				break;
+			}
+		}
+
+		// if we didn't match, bail
+		if (WxSymbols[i] == NULL) {
+			return FALSE;
+		}
+
+		temp += strlen(WxSymbols[i]);
+	}
+
+	++string;
+
+	if (*string == NULL) {
+		return FALSE;
+	}
+
+	if (strlen(*string) != 6) {
+		return FALSE;
+	}
+
+	if ((strncmp(*string, "FEW", 3) == 0 ||
+		 strncmp(*string, "SCT", 3) == 0 ||
+		 strncmp(*string, "BKN", 3) == 0 ||
+		 strncmp(*string, "OVC", 3) == 0  ) &&
+		 (nisdigit(*string + 3, 3) &&
+		  strcmp(*string + 3, "000") != 0  )) {
+			strcpy(Mptr->ObscurAloft, saveTemp);
+			strncpy(Mptr->ObscurAloftSkyCond, *string, 3);
+			Mptr->ObscurAloftHgt = atoi(*string + 3) * 100;
+			(*NDEX)++;
+			// (*NDEX)++;
+			// (*NDEX)++;
+			return TRUE;
+	}
+
+	(*NDEX)++;
+	return TRUE;
 }
+
 #pragma page(1)
-static MDSP_BOOL isNOSPECI( char *string, Decoded_METAR *Mptr, int *NDEX )
+static MDSP_BOOL isNOSPECI (char *string, Decoded_METAR *Mptr, int *NDEX)
 {
- 
-   if( string == NULL )
+   if (string == NULL) {
       return FALSE;
+	}
  
-   if( strcmp(string,"NOSPECI") != 0 )
-      return FALSE;
-   else {
-      Mptr->NOSPECI = TRUE;
-      (*NDEX)++;
-      return TRUE;
-   }
+	if (strcmp(string,"NOSPECI") != 0) {
+		return FALSE;
+	} else {
+		Mptr->NOSPECI = TRUE;
+		(*NDEX)++;
+		return TRUE;
+	}
 }
+
 #pragma page(1)
 static MDSP_BOOL isLAST( char *string, Decoded_METAR *Mptr, int *NDEX )
 {
+	if (string == NULL) {
+		return FALSE;
+	}
  
-   if( string == NULL )
-      return FALSE;
- 
-   if( strcmp(string,"LAST") != 0 )
-      return FALSE;
-   else {
-      Mptr->LAST = TRUE;
-      (*NDEX)++;
-      return TRUE;
-   }
+	if (strcmp(string,"LAST") != 0) {
+		return FALSE;
+	} else {
+		Mptr->LAST = TRUE;
+		(*NDEX)++;
+		return TRUE;
+	}
 }
+
 #pragma subtitle(" ")
 #pragma page(1)
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isSynopClouds                                    */
+/*  Title:         isSynopticClouds                                 */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -3528,8 +3534,8 @@ static MDSP_BOOL isLAST( char *string, Decoded_METAR *Mptr, int *NDEX )
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-static MDSP_BOOL isSynopClouds( char *token, Decoded_METAR *Mptr,
-                           int *NDEX )
+static MDSP_BOOL isSynopticClouds( char *token, Decoded_METAR *Mptr,
+                              int *NDEX )
 {
  
  
@@ -3670,8 +3676,8 @@ static MDSP_BOOL isWaterEquivSnow( char *string,
  
 }
 #pragma page(1)
-static MDSP_BOOL isSunshineDur( char *string, Decoded_METAR *Mptr,
-                           int *NDEX )
+static MDSP_BOOL isSunshineDuration( char *string, Decoded_METAR *Mptr,
+                                int *NDEX )
 {
  
    if( string == NULL )
@@ -4133,7 +4139,7 @@ static MDSP_BOOL isMaxTemperature(char *string, Decoded_METAR *Mptr, int *NDEX)
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         isMinTemp                                        */
+/*  Title:         isMinTemperature                                 */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
@@ -4153,7 +4159,7 @@ static MDSP_BOOL isMaxTemperature(char *string, Decoded_METAR *Mptr, int *NDEX)
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-static MDSP_BOOL isMinTemp(char *string, Decoded_METAR *Mptr, int *NDEX)
+static MDSP_BOOL isMinTemperature(char *string, Decoded_METAR *Mptr, int *NDEX)
 {
    char buf[ 32 ];
  
@@ -4775,9 +4781,9 @@ static MDSP_BOOL isDollarSign( char *indicator, Decoded_METAR *Mptr,
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-void decode_metar_remark( char **token, Decoded_METAR *Mptr )
+void decode_metar_remark(char **token, Decoded_METAR *Mptr)
 {
-   int TornadicActvty = 0, A0indicator = 0,
+	int TornadicActvty = 0, A0indicator = 0,
        peakwind = 0, windshift = 0, towerVsby = 0, surfaceVsby = 0,
        variableVsby = 0, LTGfreq = 0,
        TS_LOC = 0,
@@ -4794,34 +4800,30 @@ void decode_metar_remark( char **token, Decoded_METAR *Mptr )
        FZRANO = 0, TSNO = 0, maintIndicator = 0, CHINO = 0, RVRNO = 0,
        VISNO = 0, PNO = 0, DVR = 0;
  
-   int  NDEX,
-        ndex,
-        i;
-   char *slash,
-        *tokenX,
-        *V_char,
-        *temp_token;
+	int  NDEX, ndex, i;
+
+	char *slash, *tokenX, *V_char, *temp_token;
  
-   MDSP_BOOL extra_token,
-        IS_NOT_RMKS;
+	MDSP_BOOL extra_token, IS_NOT_RMKS;
  
-   float T_vsby;
+	float T_vsby;
  
-   NDEX = 0;
+	NDEX = 0;
  
-   /* locate the start of the metar remarks section */
+	// locate the start of the metar remarks section
  
-   IS_NOT_RMKS = TRUE;
+	IS_NOT_RMKS = TRUE;
  
-   while( token[ NDEX ] != NULL && IS_NOT_RMKS) {
+	while (token[ NDEX ] != NULL && IS_NOT_RMKS) {
 #ifdef DEBUGZZ
-   printf("decode_metar_remark:  token[%d] = %s\n",NDEX,token[NDEX]);
+		printf("decode_metar_remark:  token[%d] = %s\n",NDEX,token[NDEX]);
 #endif
-      if( strcmp(token[ NDEX ], "RMK") != 0 )
-         NDEX++;
-      else
-         IS_NOT_RMKS = FALSE;
-   }
+		if (strcmp(token[ NDEX ], "RMK") != 0) {
+			NDEX++;
+		} else {
+			IS_NOT_RMKS = FALSE;
+		}
+	}
  
    // if the metar report contains no remarks section, return
  
@@ -4842,10 +4844,10 @@ void decode_metar_remark( char **token, Decoded_METAR *Mptr )
 		return;
 	}
 
-   /* IDENTIFY AND VALIDATE REMARKS SECTION */
-   /*   DATA GROUPS FOR PARSING/DECODING    */
+	// identify and validate remarks section
+	//   data groups for parsing/decoding
  
-   while (token[NDEX] != NULL) {
+	while (token[NDEX] != NULL) {
  
 #ifdef DEBUGZZ
 		printf("decode_metar_remark:  decode RMK: token[%d] = %s\n",NDEX,token[NDEX]);
@@ -4854,6 +4856,7 @@ void decode_metar_remark( char **token, Decoded_METAR *Mptr )
 		isRADAT( &(token[NDEX]), Mptr, &NDEX );
  
 		if (isTornadicActivity (&(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: tornadic activity\n"));
 
 // NB temp
 #if 0
@@ -4866,7 +4869,7 @@ puts(stupid);
 // end temp
 
 			TornadicActvty++;
-			if( TornadicActvty > 1 ) {
+			if (TornadicActvty > 1) {
 				memset(Mptr->TornadicType, '\0', sizeof(Mptr->TornadicType));
 				memset(Mptr->TornadicLOC, '\0', sizeof(Mptr->TornadicLOC));
 				memset(Mptr->TornadicDIR, '\0', sizeof(Mptr->TornadicDIR));
@@ -4876,46 +4879,55 @@ puts(stupid);
 				Mptr->ETornadicMinute = MAXINT;
 			}
 		} else if (isA0indicator( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: A0 indicator\n"));
 			A0indicator++;
-			if( A0indicator > 1 )
-			memset(Mptr->autoIndicator, '\0', sizeof(Mptr->autoIndicator));
+			if (A0indicator > 1) {
+				memset(Mptr->autoIndicator, '\0', sizeof(Mptr->autoIndicator));
+			}
 		} else if (isPeakWind( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: peak wind\n"));
 			peakwind++;
-			if( peakwind > 1 ) {
+			if (peakwind > 1) {
 				Mptr->PKWND_dir = MAXINT;
 				Mptr->PKWND_speed = MAXINT;
 				Mptr->PKWND_hour = MAXINT;
 				Mptr->PKWND_minute = MAXINT;
 			}
 		} else if (isWindShift( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: wind shift\n"));
 			windshift++;
 			if (windshift > 1) {
 				Mptr->WshfTime_hour = MAXINT;
 				Mptr->WshfTime_minute = MAXINT;
 			}
 		} else if (isTowerVisibility( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: tower visibility\n"));
 			towerVsby++;
 			if (towerVsby > 1) {
 				Mptr->TWR_VSBY = (float) MAXINT;
 			}
 		} else if (isSurfaceVisibility( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: surface visibility\n"));
 			surfaceVsby++;
 			if (surfaceVsby > 1) {
 				Mptr->SFC_VSBY = (float) MAXINT;
 			}
 		} else if (isVariableVisibility( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: variable visibility\n"));
 			variableVsby++;
 			if (variableVsby > 1) {
 				Mptr->minVsby = (float) MAXINT;
 				Mptr->maxVsby = (float) MAXINT;
 			}
 		} else if (isVisibility2ndSite(&(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: 2nd site visibility\n"));
 			Vsby2ndSite++;
 			if (Vsby2ndSite > 1) {
 				Mptr->VSBY_2ndSite = (float) MAXINT;
 				memset(Mptr->VSBY_2ndSite_LOC, '\0', sizeof(Mptr->VSBY_2ndSite_LOC));
 			}
 		} else if (isLightningFrequency( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: lightning frequency\n"));
 			LTGfreq++;
 			if (LTGfreq > 1) {
 				Mptr->OCNL_LTG = FALSE;
@@ -4933,42 +4945,50 @@ puts(stupid);
 				memset(Mptr->LTG_DIR, '\0', sizeof(Mptr->LTG_DIR));
 			}
 		} else if (isTS_LOC( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: TS_LOC\n"));
 			TS_LOC++;
 			if (TS_LOC > 1) {
 				memset(Mptr->TS_LOC, '\0', sizeof(Mptr->TS_LOC));
 				memset(Mptr->TS_MOVMNT, '\0', sizeof(Mptr->TS_MOVMNT));
 			}
-		} else if (isRecentWX( &(token[NDEX]), Mptr, &recentWX)) {
+		} else if (isRecentWX(&(token[NDEX]), Mptr, &recentWX)) {
+			DEBUG_PRINTF(("decode_metar_remark: recent WX\n"));
 			NDEX++;
-		} else if (isVariableCIG( &(token[NDEX]), Mptr, &NDEX)) {
+		} else if (isVariableCIG(&(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: variable CIG\n"));
 			variableCIG++;
 			if( variableCIG > 1) {
 				Mptr->minCeiling = MAXINT;
 				Mptr->maxCeiling = MAXINT;
 			}
-		} else if (isCIG2ndSite( &(token[NDEX]), Mptr, &NDEX)) {
+		} else if (isCIG2ndSite(&(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: 2ndsite CIG\n"));
 			CIG2ndSite++;
 			if (CIG2ndSite > 1) {
 				Mptr->CIG_2ndSite_Meters = MAXINT;
 				memset(Mptr->CIG_2ndSite_LOC, '\0', sizeof(Mptr->CIG_2ndSite_LOC));
 			}
 		} else if (isPRESFR( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: PRESFR\n"));
 			PRESFR++;
 			if (PRESFR > 1) {
 				Mptr->PRESFR = FALSE;
 			}
 		} else if (isPRESRR( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: PRESRR\n"));
 			PRESRR++;
 			if (PRESRR > 1) {
 				Mptr->PRESRR = FALSE;
 			}
 		} else if (isSLP( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: SLP\n"));
 			SLP++;
 			if (SLP > 1) {
 				Mptr->SLP = (float) MAXINT;
 			}
 		} else if (isPartialObscuration( &(token[NDEX]), Mptr, PartObscur,
                &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: partial obscuration\n"));
 			PartObscur++;
 			if (PartObscur > 2) {
 				memset(Mptr->PartialObscurationAmt[0], '\0', sizeof(Mptr->PartialObscurationAmt[0]) );
@@ -4978,24 +4998,28 @@ puts(stupid);
 				memset(Mptr->PartialObscurationPhenom[1],'\0', sizeof(Mptr->PartialObscurationPhenom[1]));
 			}
 		} else if (isSectorVsby( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: sector visibility\n"));
 			SectorVsby++;
 			if( SectorVsby > 1 ) {
 				Mptr->SectorVsby = (float) MAXINT;
 				memset(Mptr->SectorVsby_Dir, '\0', sizeof(Mptr->SectorVsby_Dir));
 			}
 		} else if (isGR( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: GR\n"));
 			GR++;
-			if( GR > 1 ) {
+			if (GR > 1) {
 				Mptr->GR_Size = (float) MAXINT;
 				Mptr->GR = FALSE;
 			}
 		} else if (isVIRGA( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: VIRGA\n"));
 			Virga++;
-			if( Virga > 1 ) {
+			if (Virga > 1) {
 				Mptr->VIRGA = FALSE;
 				memset(Mptr->VIRGA_DIR, '\0', sizeof(Mptr->VIRGA_DIR));
 			}
 		} else if (isSurfaceObscuration( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: surface obscuration\n"));
 			SfcObscur++;
 			if (SfcObscur > 1) {
 				for (i = 0; i < MAX_SURFACE_OBSCURATIONS; i++) {
@@ -5004,6 +5028,7 @@ puts(stupid);
 				}
 			}
 		} else if (isCeiling( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: ceiling\n"));
 			Ceiling++;
 			if (Ceiling > 1) {
 				Mptr->CIGNO = FALSE;
@@ -5011,30 +5036,35 @@ puts(stupid);
 				Mptr->Estimated_Ceiling = FALSE;
 			}
 		} else if (isVariableSky( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: variable sky\n"));
 			VrbSkyCond++;
-			if( VrbSkyCond > 1 ) {
+			if (VrbSkyCond > 1) {
 				memset(Mptr->VrbSkyBelow, '\0', sizeof(Mptr->VrbSkyBelow));
 				memset(Mptr->VrbSkyAbove, '\0', sizeof(Mptr->VrbSkyAbove));
 				Mptr->VrbSkyLayerHgt = MAXINT;
 			}
 		} else if (isObscurationAloft( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: obscuration aloft\n"));
 			ObscurAloft++;
-			if( ObscurAloft > 1 ) {
+			if (ObscurAloft > 1) {
 				Mptr->ObscurAloftHgt = MAXINT;
 				memset( Mptr->ObscurAloft, '\0', sizeof(Mptr->ObscurAloft));
 				memset( Mptr->ObscurAloftSkyCond, '\0', sizeof(Mptr->ObscurAloftSkyCond));
 			}
 		} else if (isNOSPECI( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: NOSPECI\n"));
 			NoSPECI++;
 			if (NoSPECI > 1) {
 				Mptr->NOSPECI = FALSE;
 			}
-		} else if (isLAST( token[NDEX], Mptr, &NDEX)) {
+		} else if (isLAST(token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: LAST\n"));
 			Last++;
 			if (Last > 1) {
 				Mptr->LAST = FALSE;
 			}
-		} else if (isSynopClouds( token[NDEX], Mptr, &NDEX)) {
+		} else if (isSynopticClouds( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: Synoptic Clouds\n"));
 			SynopClouds++;
 			if( SynopClouds > 1 ) {
 				memset( Mptr->synoptic_cloud_type, '\0', sizeof(Mptr->synoptic_cloud_type));
@@ -5043,114 +5073,135 @@ puts(stupid);
 				Mptr->CloudHigh   = '\0';
 			}
 		} else if (isSNINCR( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: SNINCR\n"));
 			Snincr++;
 			if( Snincr > 1 ) {
 				Mptr->SNINCR = MAXINT;
 				Mptr->SNINCR_TotalDepth = MAXINT;
 			}
 		} else if (isSnowDepth( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: snow depth\n"));
 			SnowDepth++;
 			if (SnowDepth > 1) {
 				memset(Mptr->snow_depth_group, '\0', sizeof(Mptr->snow_depth_group));
 				Mptr->snow_depth = MAXINT;
 			}
 		} else if (isWaterEquivSnow( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: water equivalent snow\n"));
 			WaterEquivSnow++;
 			if (WaterEquivSnow > 1) {
 				Mptr->WaterEquivSnow = (float) MAXINT;
 			}
-		} else if (isSunshineDur( token[NDEX], Mptr, &NDEX)) {
+		} else if (isSunshineDuration(token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: sunshine duration\n"));
 			SunshineDur++;
 			if (SunshineDur > 1) {
 				Mptr->SunshineDur = MAXINT;
 				Mptr->SunSensorOut = FALSE;
 			}
 		} else if (isHourlyPrecipitation( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: hourly precipitation\n"));
 			hourlyPrecip++;
 			if (hourlyPrecip > 1) {
 				Mptr->hourlyPrecip = (float) MAXINT;
 			}
 		} else if (isP6Precipitation( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: P6 precipitation\n"));
 			P6Precip++;
 			if(P6Precip > 1) {
 				Mptr->precip_amt = (float) MAXINT;
 			}
 		} else if (isP24Precip( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: P24 precipitation\n"));
 			P24Precip++;
 			if (P24Precip > 1) {
 				Mptr->precip_24_amt = (float) MAXINT;
 			}
 		} else if (isTTdTenths(token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: TTdTenths\n"));
 			TTdTenths++;
 			if( TTdTenths > 1 ) {
 				Mptr->Temp_2_tenths = (float) MAXINT;
 				Mptr->DP_Temp_2_tenths = (float) MAXINT;
 			}
 		} else if (isMaxTemperature( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: max temperature\n"));
 			MaxTemp++;
 			if ( MaxTemp > 1) {
 				Mptr->maxtemp = (float) MAXINT;
 			}
-		} else if (isMinTemp( token[NDEX], Mptr, &NDEX)) {
+		} else if (isMinTemperature(token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: min temperature\n"));
 			MinTemp++;
 			if (MinTemp > 1) {
 				Mptr->mintemp = (float) MAXINT;
 			}
 		} else if (isT24MaxMinTemp( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: T24 max min temp\n"));
 			T24MaxMinTemp++;
 			if( T24MaxMinTemp > 1 ) {
 				Mptr->max24temp = (float) MAXINT;
 				Mptr->min24temp = (float) MAXINT;
 			}
 		} else if (isPtendency( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: P tendency\n"));
 			Ptendency++;
 			if (Ptendency > 1) {
 				Mptr->char_prestndcy = MAXINT;
 				Mptr->prestndcy = (float) MAXINT;
 			}
 		} else if (isPWINO(token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: PWINO\n"));
 			PWINO++;
 			if (PWINO > 1) {
 				Mptr->PWINO = FALSE;
 			}
 		} else if (isFZRANO(token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: FZRANO\n"));
 			FZRANO++;
 			if (FZRANO > 1) {
 				Mptr->FZRANO = FALSE;
 			}
 		} else if (isTSNO( token[NDEX], Mptr, &NDEX )) {
+			DEBUG_PRINTF(("decode_metar_remark: TSNO\n"));
 			TSNO++;
 			if (TSNO > 1) {
 				Mptr->TSNO = FALSE;
 			}
 		} else if (isDollarSign( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: maint indicator\n"));
 			maintIndicator++;
 			if (maintIndicator > 1) {
 				Mptr->DollarSign = FALSE;
 			}
 		} else if( isRVRNO( token[NDEX], Mptr, &NDEX ) ) {
+			DEBUG_PRINTF(("decode_metar_remark: RVRNO\n"));
 			RVRNO++;
 			if (RVRNO > 1) {
 				Mptr->RVRNO = FALSE;
 			}
 		} else if (isPNO( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: PNO\n"));
 			PNO++;
 			if (PNO > 1) {
 				Mptr->PNO = FALSE;
 			}
 		} else if (isVISNO( &(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: VISNO\n"));
 			VISNO++;
 			if (VISNO > 1) {
 				Mptr->VISNO = FALSE;
 				memset(Mptr->VISNO_LOC, '\0', sizeof(Mptr->VISNO_LOC));
 			}
-		} else if (isCHINO( &(token[NDEX]), Mptr, &NDEX)) {
+		} else if (isCHINO(&(token[NDEX]), Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: CHINO\n"));
 			CHINO++;
 			if (CHINO > 1) {
 				Mptr->CHINO = FALSE;
 				memset(Mptr->CHINO_LOC, '\0', sizeof(Mptr->CHINO_LOC));
 			}
 		} else if (isDVR( token[NDEX], Mptr, &NDEX)) {
+			DEBUG_PRINTF(("decode_metar_remark: DVR\n"));
 			DVR++;
 			if (DVR > 1) {
 				Mptr->DVR.Min_visRange = MAXINT;

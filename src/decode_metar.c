@@ -149,13 +149,13 @@ static void freeTokens( char **token )
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         InitDcdMETAR                                     */
+/*  Title:         init_metar_decoder                               */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
 /*  Language:      C/370                                            */
 /*                                                                  */
-/*  Abstract:  InitDcdMETAR initializes every member of the         */
+/*  Abstract:  init_metar_decoder initializes every member of the   */
 /*             structure addressed by the pointer Mptr.             */
 /*                                                                  */
 /*  External Functions Called:                                      */
@@ -170,7 +170,7 @@ static void freeTokens( char **token )
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-static void InitDcdMETAR( Decoded_METAR *Mptr )
+static void init_metar_decoder( Decoded_METAR *Mptr )
 {
    int i, j;
  
@@ -2440,10 +2440,10 @@ int decode_metar( char *string , Decoded_METAR *Mptr )
    /*   INITIALIZE STRUCTURE THAT HAS THE   */
    /*      VARIABLE TYPE Decoded_METAR      */
  
-   InitDcdMETAR( Mptr );
+   init_metar_decoder (Mptr);
  
 #ifdef DEBUGZZ
-   printf("decode_metar: Returned from InitDcdMETAR\n");
+   printf("decode_metar: Returned from init_metar_decoder\n");
 #endif
 
 	/* Copy the string since it may be const, and functions

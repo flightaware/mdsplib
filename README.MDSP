@@ -174,9 +174,9 @@ and assigned to those members.
      The METAR Decoder has the following function prototype:     
 
    
-        int DcdMETAR( char *observation, Decoded_METAR *Mptr ),
+        int decode_metar( char *observation, Decoded_METAR *Mptr ),
 
-     The following program segment illustrates how the DcdMETAR
+     The following program segment illustrates how the decode_metar
 function might be invoked:
 
 
@@ -198,7 +198,7 @@ function might be invoked:
                 if ( (observation = getMETAR( selectionParms ))  
 
                                  != NULL ) { 
-                        if( DcdMETAR( observation, Mptr) != 0 )  
+                        if( decode_metar( observation, Mptr) != 0 )  
 
                               printf("Error Msg\m");             
 
@@ -213,12 +213,12 @@ function might be invoked:
                 .
 
 
-     Within the routine that calls DcdMETAR, a variable must be
+     Within the routine that calls decode_metar, a variable must be
 declared as a Decoded_METAR type.  The address of that
 Decoded_METAR variable and a pointer to a METAR report string are
-then passed to the DcdMETAR routine.  The function getMETAR is
+then passed to the decode_metar routine.  The function getMETAR is
 for illustrative purposes only and simply represents a generic routine that the user must furnish in
-order to supply  METAR reports to the DcdMETAR routine.
+order to supply  METAR reports to the decode_metar routine.
 
      All of the files listed below have been packaged as a single
 self-extracting file called DCDMETAR.EXE.  An ASCII version of

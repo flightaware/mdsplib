@@ -2572,8 +2572,13 @@ static MDSP_BOOL isCIG2ndSite( char **token, Decoded_METAR *Mptr,
    if( nisdigit(*token,3) )
    {
       CIG2ndSite = atoi(*token ) * 10;
+
+      ++token;
+
+      if (*token == NULL)
+	return FALSE;
  
-      if( strncmp(*(++token),"RY",2) != 0)
+      if( strncmp(*token, "RY", 2) != 0)
          return FALSE;
       else {
          strcpy(Mptr->CIG_2ndSite_LOC, *token );

@@ -48,7 +48,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  
 float fracPart( char *string )
 {
-   char buf[ 6 ],
+   char buf[ 32 ],
         *slash;
  
    float numerator,

@@ -1326,7 +1326,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
 static MDSP_BOOL variableVisibility( char *string1, char *string2,
                       Decoded_METAR *Mptr, int *NDEX )
 {
-   char buf[ 6 ];
+   char buf[ 32 ];
    int numerator,
        denominator;
    char *slash,

@@ -859,7 +859,7 @@ static MDSP_BOOL isA0indicator( char *indicator, Decoded_METAR *Mptr,
 static MDSP_BOOL isPeakWind( char **string, Decoded_METAR *Mptr,
                         int *NDEX )
 {
-   char buf[ 6 ];
+   char buf[ 32 ];
    char *slash;
    int temp;
    MDSP_BOOL PK_WND_FLAG;
@@ -906,10 +906,11 @@ static MDSP_BOOL isPeakWind( char **string, Decoded_METAR *Mptr,
    else if( strlen(*string) >= 8 && strlen(*string) <= 11 &&
              nisdigit(slash+1,strlen(slash+1)) &&
              nisdigit(*string, (slash - *string)) &&
+	     (slash - *string) >= 5 &&
              (slash - *string) <= 6 )
    {
       memset( buf, '\0', 4);
-      strncpy( buf, *string, 3 );
+      strncpy( buf, *string, slash - *string );
       Mptr->PKWND_dir = atoi( buf );
  
       memset( buf, '\0', 4);
@@ -4102,7 +4103,7 @@ static MDSP_BOOL isTTdTenths( char *token, Decoded_METAR *Mptr, int *NDEX)
 #pragma page(1)
 static MDSP_BOOL isMaxTemperature(char *string, Decoded_METAR *Mptr, int *NDEX)
 {
-   char buf[ 6 ];
+   char buf[ 32 ];
  
    if( string == NULL )
       return FALSE;
@@ -4166,7 +4167,7 @@ static MDSP_BOOL isMaxTemperature(char *string, Decoded_METAR *Mptr, int *NDEX)
 #pragma page(1)
 static MDSP_BOOL isMinTemp(char *string, Decoded_METAR *Mptr, int *NDEX)
 {
-   char buf[ 6 ];
+   char buf[ 32 ];
  
    if( string == NULL )
       return FALSE;
@@ -4230,7 +4231,7 @@ static MDSP_BOOL isMinTemp(char *string, Decoded_METAR *Mptr, int *NDEX)
 static MDSP_BOOL isT24MaxMinTemp( char *string, Decoded_METAR *Mptr,
                              int *NDEX )
 {
-   char buf[ 6 ];
+   char buf[ 32 ];
  
    if( string == NULL )
       return FALSE;
@@ -4310,7 +4311,7 @@ static MDSP_BOOL isT24MaxMinTemp( char *string, Decoded_METAR *Mptr,
  
 static MDSP_BOOL isPtendency(char *string, Decoded_METAR *Mptr, int *NDEX)
 {
-   char buf[ 6 ];
+   char buf[ 32 ];
  
    if( string == NULL )
       return FALSE;

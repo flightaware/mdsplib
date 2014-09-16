@@ -689,7 +689,7 @@ static MDSP_BOOL isPartObscur( char **string, Decoded_METAR *Mptr,
    printf("isPartObscur:  *string = %s\n",*string);
    if( Mptr->PartialObscurationAmt[ndex][0] != '\0' ) {
       printf("PartialObscurationAmt = %s\n",
-                &(Mptr->PartialObscurationAmt[ndex][0]));
+                Mptr->PartialObscurationAmt[ndex]);
       if( strcmp( *string, "FEW///" ) == 0 ||
           strcmp( *string, "SCT///" ) == 0 ||
           strcmp( *string, "BKN///" ) == 0 ||
@@ -721,7 +721,7 @@ static MDSP_BOOL isPartObscur( char **string, Decoded_METAR *Mptr,
       }
       else {
          if( strcmp( *string,
-                     &(Mptr->PartialObscurationAmt[ndex][0]) ) == 0 )
+                     Mptr->PartialObscurationAmt[ndex] ) == 0 )
          {
             --string;
  
@@ -731,7 +731,7 @@ static MDSP_BOOL isPartObscur( char **string, Decoded_METAR *Mptr,
             i = 0;
             while( phenom[i] != NULL ) {
                if( strcmp( *string, phenom[i] ) == 0 ) {
-                  strcpy(&(Mptr->PartialObscurationPhenom[ndex][0]),
+                  strcpy(Mptr->PartialObscurationPhenom[ndex],
                          *string);
  
                   (*NDEX)++;
@@ -3396,7 +3396,7 @@ static MDSP_BOOL isSfcObscuration( char *string, Decoded_METAR *Mptr,
             return FALSE;
          }
          else {
-            strcpy(&(Mptr->SfcObscuration[ndex][0]),WxSymbols[i]);
+            strcpy(Mptr->SfcObscuration[ndex],WxSymbols[i]);
             temp += strlen(WxSymbols[i]);
             ndex++;
          }
@@ -5164,11 +5164,11 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
                &NDEX ) ) {
          PartObscur++;
          if( PartObscur > 2 ) {
-            memset(&(Mptr->PartialObscurationAmt[0][0]), '\0', sizeof(Mptr->PartialObscurationAmt[0]) );
-            memset(&(Mptr->PartialObscurationPhenom[0][0]),'\0', sizeof(Mptr->PartialObscurationPhenom[0]));
+            memset(Mptr->PartialObscurationAmt[0], '\0', sizeof(Mptr->PartialObscurationAmt[0]) );
+            memset(Mptr->PartialObscurationPhenom[0],'\0', sizeof(Mptr->PartialObscurationPhenom[0]));
  
-            memset(&(Mptr->PartialObscurationAmt[1][0]), '\0', sizeof(Mptr->PartialObscurationAmt[1]));
-            memset(&(Mptr->PartialObscurationPhenom[1][0]),'\0', sizeof(Mptr->PartialObscurationPhenom[1]));
+            memset(Mptr->PartialObscurationAmt[1], '\0', sizeof(Mptr->PartialObscurationAmt[1]));
+            memset(Mptr->PartialObscurationPhenom[1],'\0', sizeof(Mptr->PartialObscurationPhenom[1]));
          }
       }
       else if( isSectorVsby( &(token[NDEX]), Mptr, &NDEX ) ) {

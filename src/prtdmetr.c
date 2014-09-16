@@ -230,13 +230,13 @@ void sprint_metar (char * string, Decoded_METAR *Mptr)
    for (i = 0; i < MAX_PARTIAL_OBSCURATIONS; i++) {
        if ( Mptr->PartialObscurationAmt[i][0] != '\0' ) {
 	  sprintf(temp, "OBSCURATION AMOUNT  : %s\n",
-		&(Mptr->PartialObscurationAmt[i][0]));
+		Mptr->PartialObscurationAmt[i]);
 	  strcat(string, temp);
        }
      
        if ( Mptr->PartialObscurationPhenom[i][0] != '\0' ) {
 	  sprintf(temp, "OBSCURATION PHENOM  : %s\n",
-		&(Mptr->PartialObscurationPhenom[i][0]));
+		Mptr->PartialObscurationPhenom[i]);
 	  strcat(string, temp);
        }
     }
@@ -593,7 +593,7 @@ void sprint_metar (char * string, Decoded_METAR *Mptr)
    for( i = 0; i < MAX_SURFACE_OBSCURATIONS; i++ ) {
       if( Mptr->SfcObscuration[i][0] != '\0' ) {
          sprintf(temp, "SfcObscuration      : %s\n",
-                   &(Mptr->SfcObscuration[i][0]) );
+                   Mptr->SfcObscuration[i]);
          strcat(string, temp);
       }
    }

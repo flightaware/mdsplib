@@ -349,8 +349,8 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
    /***********************/
  
     for (i = 0; i < MAX_PARTIAL_OBSCURATIONS; i++) {
-       memset( &(Mptr->PartialObscurationAmt[i][0]), '\0', sizeof(Mptr->PartialObscurationAmt[i]));
-       memset( &(Mptr->PartialObscurationPhenom[i][0]), '\0', sizeof(Mptr->PartialObscurationPhenom[0]));
+       memset( Mptr->PartialObscurationAmt[i], '\0', sizeof(Mptr->PartialObscurationAmt[i]));
+       memset( Mptr->PartialObscurationPhenom[i], '\0', sizeof(Mptr->PartialObscurationPhenom[0]));
     }
  
  
@@ -416,7 +416,7 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
    memset(Mptr->VSBY_2ndSite_LOC, '\0', sizeof(Mptr->VSBY_2ndSite_LOC));
  
    for( i = 0; i < 6; i++ )
-      memset (&(Mptr->SfcObscuration[i][0]), '\0', sizeof(Mptr->SfcObscuration[i]));
+      memset (Mptr->SfcObscuration[i], '\0', sizeof(Mptr->SfcObscuration[i]));
  
    Mptr->Num8thsSkyObscured = MAXINT;
  
@@ -607,7 +607,7 @@ static MDSP_BOOL isPartObscur( char **string, Decoded_METAR *Mptr,
        strcmp( *string, "FEW000" ) == 0 ||
        strcmp( *string, "SCT000" ) == 0 ||
        strcmp( *string, "BKN000" ) == 0    ) {
-      strcpy( &(Mptr->PartialObscurationAmt[0][0]), *string );
+      strcpy( Mptr->PartialObscurationAmt[0], *string );
       (*NDEX)++;
       string++;
  
@@ -618,7 +618,7 @@ static MDSP_BOOL isPartObscur( char **string, Decoded_METAR *Mptr,
           if( strcmp( *string, "FEW000" ) == 0 ||
               strcmp( *string, "SCT000" ) == 0 ||
               strcmp( *string, "BKN000" ) == 0    ) {
-            strcpy( &(Mptr->PartialObscurationAmt[1][0]), *string );
+            strcpy( Mptr->PartialObscurationAmt[1], *string );
             (*NDEX)++;
          }
       }
@@ -626,7 +626,7 @@ static MDSP_BOOL isPartObscur( char **string, Decoded_METAR *Mptr,
          if( strcmp( *string, "FEW///" ) == 0 ||
              strcmp( *string, "SCT///" ) == 0 ||
              strcmp( *string, "BKN///" ) == 0 ) {
-            strcpy( &(Mptr->PartialObscurationAmt[1][0]), *string );
+            strcpy( Mptr->PartialObscurationAmt[1], *string );
             (*NDEX)++;
          }
       }

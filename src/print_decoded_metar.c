@@ -884,7 +884,7 @@ void sprint_metar (char * string, Decoded_METAR *Mptr)
 }
 
 
-void prtDMETR (Decoded_METAR *Mptr)
+void print_decoded_metar (Decoded_METAR *Mptr)
 {
 	char string[5000];
 	

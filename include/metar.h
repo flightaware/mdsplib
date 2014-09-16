@@ -283,14 +283,14 @@ typedef struct decoded_METAR {
 
 /********************************************************************/
 /*                                                                  */
-/*  Title:         DcdMETAR                                         */
+/*  Title:         decode_metar                                     */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          14 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
 /*  Language:      C/370                                            */
 /*                                                                  */
-/*  Abstract:      DcdMETAR takes a pointer to a METAR report char- */
-/*                 acter string as input, decodes the report, and   */
+/*  Abstract:      decode_metar takes a pointer to a METAR report   */
+/*                 string as input, decodes the report, and         */
 /*                 puts the individual decoded/parsed groups into   */
 /*                 a structure that has the variable type           */
 /*                 Decoded_METAR.                                   */
@@ -307,19 +307,20 @@ typedef struct decoded_METAR {
 /*                                                                  */
 /********************************************************************/
 
-int DcdMETAR( char *string , Decoded_METAR *Mptr );
+int decode_metar( char *string , Decoded_METAR *Mptr );
 
 
 
 /********************************************************************/
 /*                                                                  */
-/*  Title:         prtDMETR                                         */
+/*  Title:         print_decoded_metar                              */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
 /*  Language:      C/370                                            */
 /*                                                                  */
-/*  Abstract:  prtDMETR    prints, in order of the ASOS METAR       */
+/*  Abstract:  print_decoded_metar                                  */
+/*             prints, in order of the ASOS METAR                   */
 /*             format, all non-initialized members of the structure */
 /*             addressed by the Decoded_METAR pointer.              */
 /*                                                                  */
@@ -335,20 +336,21 @@ int DcdMETAR( char *string , Decoded_METAR *Mptr );
 /*                                                                  */
 /********************************************************************/
 
-void prtDMETR( Decoded_METAR *Mptr );
+void print_decoded_metar( Decoded_METAR *Mptr );
 
 
 /********************************************************************/
 /*                                                                  */
-/*  Title:         dcdNetMETAR                                      */
+/*  Title:         decode_net_metar                                 */
 /*  Date:          24 Jul 2001                                      */
 /*  Programmer:    Eric McCarthy                                    */
 /*  Language:      C                                                */
 /*                                                                  */
-/*  Abstract:  dcdNetMETAR                                          */
+/*  Abstract:  decode_net_metar                                     */
 /*                 The METARs supplied by the NWS server need to    */
 /*                 be reformatted before they can be sent through   */
-/*                 dcdMETAR. This calls dcdMETAR on the correctly   */
+/*                 decode_metar.                                    */
+/*                 This calls dcdMETAR on the correctly             */
 /*                 formated METAR.                                  */
 /*                                                                  */
 /*  Input:         a pointer to a METAR string from a NWS server    */
@@ -361,7 +363,7 @@ void prtDMETR( Decoded_METAR *Mptr );
 /*                                                                  */
 /********************************************************************/
 
-int dcdNetMETAR (char *string, Decoded_METAR *Mptr);
+int decode_net_metar (char *string, Decoded_METAR *Mptr);
 
 
 /********************************************************************/
@@ -371,8 +373,8 @@ int dcdNetMETAR (char *string, Decoded_METAR *Mptr);
 /*  Programmer:    Eric McCarthy                                    */
 /*  Language:      C                                                */
 /*                                                                  */
-/*  Abstract:  sprtDMETR                                            */
-/*                 Does what prtDMETR does, but into a string.      */
+/*  Abstract:  sprint_metar                                         */
+/*      Does what print_decoded_metar does, but into a string.      */
 /*                                                                  */
 /*  Input:         string containing the printout, decoded METAR    */
 /*                                                                  */

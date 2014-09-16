@@ -27,8 +27,8 @@ char *BldSynop( Decoded_METAR * , char * );
 /*char *Sec5MeSm(Decoded_METAR *, char *);*/
 #endif
  
-void prtDMETR( Decoded_METAR *);
-int DcdMETAR( char *, Decoded_METAR * );
+void print_decoded_metar( Decoded_METAR *);
+int decode_metar( char *, Decoded_METAR * );
  
 #pragma page(1)
 #pragma subtitle(" ")
@@ -46,8 +46,8 @@ int DcdMETAR( char *, Decoded_METAR * );
 /*                                                                  */
 /*  External Functions Called:                                      */
 /*                 None.                                            */
-/*                 DcdMETAR                                         */
-/*                 prtDcdMetar                                      */
+/*                 decode_metar                                     */
+/*                 print_decoded_metar                              */
 /*                 Sec0MTSm                                         */
 /*                 Sec1MTSm                                         */
 /*                                                                  */
@@ -600,20 +600,12 @@ main()
  
         NULL};
  
-   /***************************/
-   /* DECLARE LOCAL VARIABLES */
-   /***************************/
- 
    Decoded_METAR Metar;
    Decoded_METAR *Mptr = &Metar;
    int j,
        ErReturn;
    static char *synopRTRN = NULL;
    char bltn_prefix[20];
- 
-   /***************************************************/
-   /* START BODY OF MAIN ROUTINE FOR CALLING DcdMETAR */
-   /***************************************************/
  
    j = 0;
  
@@ -623,12 +615,12 @@ main()
       printf("\n\nINPUT METAR REPORT:\n\n %s\n\n",string[j] );
  
             /*-- DECODE INPUT REPORT ---------------------------------*/
-      if ( (ErReturn = DcdMETAR( string[ j ], Mptr )) != 0 )
-         printf("DcdMETAR:  Error Return Number: %d\n",ErReturn);
+      if ( (ErReturn = decode_metar( string[ j ], Mptr )) != 0 )
+         printf("decode_metar:  Error Return Number: %d\n",ErReturn);
  
             /*-- PRINT DECODED METAR REPORT ELEMENTS -----------------*/
       printf("\n\nFINAL DECODED PRODUCT...\n\n");
-      prtDMETR( Mptr );
+      print_decoded_metar( Mptr );
       j++;
  
    }

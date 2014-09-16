@@ -27,8 +27,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "metar_structs.h"     /* standard header file */
 
 float fracPart( char * );
-void DcdMTRmk( char **, Decoded_METAR * );
-void prtDMETR( Decoded_METAR * );
+void decode_metar_remark( char **, Decoded_METAR * );
+void print_decoded_metar( Decoded_METAR * );
 
 #pragma page(1)
 #pragma subtitle(" ")
@@ -2377,13 +2377,13 @@ printf("isWindData:  Passed dddff(f) test - wind = %s\n",wind);
 #pragma subtitle("subtitle - Decode METAR report.              ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         DcdMETAR                                         */
+/*  Title:         decode_metar                                         */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          14 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
 /*  Language:      C/370                                            */
 /*                                                                  */
-/*  Abstract:      DcdMETAR takes a pointer to a METAR report char- */
+/*  Abstract:      decode_metar takes a pointer to a METAR report char- */
 /*                 acter string as input, decodes the report, and   */
 /*                 puts the individual decoded/parsed groups into   */
 /*                 a structure that has the variable type           */
@@ -2403,7 +2403,7 @@ printf("isWindData:  Passed dddff(f) test - wind = %s\n",wind);
 #pragma page(1)
  
  
-int DcdMETAR( char *string , Decoded_METAR *Mptr )
+int decode_metar( char *string , Decoded_METAR *Mptr )
 {
    /* DECLARE LOCAL VARIABLES */
  
@@ -2443,7 +2443,7 @@ int DcdMETAR( char *string , Decoded_METAR *Mptr )
    InitDcdMETAR( Mptr );
  
 #ifdef DEBUGZZ
-   printf("DcdMETAR: Returned from InitDcdMETAR\n");
+   printf("decode_metar: Returned from InitDcdMETAR\n");
 #endif
 
 	/* Copy the string since it may be const, and functions
@@ -2456,7 +2456,7 @@ int DcdMETAR( char *string , Decoded_METAR *Mptr )
  
    /* TOKENIZE AND STORE THE INPUT METAR REPORT STRING */
 #ifdef DEBUGZZ
-   printf("DcdMETAR: Before start of tokenizing, string = %s\n",
+   printf("decode_metar: Before start of tokenizing, string = %s\n",
              stringCpy);
 #endif
  
@@ -2469,16 +2469,16 @@ int DcdMETAR( char *string , Decoded_METAR *Mptr )
    IS_NOT_RMKS = TRUE;
  
 #ifdef DEBUGZZ
-    printf("DcdMETAR: token[0] = %s\n",token[0]);
+    printf("decode_metar: token[0] = %s\n",token[0]);
 #endif
  
    while( token[NDEX] != NULL && IS_NOT_RMKS ) {
  
 #ifdef DEBUGZZ
 if( strcmp(token[0],"OPKC") == 0 || strcmp(token[0],"TAPA") == 0 ) {
-   printf("DcdMETAR:  token[%d] = %s\n",NDEX,token[NDEX]);
-   printf("DcdMETAR: Token[%d] = %s\n",NDEX,token[NDEX]);
-   printf("DcdMETAR: MetarGroup = %d\n",MetarGroup);
+   printf("decode_metar:  token[%d] = %s\n",NDEX,token[NDEX]);
+   printf("decode_metar: Token[%d] = %s\n",NDEX,token[NDEX]);
+   printf("decode_metar: MetarGroup = %d\n",MetarGroup);
 }
 #endif
  
@@ -2488,8 +2488,8 @@ if( strcmp(token[0],"OPKC") == 0 || strcmp(token[0],"TAPA") == 0 ) {
  
 #ifdef DEBUGZZ
 if( strcmp(token[0],"OPKC") == 0 || strcmp(token[0],"TAPA") == 0 ) {
-   printf("DcdMETAR: StartGroup = %d\n",StartGroup);
-   printf("DcdMETAR: SaveStartGroup = %d\n",SaveStartGroup);
+   printf("decode_metar: StartGroup = %d\n",StartGroup);
+   printf("decode_metar: SaveStartGroup = %d\n",SaveStartGroup);
 }
 #endif
  
@@ -2511,7 +2511,7 @@ if( strcmp(token[0],"OPKC") == 0 || strcmp(token[0],"TAPA") == 0 ) {
             }
             else {
 #ifdef DEBUGZX
-printf("DcdMETAR:  token[%d] = %s\n",NDEX,token[NDEX]);
+printf("decode_metar:  token[%d] = %s\n",NDEX,token[NDEX]);
 #endif
                freeTokens( token );
                return 12;
@@ -2624,7 +2624,7 @@ printf("DcdMETAR:  token[%d] = %s\n",NDEX,token[NDEX]);
  
 #ifdef DEBUGZZ
 if( strcmp(token[0],"OPKC") == 0 || strcmp(token[0],"TAPA") == 0 ) {
-   printf("DcdMETAR:  while loop exited, Token[%d] = %s\n",
+   printf("decode_metar:  while loop exited, Token[%d] = %s\n",
                   NDEX,token[NDEX]);
 }
 #endif
@@ -2633,19 +2633,19 @@ if( strcmp(token[0],"OPKC") == 0 || strcmp(token[0],"TAPA") == 0 ) {
 	 /*       METAR REPORT         */
 
 #ifdef PRTMETAR
-printf("DCDMETAR:  Print DECODED METAR, before leaving "
-       "DCDMETAR Routine, but before possible call to DcdMTRmk\n\n");
-prtDMETR( Mptr );
+printf("decode_metar:  Print DECODED METAR, before leaving "
+       "decode_metar Routine, but before possible call to decode_metar_remark\n\n");
+print_decoded_metar( Mptr );
 #endif
  
    if( token[NDEX] != NULL )
       if( strcmp( token[NDEX], "RMK" ) == 0 )
-         DcdMTRmk( token, Mptr );
+         decode_metar_remark( token, Mptr );
  
 #ifdef PRTMETAR
-printf("DCDMETAR:  Print DECODED METAR, after possible DcdMTRmk "
+printf("decode_metar:  Print DECODED METAR, after possible decode_metar_remark "
        "call\n\n");
-prtDMETR( Mptr );
+print_decoded_metar( Mptr );
 #endif
  
    freeTokens( token );    /* FREE THE STORAGE ALLOCATED FOR THE   */
@@ -2662,16 +2662,16 @@ prtDMETR( Mptr );
 
 /********************************************************************/
 /*                                                                  */
-/*  Title:         dcdNetMETAR                                      */
+/*  Title:         decode_net_metar                                 */
 /*  Date:          24 Jul 2001                                      */
 /*  Programmer:    Eric McCarthy                                    */
 /*  Language:      C/370                                            */
 /*                                                                  */
-/*  Abstract:  dcdNetMETAR                                          */
+/*  Abstract:  decode_net_metar                                     */
 /*                 The METARs supplied by the NWS server need to    */
 /*                 be reformatted before they can be sent through   */
-/*                 dcdMETAR. This calls dcdMETAR on the correctly   */
-/*                 formated METAR.                                  */
+/*                 decode_metar. This calls decode_metar on the     */
+/*                 correctly formated METAR.                        */
 /*                                                                  */
 /*  Input:         a pointer to a METAR string from a NWS server    */
 /*                                                                  */
@@ -2683,8 +2683,7 @@ prtDMETR( Mptr );
 /*                                                                  */
 /********************************************************************/
 
-
-int dcdNetMETAR (char *string, Decoded_METAR *Mptr)
+int decode_net_metar (char *string, Decoded_METAR *Mptr)
 {
 	char *string_cpy, *ptr;
 	int result;
@@ -2710,7 +2709,7 @@ int dcdNetMETAR (char *string, Decoded_METAR *Mptr)
 	}
 	
 	/* decode the METAR */
-	result = DcdMETAR(string_cpy, Mptr);
+	result = decode_metar(string_cpy, Mptr);
 	
 	free(string_cpy);
 	return result;

@@ -4763,13 +4763,13 @@ static MDSP_BOOL isDollarSign( char *indicator, Decoded_METAR *Mptr,
 #pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
-/*  Title:         DcdMTRmk                                         */
+/*  Title:         decode_metar_remark                              */
 /*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
 /*  Date:          15 Sep 1994                                      */
 /*  Programmer:    CARL MCCALLA                                     */
 /*  Language:      C/370                                            */
 /*                                                                  */
-/*  Abstract:      DcdMTRmk takes a pointer to a METAR              */
+/*  Abstract:      decode_metar_remark takes a pointer to a METAR   */
 /*                 report and parses/decodes data elements from     */
 /*                 the remarks section of the report.               */
 /*                                                                  */
@@ -4791,7 +4791,7 @@ static MDSP_BOOL isDollarSign( char *indicator, Decoded_METAR *Mptr,
 /*                                                                  */
 /********************************************************************/
 #pragma page(1)
-void DcdMTRmk( char **token, Decoded_METAR *Mptr )
+void decode_metar_remark( char **token, Decoded_METAR *Mptr )
 {
    int TornadicActvty = 0, A0indicator = 0,
        peakwind = 0, windshift = 0, towerVsby = 0, surfaceVsby = 0,
@@ -4831,7 +4831,7 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
  
    while( token[ NDEX ] != NULL && IS_NOT_RMKS) {
 #ifdef DEBUGZZ
-   printf("DcdMTRmk:  token[%d] = %s\n",NDEX,token[NDEX]);
+   printf("decode_metar_remark:  token[%d] = %s\n",NDEX,token[NDEX]);
 #endif
       if( strcmp(token[ NDEX ], "RMK") != 0 )
          NDEX++;
@@ -4844,18 +4844,18 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
  
    if( token[ NDEX ] != NULL ) {
 #ifdef DEBUGZZ
-   printf("DcdMTRmk:  RMK found, token[%d] = %s\n",
+   printf("decode_metar_remark:  RMK found, token[%d] = %s\n",
                    NDEX,token[NDEX]);
 #endif
       NDEX++;
 #ifdef DEBUGZZ
-   printf("DcdMTRmk:  Bump NDEX, token[%d] = %s\n",
+   printf("decode_metar_remark:  Bump NDEX, token[%d] = %s\n",
                    NDEX,token[NDEX]);
 #endif
    }
    else {
 #ifdef DEBUGZZ
-   printf("DcdMTRmk:  No RMK found.  NULL ptr encountered\n");
+   printf("decode_metar_remark:  No RMK found.  NULL ptr encountered\n");
 #endif
       return;
    }
@@ -4866,7 +4866,7 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
    while(token[NDEX] != NULL) {
  
 #ifdef DEBUGZZ
-   printf("DcdMTRmk:  DECODE RMKS: token[%d] = %s\n",NDEX,token[NDEX]);
+   printf("decode_metar_remark:  DECODE RMKS: token[%d] = %s\n",NDEX,token[NDEX]);
 #endif
  
       isRADAT( &(token[NDEX]), Mptr, &NDEX );
@@ -5210,7 +5210,7 @@ puts(stupid);
       }
       else {
 #ifdef DEBUGZZ
-   printf("DcdMTRmk:  PUNTING ON RMKS: token[%d] = %s\n",NDEX,token[NDEX]);
+   printf("decode_metar_remark:  PUNTING ON RMKS: token[%d] = %s\n",NDEX,token[NDEX]);
 #endif
          NDEX++;
       }

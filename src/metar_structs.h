@@ -39,6 +39,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  
 #include "local.h"     /* standard header file */
 
+#define MAX_RUNWAYS 12
+#define MAX_CLOUD_GROUPS 6
+#define MAX_SURFACE_OBSCURATIONS 6
+#define MAX_PARTIAL_OBSCURATIONS 2
+
 /*********************************************/
 /*                                           */
 /* RUNWAY VISUAL RANGE STRUCTURE DECLARATION */
@@ -46,7 +51,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*                                           */
 /*********************************************/
  
-#define MAX_RUNWAYS 12
  
 typedef struct runway_VisRange {
    char runway_designator[6];
@@ -81,7 +85,6 @@ typedef struct dispatch_VisRange {
 /*                                       */
 /*****************************************/
  
-#define MAX_CLOUD_GROUPS 6
 
 typedef struct cloud_Conditions {
    char cloud_type[5];
@@ -157,9 +160,9 @@ typedef struct decoded_METAR {
    char TornadicMovDir[3];
    char CHINO_LOC[6];
    char VISNO_LOC[6];
-   char PartialObscurationAmt[2][7];
-   char PartialObscurationPhenom[2][12];
-   char SfcObscuration[6][10];
+   char PartialObscurationAmt[MAX_PARTIAL_OBSCURATIONS][7];
+   char PartialObscurationPhenom[MAX_PARTIAL_OBSCURATIONS][12];
+   char SfcObscuration[MAX_SURFACE_OBSCURATIONS][10];
    char charPrevailVsby[12];
    char charVertVsby[10];
    char TS_LOC[3];

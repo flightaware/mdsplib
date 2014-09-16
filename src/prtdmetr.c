@@ -220,39 +220,26 @@ void sprint_metar (char * string, Decoded_METAR *Mptr)
       strcat(string, temp);
    }
  
-   i = 0;
-   while ( Mptr->WxObstruct[i][0] != '\0' && i < MAXWXSYMBOLS )
+   for (i = 0; Mptr->WxObstruct[i][0] != '\0' && i < MAXWXSYMBOLS; i++)
    {
       sprintf(temp, "WX/OBSTRUCT VISION  : %s\n",
          Mptr->WxObstruct[i] );
       strcat(string, temp);
-      i++;
    }
- 
-   if ( Mptr->PartialObscurationAmt[0][0] != '\0' ) {
-      sprintf(temp, "OBSCURATION AMOUNT  : %s\n",
-            &(Mptr->PartialObscurationAmt[0][0]));
-      strcat(string, temp);
-   }
- 
-   if ( Mptr->PartialObscurationPhenom[0][0] != '\0' ) {
-      sprintf(temp, "OBSCURATION PHENOM  : %s\n",
-            &(Mptr->PartialObscurationPhenom[0][0]));
-      strcat(string, temp);
-   }
- 
- 
-   if ( Mptr->PartialObscurationAmt[1][0] != '\0' ) {
-      sprintf(temp, "OBSCURATION AMOUNT  : %s\n",
-            &(Mptr->PartialObscurationAmt[1][0]));
-      strcat(string, temp);
-   }
- 
-   if ( Mptr->PartialObscurationPhenom[1][0] != '\0' ) {
-      sprintf(temp, "OBSCURATION PHENOM  : %s\n",
-            &(Mptr->PartialObscurationPhenom[1][0]));
-      strcat(string, temp);
-   }
+
+   for (i = 0; i < MAX_PARTIAL_OBSCURATIONS; i++) {
+       if ( Mptr->PartialObscurationAmt[i][0] != '\0' ) {
+	  sprintf(temp, "OBSCURATION AMOUNT  : %s\n",
+		&(Mptr->PartialObscurationAmt[i][0]));
+	  strcat(string, temp);
+       }
+     
+       if ( Mptr->PartialObscurationPhenom[i][0] != '\0' ) {
+	  sprintf(temp, "OBSCURATION PHENOM  : %s\n",
+		&(Mptr->PartialObscurationPhenom[i][0]));
+	  strcat(string, temp);
+       }
+    }
  
    for (i = 0;  Mptr->cloudGroup[ i ].cloud_type[0] != '\0' &&
                      i < MAX_CLOUD_GROUPS; i++ )
@@ -603,7 +590,7 @@ void sprint_metar (char * string, Decoded_METAR *Mptr)
       strcat(string, temp);
    }
  
-   for( i = 0; i < 6; i++ ) {
+   for( i = 0; i < MAX_SURFACE_OBSCURATIONS; i++ ) {
       if( Mptr->SfcObscuration[i][0] != '\0' ) {
          sprintf(temp, "SfcObscuration      : %s\n",
                    &(Mptr->SfcObscuration[i][0]) );

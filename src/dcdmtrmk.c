@@ -3378,7 +3378,7 @@ static MDSP_BOOL isSfcObscuration( char *string, Decoded_METAR *Mptr,
       temp = ww;
       numLoc = temp + (strlen(temp) - 1 );
  
-      while( temp < numLoc && ndex < 6 ) {
+      while( temp < numLoc && ndex < MAX_SURFACE_OBSCURATIONS ) {
          i = 0;
  
          IS_NOT_FOUND = TRUE;
@@ -5195,7 +5195,7 @@ void DcdMTRmk( char **token, Decoded_METAR *Mptr )
       else if( isSfcObscuration( token[NDEX], Mptr, &NDEX ) ) {
          SfcObscur++;
          if( SfcObscur > 1 ) {
-            for( i = 0; i < 6; i++ ) {
+            for( i = 0; i < MAX_SURFACE_OBSCURATIONS; i++ ) {
                memset(&(Mptr->SfcObscuration[i][0]), '\0', sizeof(Mptr->SfcObscuration[i]));
                Mptr->Num8thsSkyObscured = MAXINT;
             }

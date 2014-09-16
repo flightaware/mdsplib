@@ -348,11 +348,10 @@ static void InitDcdMETAR( Decoded_METAR *Mptr )
    /* PARTIAL OBSCURATION */
    /***********************/
  
-   memset( &(Mptr->PartialObscurationAmt[0][0]), '\0', sizeof(Mptr->PartialObscurationAmt[0]));
-   memset( &(Mptr->PartialObscurationPhenom[0][0]), '\0', sizeof(Mptr->PartialObscurationPhenom[0]));
- 
-   memset( &(Mptr->PartialObscurationAmt[1][0]), '\0', sizeof(Mptr->PartialObscurationAmt[1]));
-   memset( &(Mptr->PartialObscurationPhenom[1][0]), '\0', sizeof(Mptr->PartialObscurationPhenom[1]));
+    for (i = 0; i < MAX_PARTIAL_OBSCURATIONS; i++) {
+       memset( &(Mptr->PartialObscurationAmt[i][0]), '\0', sizeof(Mptr->PartialObscurationAmt[i]));
+       memset( &(Mptr->PartialObscurationPhenom[i][0]), '\0', sizeof(Mptr->PartialObscurationPhenom[0]));
+    }
  
  
    /***************************************************/
@@ -2649,7 +2648,7 @@ printf("DcdMETAR:  token[%d] = %s\n",NDEX,token[NDEX]);
             MetarGroup = presentWX;
  
             while (isRVR( token[NDEX], Mptr, &NDEX, ndex ) &&
-                               ndex < 12 ) {
+                               ndex < MAX_RUNWAYS ) {
                ndex++;
                SaveStartGroup = StartGroup = RVR;
                MetarGroup = presentWX;

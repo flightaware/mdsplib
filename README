@@ -20,7 +20,7 @@ LICENSE before using this program (it's the LGPL).
 COMPILING
 
 Switch into the mdsplib directory and run "make". If you also want the
-test program to be produced, run "make dmetar" instead. Both commands
+test program to be produced, run "make metar_test" instead. Both commands
 will produce "metar.a". This is the library. The header file for this
 library is "metar.h". The test application will be named "dmetar", it
 takes no parameters.
@@ -38,13 +38,17 @@ it will install the library in /usr/local/lib and the header in
 
 FLIGHTAWARE
 
-FlightAware has made a number of important bug fixes 
-to MDPSLIB over the years.  As the sourceforge project that's reported
-to be its home seems pretty inactive and isn't configured to receive
-bug reports or patches, and as we're using git internally, it was
-ever so easy to put this repo on github, which we've done.
+FlightAware has made a number of fairly important bug fixes
+to mdsplib over the years.  Also we've smoothed things out, expanded
+function names past fifteen characters and you know, stuff like that
+to improve readability.
 
-As of September 2014 mdsplib can ingest more than 350,000,000 METARs 
+As the sourceforge project that's reported to be mdsplib's home seems
+pretty inactive and isn't configured to receive bug reports or patches,
+and as we're using git internally, it was ever so easy to put this repo
+on github.
+
+As of September 2014 mdsplib can ingest more than 350,000,000 METARs
 issued between 2008 and 2014 without crashing.  The same can not
 be said for unpatched mdsplib.
 
@@ -60,7 +64,8 @@ PARSING FAILURES
 mdsplib has other problems like because of how it parses and how it is
 structured in many cases if there is more than one report of something
 in the remarks, all the remarks pertaining to that thing will be thrown
-away.  That's not good.  We're thinking about what to do about it.
+away.  That's not good and it's not going to be easy to change it.
+We're thinking about what to do about it.
 
 
 ORIGINAL CONTACT

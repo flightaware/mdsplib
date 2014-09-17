@@ -11,7 +11,7 @@ LIBS =
 
 library: libmetar.a
 
-all: dmetar library
+all: metar_test library
 
 libmetar.a: src/antoi.o src/charcmp.o src/decode_metar.o src/decode_metar_remark.o src/fracpart.o src/print_decoded_metar.o src/stspack2.o src/stspack3.o
 	ar ruv libmetar.a src/antoi.o src/charcmp.o src/decode_metar.o src/decode_metar_remark.o src/fracpart.o src/print_decoded_metar.o src/stspack2.o src/stspack3.o

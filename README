@@ -5,7 +5,7 @@ METAR Decoder Software Package Library
 ABOUT THE MDSP LIBRARY
 
 The MDSP Library provides a programmer with two functions, the major one
-being decode_metar, which decodes a METAR into structures provided by the
+being decode_metar, which decodes a METAR into C structures provided by the
 library. Also print_decoded_metar, which prints out a decoded METAR structure.
 
 The MDSP was written by Carl McCalla and released to the public by the
@@ -15,7 +15,6 @@ modified to compile and run on *NIX systems.
 Please read the file README.MDSP included in this package. It's the
 README that comes with the original MDSP from the NWS. You must read the
 LICENSE before using this program (it's the LGPL).
-
 
 
 COMPILING
@@ -39,11 +38,29 @@ it will install the library in /usr/local/lib and the header in
 
 FLIGHTAWARE
 
-FlightAware has made a few bug fixes and/or improvements
+FlightAware has made a number of important bug fixes 
 to MDPSLIB over the years.  As the sourceforge project that's reported
 to be its home seems pretty inactive and isn't configured to receive
-bug reports or patches, and as we're using git internally, making it 
-ever so easy to put this repo on github, we've done that.
+bug reports or patches, and as we're using git internally, it was
+ever so easy to put this repo on github, which we've done.
+
+As of September 2014 mdsplib can ingest more than 350,000,000 METARs 
+issued between 2008 and 2014 without crashing.  The same can not
+be said for unpatched mdsplib.
+
+SECURITY
+
+mdsplib was written in the early 90s and is not up to date with current
+security practices for C coding.  Specifically it generally assumes
+that target strings are large enough to contain whatever is being
+assembled into them.
+
+PARSING FAILURES
+
+mdsplib has other problems like because of how it parses and how it is
+structured in many cases if there is more than one report of something
+in the remarks, all the remarks pertaining to that thing will be thrown
+away.  That's not good.  We're thinking about what to do about it.
 
 
 ORIGINAL CONTACT

@@ -3161,7 +3161,7 @@ static MDSP_BOOL isVIRGA( char **string, Decoded_METAR *Mptr, int *NDEX)
       (++string);
  
       if( *string == NULL )
-         return FALSE;
+         return TRUE;
  
  
       if( strcmp( *string, "N" ) == 0 ||
@@ -4816,7 +4816,7 @@ void decode_metar_remark(char **token, Decoded_METAR *Mptr)
  
 	while (token[ NDEX ] != NULL && IS_NOT_RMKS) {
 #ifdef DEBUGZZ
-		printf("decode_metar_remark:  token[%d] = %s\n",NDEX,token[NDEX]);
+		printf("decode_metar_remark:  token[%d] = %s\n", NDEX, token[NDEX]);
 #endif
 		if (strcmp(token[ NDEX ], "RMK") != 0) {
 			NDEX++;
@@ -4850,7 +4850,7 @@ void decode_metar_remark(char **token, Decoded_METAR *Mptr)
 	while (token[NDEX] != NULL) {
  
 #ifdef DEBUGZZ
-		printf("decode_metar_remark:  decode RMK: token[%d] = %s\n",NDEX,token[NDEX]);
+		printf("decode_metar_remark:  decode RMK: token[%d] = %s\n", NDEX, token[NDEX]);
 #endif
  
 		isRADAT( &(token[NDEX]), Mptr, &NDEX );
@@ -5213,7 +5213,7 @@ puts(stupid);
 			}
 		} else {
 #ifdef DEBUGZZ
-			printf("decode_metar_remark:  punting on RMKS: token[%d] = %s\n",NDEX,token[NDEX]);
+			printf("decode_metar_remark:  punting on RMKs: token[%d] = %s\n",NDEX,token[NDEX]);
 #endif
 			NDEX++;
 		}

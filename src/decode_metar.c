@@ -1274,12 +1274,12 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
          (*NDEX)++;
          return TRUE;
       }
-      else if( antoi(*visblty,
+      else if(( antoi(*visblty,
             strlen(*visblty)) >= 5000 &&
           antoi(*visblty,
             strlen(*visblty)) <= 9999 &&
           (antoi(*visblty,
-            strlen(*visblty)) % 500) == 0 ||
+            strlen(*visblty)) % 500) == 0) ||
            antoi(*visblty,
             strlen(*visblty)) == 9999 )
       {

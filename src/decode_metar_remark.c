@@ -142,6 +142,7 @@ static MDSP_BOOL isTS_LOC( char **string, Decoded_METAR *Mptr,
          return FALSE;
  
    }
+   return FALSE;
  
 }
  
@@ -2437,7 +2438,8 @@ printf("isRecentWX:  JUST inside while-loop, temp = %s\n",temp);
       }
  
    }
- 
+   // should not reach here
+   return FALSE;
 }
  
  

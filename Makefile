@@ -1,9 +1,11 @@
 # $Id$
 
 CC = gcc
+#CC = clang
 
 #CFLAGS = -g -O2 -fPIC -DDEBUGZZ
 #CFLAGS = -g -O0 -fPIC -DDEBUGZZ
+#CFLAGS = -g -Os -fPIC
 CFLAGS = -g -O2 -fPIC
 #CFLAGS = -g -O0 -fPIC
 

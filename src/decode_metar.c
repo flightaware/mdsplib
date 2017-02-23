@@ -2261,7 +2261,7 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
    if( wind == NULL )
       return FALSE;
  
-   if( strlen(wind) < 7 )
+   if( strlen(wind) < 5 )
       return FALSE;
  
    memset(dummy,'\0', sizeof(dummy));
@@ -2275,8 +2275,17 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
       strcpy( dummy, "MPS" );
 */
  
-   if( (unitsPtr = strstr( wind, "KT") ) != NULL )
+   if( (unitsPtr = strstr( wind, "KT") ) != NULL ) {
       strcpy( dummy, "KT" );
+   }
+   else if ( charcmp(wind,"ddddd'G'dd")) {
+      unitsPtr = wind + strlen(wind);
+      strcpy( dummy, "KT" );
+   }
+   else if ( charcmp(wind,"ddddd")) {
+      unitsPtr = wind + strlen(wind);
+      strcpy( dummy, "KT" );
+   }
    else
       return FALSE;
  

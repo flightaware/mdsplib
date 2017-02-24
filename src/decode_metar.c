@@ -1091,6 +1091,14 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
       (*NDEX)++;
       return TRUE;
    }
+
+   // CHECK FOR VISIBILITY MISSING
+   // INDICATOR FROM AUTO MEASUREMENTS
+
+   if( strcmp(*visblty,"////") == 0) {
+      (*NDEX)++;
+      return TRUE;
+   }
  
    // CHECK FOR VISIBILITY MEASURED IN KILOMETERS
  
@@ -1779,7 +1787,8 @@ static MDSP_BOOL isWxToken( char *token )
    for( i = 0; i < strlen(token); i++ )
    {
       if( !(isalpha(*(token+i)) || *(token+i) == '+' ||
-                                   *(token+i) == '-'   ) )
+                                   *(token+i) == '-' ||
+                                   *(token+i) == '/'  ) )
          return FALSE;
    }
    return TRUE;
@@ -1841,6 +1850,13 @@ static MDSP_BOOL isPresentWX( char *token, Decoded_METAR *Mptr,
  
    if( token == NULL)
       return FALSE;
+
+   if( strcmp(token,"//") == 0 ) {
+      strcpy( Mptr->WxObstruct[*next], "MISSING");
+      (*next)++;
+      (*NDEX)++;
+      return TRUE;
+   }
  
    temp_token_orig = temp_token =
         (char *) malloc(sizeof(char)*(strlen(token)+1));
@@ -2245,7 +2261,7 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
    if( wind == NULL )
       return FALSE;
  
-   if( strlen(wind) < 7 )
+   if( strlen(wind) < 5 )
       return FALSE;
  
    memset(dummy,'\0', sizeof(dummy));
@@ -2259,8 +2275,17 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
       strcpy( dummy, "MPS" );
 */
  
-   if( (unitsPtr = strstr( wind, "KT") ) != NULL )
+   if( (unitsPtr = strstr( wind, "KT") ) != NULL ) {
       strcpy( dummy, "KT" );
+   }
+   else if ( charcmp(wind,"ddddd'G'dd")) {
+      unitsPtr = wind + strlen(wind);
+      strcpy( dummy, "KT" );
+   }
+   else if ( charcmp(wind,"ddddd")) {
+      unitsPtr = wind + strlen(wind);
+      strcpy( dummy, "KT" );
+   }
    else
       return FALSE;
  

@@ -647,8 +647,9 @@ static MDSP_BOOL isCloudLayer( char *token )
    if( token == NULL )
       return FALSE;
 
-   if (strcmp(token, "//////"))
+   if (strlen(token) == 6 && charcmp(token,"'/''/''/''/''/''/'")) {
       return TRUE;
+   }
  
    if( strlen(token) < 6 )
       return FALSE;
@@ -744,8 +745,9 @@ static void parseCloudData( char *token, Decoded_METAR *Mptr, int next)
    if( token == NULL )
       return;
 
-   if (strcmp(token, "//////"))
+   if (strlen(token) == 6 && charcmp(token,"'/''/''/''/''/''/'")) {
       return;
+   }
  
    if( strlen(token) > 6 )
       strncpy(Mptr->cloudGroup[next].other_cld_phenom,token+6,
@@ -1101,7 +1103,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
    // CHECK FOR VISIBILITY MISSING
    // INDICATOR FROM AUTO MEASUREMENTS
 
-   if( strcmp(*visblty,"////") == 0) {
+   if(strlen(*visblty) == 4 && charcmp(*visblty,"'/''/''/''/'")) {
       (*NDEX)++;
       return TRUE;
    }
@@ -1857,7 +1859,7 @@ static MDSP_BOOL isPresentWX( char *token, Decoded_METAR *Mptr,
    if( token == NULL)
       return FALSE;
 
-   if( strcmp(token,"//") == 0 ) {
+   if(strlen(token) == 2 && charcmp(token,"'/''/'")) {
       strcpy( Mptr->WxObstruct[*next], "MISSING");
       (*next)++;
       (*NDEX)++;
@@ -2318,7 +2320,7 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
    if( wind == NULL )
       return FALSE;
 
-   if( strcmp( wind, "/////") == 0) {
+   if(strlen(wind) == 5 && charcmp(wind,"'/''/''/''/''/'")) {
       (*NDEX)++;
       return TRUE;
    }

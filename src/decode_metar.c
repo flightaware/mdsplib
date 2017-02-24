@@ -2340,6 +2340,9 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
    if( (unitsPtr = strstr( wind, "KT") ) != NULL ) {
       strcpy( dummy, "KT" );
    }
+   else if( (unitsPtr = strstr( wind, "MPS") ) != NULL) {
+      strcpy( dummy, "MPS" );
+   }
    else if ( charcmp(wind,"ddddd'G'dd")) {
       unitsPtr = wind + strlen(wind);
       if(defaultWindUnitsForAirport(Mptr->stnid, &defaultUnit)) {

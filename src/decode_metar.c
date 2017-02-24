@@ -646,6 +646,9 @@ static MDSP_BOOL isCloudLayer( char *token )
 {
    if( token == NULL )
       return FALSE;
+
+   if (strcmp(token, "//////"))
+      return TRUE;
  
    if( strlen(token) < 6 )
       return FALSE;
@@ -739,6 +742,9 @@ static void parseCloudData( char *token, Decoded_METAR *Mptr, int next)
  
  
    if( token == NULL )
+      return;
+
+   if (strcmp(token, "//////"))
       return;
  
    if( strlen(token) > 6 )
@@ -2223,7 +2229,57 @@ static MDSP_BOOL isTimeUTC( char *UTC, Decoded_METAR *Mptr, int *NDEX )
    else
       return FALSE;
 }
- 
+
+#pragma subtitle(" ")
+#pragma page(1)
+#pragma subtitle("subtitle - description                       ")
+/********************************************************************/
+/*                                                                  */
+/*  Title:         defaultWindUnitsForAirport                       */
+/*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
+/*  Date:          15 Sep 1994                                      */
+/*  Programmer:    CARL MCCALLA                                     */
+/*  Language:      C/370                                            */
+/*                                                                  */
+/*  Abstract:                                                       */
+/*                                                                  */
+/*  External Functions Called:                                      */
+/*                 None.                                            */
+/*                                                                  */
+/*  Input:         x                                                */
+/*                                                                  */
+/*  Output:        x                                                */
+/*                                                                  */
+/*  Modification History:                                           */
+/*                 None.                                            */
+/*                                                                  */
+/********************************************************************/
+#pragma page(1)
+
+static MDSP_BOOL defaultWindUnitsForAirport( char *airportId, char **defaultUnit )
+{
+   int i;
+   static char *airportPrefixUsingMPS[1] = { "Z" },
+               *airportPrefixWithoutDefault[1] = { "U" };
+
+   char airportPrefix = airportId[0];
+
+   for ( i = 0; i < sizeof(airportPrefixUsingMPS) / sizeof(airportPrefixUsingMPS[0]); i++ ) {
+      if (strncmp(airportId,airportPrefixUsingMPS[i],1) == 0) {
+         strcpy(*defaultUnit, "MPS");
+         return TRUE;
+      }
+   }
+
+   for ( i = 0; i < sizeof(airportPrefixWithoutDefault) / sizeof(airportPrefixWithoutDefault[0]); i++ ) {
+      if (strncmp(airportId,airportPrefixWithoutDefault[i],1) == 0) {
+         return FALSE;
+      }
+   }
+
+   strcpy(*defaultUnit, "KT");
+   return TRUE;
+}
  
 #pragma subtitle(" ")
 #pragma page(1)
@@ -2255,11 +2311,17 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
 {
  
    char *GustPtr,
-        *unitsPtr;
+        *unitsPtr,
+        *defaultUnit = malloc(4);
    char dummy[8];
  
    if( wind == NULL )
       return FALSE;
+
+   if( strcmp( wind, "/////") == 0) {
+      (*NDEX)++;
+      return TRUE;
+   }
  
    if( strlen(wind) < 5 )
       return FALSE;
@@ -2280,11 +2342,15 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
    }
    else if ( charcmp(wind,"ddddd'G'dd")) {
       unitsPtr = wind + strlen(wind);
-      strcpy( dummy, "KT" );
+      if(defaultWindUnitsForAirport(Mptr->stnid, &defaultUnit)) {
+         strcpy( dummy, defaultUnit );
+      }
    }
    else if ( charcmp(wind,"ddddd")) {
       unitsPtr = wind + strlen(wind);
-      strcpy( dummy, "KT" );
+      if(defaultWindUnitsForAirport(Mptr->stnid, &defaultUnit)) {
+         strcpy( dummy, defaultUnit );
+      }
    }
    else
       return FALSE;
@@ -2397,6 +2463,7 @@ printf("isWindData:  Passed dddff(f) test - wind = %s\n",wind);
       return FALSE;
  
 }
+
 #pragma page(1)
 #pragma subtitle(" ")
 #pragma subtitle("subtitle - Decode METAR report.              ")

@@ -2258,10 +2258,11 @@ static MDSP_BOOL isTimeUTC( char *UTC, Decoded_METAR *Mptr, int *NDEX )
 /********************************************************************/
 #pragma page(1)
 
-static MDSP_BOOL defaultWindUnitsForAirport( char *airportId, char **defaultUnit )
+static char* defaultWindUnitsForAirport( char *airportId )
 {
-   /* Airport prefix Z covers Chinese airports */
-   /* Airport prefix U covers Russia and the former Soviet states airports */
+   /* Airport prefix Z covers Chinese airports which use MPS */
+   /* Airport prefix U covers Russia and the former Soviet states airports. */
+   /* They use both MPS and KT so we cannot determine the units based on that prefix. */
    int i;
    static char *airportPrefixUsingMPS[1] = { "Z" },
                *airportPrefixWithoutDefault[1] = { "U" };
@@ -2274,19 +2275,17 @@ static MDSP_BOOL defaultWindUnitsForAirport( char *airportId, char **defaultUnit
 
    for ( i = 0; i < sizeof(airportPrefixUsingMPS) / sizeof(airportPrefixUsingMPS[0]); i++ ) {
       if (strncmp(airportId,airportPrefixUsingMPS[i],1) == 0) {
-         strcpy(*defaultUnit, "MPS");
-         return TRUE;
+         return "MPS";
       }
    }
 
    for ( i = 0; i < sizeof(airportPrefixWithoutDefault) / sizeof(airportPrefixWithoutDefault[0]); i++ ) {
       if (strncmp(airportId,airportPrefixWithoutDefault[i],1) == 0) {
-         return FALSE;
+         return "";
       }
    }
 
-   strcpy(*defaultUnit, "KT");
-   return TRUE;
+   return "KT";
 }
  
 #pragma subtitle(" ")
@@ -2410,21 +2409,9 @@ printf("isWindData:  Passed VRBdddKT test - wind = %s\n",wind);
    else if( (unitsPtr = strstr( wind, "MPS") ) != NULL) {
       strcpy( dummy, "MPS" );
    }
-   else if ( charcmp(wind,"ddddd'G'dd")) {
+   else if ( charcmp(wind,"ddddd'G'dd") || charcmp(wind,"ddddd") ) {
       unitsPtr = wind + strlen(wind);
-      defaultUnit = malloc(4);
-      if(defaultWindUnitsForAirport(Mptr->stnid, &defaultUnit)) {
-         strcpy( dummy, defaultUnit );
-      }
-      free(defaultUnit);
-   }
-   else if ( charcmp(wind,"ddddd")) {
-      unitsPtr = wind + strlen(wind);
-      defaultUnit = malloc(4);
-      if(defaultWindUnitsForAirport(Mptr->stnid, &defaultUnit)) {
-         strcpy( dummy, defaultUnit );
-      }
-      free(defaultUnit);
+      strcpy( dummy, defaultWindUnitsForAirport(Mptr->stnid));
    }
    else
       return FALSE;

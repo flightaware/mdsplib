@@ -646,6 +646,10 @@ static MDSP_BOOL isCloudLayer( char *token )
 {
    if( token == NULL )
       return FALSE;
+
+   if (strlen(token) == 6 && charcmp(token,"'/''/''/''/''/''/'")) {
+      return TRUE;
+   }
  
    if( strlen(token) < 6 )
       return FALSE;
@@ -740,6 +744,10 @@ static void parseCloudData( char *token, Decoded_METAR *Mptr, int next)
  
    if( token == NULL )
       return;
+
+   if (strlen(token) == 6 && charcmp(token,"'/''/''/''/''/''/'")) {
+      return;
+   }
  
    if( strlen(token) > 6 )
       strncpy(Mptr->cloudGroup[next].other_cld_phenom,token+6,
@@ -1095,7 +1103,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
    // CHECK FOR VISIBILITY MISSING
    // INDICATOR FROM AUTO MEASUREMENTS
 
-   if( strcmp(*visblty,"////") == 0) {
+   if(strlen(*visblty) == 4 && charcmp(*visblty,"'/''/''/''/'")) {
       (*NDEX)++;
       return TRUE;
    }
@@ -1851,7 +1859,7 @@ static MDSP_BOOL isPresentWX( char *token, Decoded_METAR *Mptr,
    if( token == NULL)
       return FALSE;
 
-   if( strcmp(token,"//") == 0 ) {
+   if(strlen(token) == 2 && charcmp(token,"'/''/'")) {
       strcpy( Mptr->WxObstruct[*next], "MISSING");
       (*next)++;
       (*NDEX)++;
@@ -2223,7 +2231,63 @@ static MDSP_BOOL isTimeUTC( char *UTC, Decoded_METAR *Mptr, int *NDEX )
    else
       return FALSE;
 }
- 
+
+#pragma subtitle(" ")
+#pragma page(1)
+#pragma subtitle("subtitle - description                       ")
+/********************************************************************/
+/*                                                                  */
+/*  Title:         defaultWindUnitsForAirport                       */
+/*  Organization:  W/OSO242 - GRAPHICS AND DISPLAY SECTION          */
+/*  Date:          15 Sep 1994                                      */
+/*  Programmer:    CARL MCCALLA                                     */
+/*  Language:      C/370                                            */
+/*                                                                  */
+/*  Abstract:                                                       */
+/*                                                                  */
+/*  External Functions Called:                                      */
+/*                 None.                                            */
+/*                                                                  */
+/*  Input:         x                                                */
+/*                                                                  */
+/*  Output:        x                                                */
+/*                                                                  */
+/*  Modification History:                                           */
+/*                 None.                                            */
+/*                                                                  */
+/********************************************************************/
+#pragma page(1)
+
+static char* defaultWindUnitsForAirport( char *airportId )
+{
+   /* Airport prefix Z covers Chinese airports which use MPS */
+   /* Airport prefix U covers Russia and the former Soviet states airports. */
+   /* They use both MPS and KT so we cannot determine the units based on that prefix. */
+   int i;
+   static char *airportPrefixUsingMPS[1] = { "Z" },
+               *airportPrefixWithoutDefault[1] = { "U" };
+
+   char airportPrefix = airportId[0];
+
+   /* Check that an ICAO airport code has been passed in. */
+   if( strlen(airportId) != 4 ) {
+      return "";
+   }
+
+   for ( i = 0; i < sizeof(airportPrefixUsingMPS) / sizeof(airportPrefixUsingMPS[0]); i++ ) {
+      if (strncmp(airportId,airportPrefixUsingMPS[i],1) == 0) {
+         return "MPS";
+      }
+   }
+
+   for ( i = 0; i < sizeof(airportPrefixWithoutDefault) / sizeof(airportPrefixWithoutDefault[0]); i++ ) {
+      if (strncmp(airportId,airportPrefixWithoutDefault[i],1) == 0) {
+         return "";
+      }
+   }
+
+   return "KT";
+}
  
 #pragma subtitle(" ")
 #pragma page(1)
@@ -2255,39 +2319,22 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
 {
  
    char *GustPtr,
-        *unitsPtr;
+        *unitsPtr,
+        *defaultUnit;
    char dummy[8];
  
    if( wind == NULL )
       return FALSE;
+
+   if(strlen(wind) == 5 && charcmp(wind,"'/''/''/''/''/'")) {
+      (*NDEX)++;
+      return TRUE;
+   }
  
    if( strlen(wind) < 5 )
       return FALSE;
  
    memset(dummy,'\0', sizeof(dummy));
- 
-   /* CHECK FOR WIND SPEED UNITS OF KNOTS */
- 
-/*
-   if( ( unitsPtr = strstr( wind, "KMH" ) ) != NULL )
-      strcpy( dummy, "KMH" );
-   else if( (unitsPtr = strstr( wind, "MPS") ) != NULL )
-      strcpy( dummy, "MPS" );
-*/
- 
-   if( (unitsPtr = strstr( wind, "KT") ) != NULL ) {
-      strcpy( dummy, "KT" );
-   }
-   else if ( charcmp(wind,"ddddd'G'dd")) {
-      unitsPtr = wind + strlen(wind);
-      strcpy( dummy, "KT" );
-   }
-   else if ( charcmp(wind,"ddddd")) {
-      unitsPtr = wind + strlen(wind);
-      strcpy( dummy, "KT" );
-   }
-   else
-      return FALSE;
  
    /* CHECK FOR VARIABLE ("VRB") WIND SPEED */
  
@@ -2347,7 +2394,29 @@ printf("isWindData:  Passed VRBdddKT test - wind = %s\n",wind);
       (*NDEX)++;
       return TRUE;
    }
- 
+
+   /* CHECK FOR WIND SPEED UNITS */
+    
+   /*
+      if( ( unitsPtr = strstr( wind, "KMH" ) ) != NULL )
+         strcpy( dummy, "KMH" );
+      else if( (unitsPtr = strstr( wind, "MPS") ) != NULL )
+         strcpy( dummy, "MPS" );
+   */
+    
+   if( (unitsPtr = strstr( wind, "KT") ) != NULL ) {
+      strcpy( dummy, "KT" );
+   }
+   else if( (unitsPtr = strstr( wind, "MPS") ) != NULL) {
+      strcpy( dummy, "MPS" );
+   }
+   else if ( charcmp(wind,"ddddd'G'dd") || charcmp(wind,"ddddd") ) {
+      unitsPtr = wind + strlen(wind);
+      strcpy( dummy, defaultWindUnitsForAirport(Mptr->stnid));
+   }
+   else
+      return FALSE;
+
    // check for wind gusts
  
    if( (GustPtr = strchr( wind, 'G' )) != NULL )
@@ -2393,10 +2462,12 @@ printf("isWindData:  Passed dddff(f) test - wind = %s\n",wind);
 */
       return TRUE;
    }
-   else
+   else {
       return FALSE;
+   }
  
 }
+
 #pragma page(1)
 #pragma subtitle(" ")
 #pragma subtitle("subtitle - Decode METAR report.              ")

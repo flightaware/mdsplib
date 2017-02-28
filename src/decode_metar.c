@@ -2270,7 +2270,7 @@ static char* defaultWindUnitsForAirport( char *airportId )
    char airportPrefix = airportId[0];
 
    if( strlen(airportId) != 4 ) {
-      return FALSE;
+      return "";
    }
 
    for ( i = 0; i < sizeof(airportPrefixUsingMPS) / sizeof(airportPrefixUsingMPS[0]); i++ ) {

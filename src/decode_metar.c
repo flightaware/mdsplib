@@ -2260,10 +2260,6 @@ static MDSP_BOOL isTimeUTC( char *UTC, Decoded_METAR *Mptr, int *NDEX )
 
 static MDSP_BOOL defaultWindUnitsForAirport( char *airportId, char **defaultUnit )
 {
-   if( strlen(airportId) != 4 ) {
-      return FALSE;
-   }
-
    /* Airport prefix Z covers Chinese airports */
    /* Airport prefix U covers Russia and the former Soviet states airports */
    int i;
@@ -2271,6 +2267,10 @@ static MDSP_BOOL defaultWindUnitsForAirport( char *airportId, char **defaultUnit
                *airportPrefixWithoutDefault[1] = { "U" };
 
    char airportPrefix = airportId[0];
+
+   if( strlen(airportId) != 4 ) {
+      return FALSE;
+   }
 
    for ( i = 0; i < sizeof(airportPrefixUsingMPS) / sizeof(airportPrefixUsingMPS[0]); i++ ) {
       if (strncmp(airportId,airportPrefixUsingMPS[i],1) == 0) {

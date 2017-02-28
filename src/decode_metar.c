@@ -2269,6 +2269,7 @@ static char* defaultWindUnitsForAirport( char *airportId )
 
    char airportPrefix = airportId[0];
 
+   /* Check that an ICAO airport code has been passed in. */
    if( strlen(airportId) != 4 ) {
       return "";
    }

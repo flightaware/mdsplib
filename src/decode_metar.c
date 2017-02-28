@@ -2260,6 +2260,12 @@ static MDSP_BOOL isTimeUTC( char *UTC, Decoded_METAR *Mptr, int *NDEX )
 
 static MDSP_BOOL defaultWindUnitsForAirport( char *airportId, char **defaultUnit )
 {
+   if( strlen(airportId) != 4 ) {
+      return FALSE;
+   }
+
+   /* Airport prefix Z covers Chinese airports */
+   /* Airport prefix U covers Russia and the former Soviet states airports */
    int i;
    static char *airportPrefixUsingMPS[1] = { "Z" },
                *airportPrefixWithoutDefault[1] = { "U" };
@@ -2314,7 +2320,7 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
  
    char *GustPtr,
         *unitsPtr,
-        *defaultUnit = malloc(4);
+        *defaultUnit;
    char dummy[8];
  
    if( wind == NULL )
@@ -2329,36 +2335,6 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
       return FALSE;
  
    memset(dummy,'\0', sizeof(dummy));
- 
-   /* CHECK FOR WIND SPEED UNITS OF KNOTS */
- 
-/*
-   if( ( unitsPtr = strstr( wind, "KMH" ) ) != NULL )
-      strcpy( dummy, "KMH" );
-   else if( (unitsPtr = strstr( wind, "MPS") ) != NULL )
-      strcpy( dummy, "MPS" );
-*/
- 
-   if( (unitsPtr = strstr( wind, "KT") ) != NULL ) {
-      strcpy( dummy, "KT" );
-   }
-   else if( (unitsPtr = strstr( wind, "MPS") ) != NULL) {
-      strcpy( dummy, "MPS" );
-   }
-   else if ( charcmp(wind,"ddddd'G'dd")) {
-      unitsPtr = wind + strlen(wind);
-      if(defaultWindUnitsForAirport(Mptr->stnid, &defaultUnit)) {
-         strcpy( dummy, defaultUnit );
-      }
-   }
-   else if ( charcmp(wind,"ddddd")) {
-      unitsPtr = wind + strlen(wind);
-      if(defaultWindUnitsForAirport(Mptr->stnid, &defaultUnit)) {
-         strcpy( dummy, defaultUnit );
-      }
-   }
-   else
-      return FALSE;
  
    /* CHECK FOR VARIABLE ("VRB") WIND SPEED */
  
@@ -2418,7 +2394,41 @@ printf("isWindData:  Passed VRBdddKT test - wind = %s\n",wind);
       (*NDEX)++;
       return TRUE;
    }
- 
+
+   /* CHECK FOR WIND SPEED UNITS */
+    
+   /*
+      if( ( unitsPtr = strstr( wind, "KMH" ) ) != NULL )
+         strcpy( dummy, "KMH" );
+      else if( (unitsPtr = strstr( wind, "MPS") ) != NULL )
+         strcpy( dummy, "MPS" );
+   */
+    
+   if( (unitsPtr = strstr( wind, "KT") ) != NULL ) {
+      strcpy( dummy, "KT" );
+   }
+   else if( (unitsPtr = strstr( wind, "MPS") ) != NULL) {
+      strcpy( dummy, "MPS" );
+   }
+   else if ( charcmp(wind,"ddddd'G'dd")) {
+      unitsPtr = wind + strlen(wind);
+      defaultUnit = malloc(4);
+      if(defaultWindUnitsForAirport(Mptr->stnid, &defaultUnit)) {
+         strcpy( dummy, defaultUnit );
+      }
+      free(defaultUnit);
+   }
+   else if ( charcmp(wind,"ddddd")) {
+      unitsPtr = wind + strlen(wind);
+      defaultUnit = malloc(4);
+      if(defaultWindUnitsForAirport(Mptr->stnid, &defaultUnit)) {
+         strcpy( dummy, defaultUnit );
+      }
+      free(defaultUnit);
+   }
+   else
+      return FALSE;
+
    // check for wind gusts
  
    if( (GustPtr = strchr( wind, 'G' )) != NULL )
@@ -2464,8 +2474,9 @@ printf("isWindData:  Passed dddff(f) test - wind = %s\n",wind);
 */
       return TRUE;
    }
-   else
+   else {
       return FALSE;
+   }
  
 }
 

@@ -988,7 +988,7 @@ typedef struct sw_dir_info_rec {
   char flag1;
   char flag2;
   char flag3;
-  char class;
+  //char class;
   short int domestic_cat_num;
   char afos_tmp;
   char ccb[2];
@@ -1193,7 +1193,7 @@ int stregion(int);
 int ccregion(char *);
 char *rgnname(int);
  
-void *memrchr(const void *, int, size_t);
+// void *memrchr(const void *, int, size_t);
  
 MDSP_BOOL sysmonms(char *, char *, ...);
 MDSP_BOOL sysmoncl(char *);

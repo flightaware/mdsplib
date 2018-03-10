@@ -1519,7 +1519,7 @@ static MDSP_BOOL isRVR( char *token, Decoded_METAR *Mptr, int *NDEX,
          return FALSE;
  
    if( strcmp(token+(strlen(token)-2),"FT") != 0 )
-      return FALSE;
+      FT_ptr = token + strlen(token);
    else
       FT_ptr = token + (strlen(token)-2);
  

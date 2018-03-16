@@ -42,7 +42,9 @@ typedef unsigned short int MDSP_BOOL;
 #define MAX_CLOUD_GROUPS 6
 #define MAX_SURFACE_OBSCURATIONS 6
 #define MAX_PARTIAL_OBSCURATIONS 2
- 
+
+typedef enum distance_unit { FT, METERS } Distance_Unit;
+
 /*********************************************/
 /*                                           */
 /* RUNWAY VISUAL RANGE STRUCTURE DECLARATION */
@@ -58,6 +60,7 @@ typedef struct runway_VisRange {
    int  visRange;
    int  Max_visRange;
    int  Min_visRange;
+   Distance_Unit distance_unit;
 }  Runway_VisRange;
  
 /***********************************************/

@@ -303,6 +303,8 @@ static void init_metar_decoder( Decoded_METAR *Mptr )
  
       Mptr->RRVR[ i ].Max_visRange = MAXINT;
       Mptr->RRVR[ i ].Min_visRange = MAXINT;
+
+      Mptr->RRVR[ i ].distance_unit = FT;
    }
  
    Mptr->DVR.visRange = MAXINT;
@@ -1518,8 +1520,11 @@ static MDSP_BOOL isRVR( char *token, Decoded_METAR *Mptr, int *NDEX,
       if( !nisalpha(token+3,(slashPtr - (token+3))) )
          return FALSE;
  
-   if( strcmp(token+(strlen(token)-2),"FT") != 0 )
+   if( strcmp(token+(strlen(token)-2),"FT") != 0 ) {
+      // The unit is now meters.
+      Mptr->RRVR[ndex].distance_unit = METERS;
       FT_ptr = token + strlen(token);
+   }
    else
       FT_ptr = token + (strlen(token)-2);
  

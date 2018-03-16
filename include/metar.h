@@ -1,3 +1,5 @@
+#ifndef MDSPLIB_METAR_H__
+#define MDSPLIB_METAR_H__
 
 /* ref: http://limulus.net/mdsplib */
 /*
@@ -386,3 +388,4 @@ int decode_net_metar (char *string, Decoded_METAR *Mptr);
 void sprint_metar( char *string, Decoded_METAR *Mptr );
 
 
+#endif // MDSPLIB_METAR_H__

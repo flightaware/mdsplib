@@ -59,3 +59,5 @@ install: library
 	chmod 0644 /usr/local/lib/libmetar.a
 	ranlib /usr/local/lib/libmetar.a
 
+test:	metar_test
+	./metar_test

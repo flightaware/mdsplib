@@ -5,3 +5,4 @@ os:
 
 script:
   - make
+  - make test

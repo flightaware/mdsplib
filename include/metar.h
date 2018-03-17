@@ -43,7 +43,7 @@ typedef unsigned short int MDSP_BOOL;
 #define MAX_SURFACE_OBSCURATIONS 6
 #define MAX_PARTIAL_OBSCURATIONS 2
 
-typedef enum distance_unit { FT, METERS } Distance_Unit;
+typedef enum distance_unit { DIST_FEET, DIST_METERS } Distance_Unit;
 
 /*********************************************/
 /*                                           */

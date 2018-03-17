@@ -21,8 +21,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 char* distance_as_string(Distance_Unit unit) {
    switch (unit) {
-   case FT: return "FT";
-   case METERS: return "METERS";
+   case DIST_FEET: return "FT";
+   case DIST_METERS: return "M";
    default: return "UNKNOWN UNIT";
    }
 }

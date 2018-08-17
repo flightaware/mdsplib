@@ -833,6 +833,20 @@ static MDSP_BOOL isSkyConditions( char **skycond, Decoded_METAR *Mptr,
       return TRUE;
    }
  
+      // interrogate skycond to determine if "NSC" is present
+ 
+   else if( strcmp(*skycond,"NSC") == 0)
+   {
+      strcpy(Mptr->cloudGroup[0].cloud_type,"NSC");
+/*
+      memset(Mptr->cloudGroup[0].cloud_hgt_char,'\0',1);
+      memset(Mptr->cloudGroup[0].other_cld_phenom,
+              '\0', 1);
+*/
+      (*NDEX)++;
+      return TRUE;
+   }
+ 
       // interrogate skycond to determine if
       //    vertical visibility is present
  

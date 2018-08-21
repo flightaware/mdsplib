@@ -19,6 +19,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "metar_structs.h"
 
+char* distance_as_string(Distance_Unit unit) {
+   switch (unit) {
+   case DIST_FEET: return "FT";
+   case DIST_METERS: return "M";
+   default: return "UNKNOWN UNIT";
+   }
+}
+
 /* NB this is pretty insecure insofar as it blindly writes into string
  * on the assuption that string can fit it all 
  * */
@@ -205,7 +213,8 @@ void sprint_metar (char * string, Decoded_METAR *Mptr)
       }
  
       if( Mptr->RRVR[i].visRange != MAXINT ) {
-         sprintf(temp, "R_WAY VIS RANGE (FT): %d\n",
+         sprintf(temp, "R_WAY VIS RANGE (%s): %d\n",
+                 distance_as_string(Mptr->RRVR[i].distance_unit),
                  Mptr->RRVR[i].visRange);
          strcat(string, temp);
       }
@@ -226,13 +235,15 @@ void sprint_metar (char * string, Decoded_METAR *Mptr)
       }
  
       if( Mptr->RRVR[i].Max_visRange != MAXINT ) {
-         sprintf(temp, "MX R_WAY VISRNG (FT): %d\n",
+         sprintf(temp, "MX R_WAY VISRNG (%s): %d\n",
+                 distance_as_string(Mptr->RRVR[i].distance_unit),
                  Mptr->RRVR[i].Max_visRange);
          strcat(string, temp);
       }
  
       if( Mptr->RRVR[i].Min_visRange != MAXINT ) {
-         sprintf(temp, "MN R_WAY VISRNG (FT): %d\n",
+         sprintf(temp, "MN R_WAY VISRNG (%s): %d\n",
+                 distance_as_string(Mptr->RRVR[i].distance_unit),
                  Mptr->RRVR[i].Min_visRange);
          strcat(string, temp);
       }

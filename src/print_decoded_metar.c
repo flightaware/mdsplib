@@ -860,12 +860,6 @@ void sprint_metar (char * string, Decoded_METAR *Mptr)
       strcat(string, temp);
    }
  
- /*
-   if( Mptr->charVertVsby[0] != '\0' )
-      sprintf(temp, "Vert. Vsby (CHAR)   : %s\n",
-                  Mptr->charVertVsby );
- */
- 
    if ( Mptr->QFE != MAXINT ) {
       sprintf(temp, "QFE                 : %d\n", Mptr->QFE);
       strcat(string, temp);

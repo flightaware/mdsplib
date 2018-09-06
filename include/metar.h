@@ -165,8 +165,6 @@ typedef struct decoded_METAR {
    char PartialObscurationAmt[MAX_PARTIAL_OBSCURATIONS][7];
    char PartialObscurationPhenom[MAX_PARTIAL_OBSCURATIONS][12];
    char SfcObscuration[MAX_SURFACE_OBSCURATIONS][10];
-   char charPrevailVsby[12];
-   char charVertVsby[10];
    char TS_LOC[3];
    char TS_MOVMNT[3];
  

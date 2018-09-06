@@ -188,12 +188,7 @@ void sprint_metar (char * string, Decoded_METAR *Mptr)
       sprintf(temp, "PREVAIL VSBY (SM)   : %.3f\n",Mptr->prevail_vsbySM);
       strcat(string, temp);
    }
-/*
-   if ( Mptr->charPrevailVsby[0] != '\0' ) {
-      sprintf(temp, "PREVAIL VSBY (CHAR) : %s\n",Mptr->charPrevailVsby);
-      strcat(string, temp);
-   }
-*/
+
    if ( Mptr->vsby_Dir[ 0 ] != '\0' ) {
       sprintf(temp, "VISIBILITY DIRECTION: %s\n",Mptr->vsby_Dir);
       strcat(string, temp);
@@ -864,12 +859,6 @@ void sprint_metar (char * string, Decoded_METAR *Mptr)
                   Mptr->VertVsby );
       strcat(string, temp);
    }
- 
- /*
-   if( Mptr->charVertVsby[0] != '\0' )
-      sprintf(temp, "Vert. Vsby (CHAR)   : %s\n",
-                  Mptr->charVertVsby );
- */
  
    if ( Mptr->QFE != MAXINT ) {
       sprintf(temp, "QFE                 : %d\n", Mptr->QFE);

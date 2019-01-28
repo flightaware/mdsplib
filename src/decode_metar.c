@@ -249,6 +249,7 @@ static void init_metar_decoder( Decoded_METAR *Mptr )
    Mptr->VcyStn_LTG    = FALSE;
    Mptr->LightningVCTS = FALSE;
    Mptr->LightningTS   = FALSE;
+   Mptr->visibilityIsUpperBound = FALSE;
  
    memset( Mptr->LTG_DIR, '\0', sizeof(Mptr->LTG_DIR));
  
@@ -1029,8 +1030,7 @@ static float prevailingVisibility( char *visibility )
         *SM_KM_ptr;
    char numerator[3],
         denominator[3];
- 
- 
+
    if( (SM_KM_ptr = strstr( visibility, "SM" )) == NULL )
       SM_KM_ptr = strstr(visibility, "KM");
  
@@ -1067,7 +1067,28 @@ static float prevailingVisibility( char *visibility )
    }
  
 }
- 
+
+/*
+ * Occasionally, visibility strings are preceded by "M ", indicating
+ * that the actual visibility is something less than the value
+ * in question, eg, M 1/4SM = 'less than 0.25 sm'
+ */
+static MDSP_BOOL isMBeforeVis( char **m, Decoded_METAR *Mptr,
+                               int *NDEX )
+{
+    (void)Mptr;
+
+    if (*m == NULL) {
+        return FALSE;
+    }
+
+    if (strncmp(*m, "M ", 2) == 0) {
+        (*NDEX)++;
+        return TRUE;
+    }
+    return FALSE;
+}
+
 #pragma subtitle(" ")
 #pragma page(1)
 #pragma subtitle("subtitle - description                       ")
@@ -1101,17 +1122,32 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
    char *achar,
         *astring,
         *save_token;
- 
- 
-   // CHECK FOR VISIBILITY MEASURED <1/4SM
- 
+   MDSP_BOOL isVisAfterM;
+
    if( *visblty == NULL )
-      return FALSE;
- 
- 
-   if( strcmp(*visblty,"M1/4SM") == 0 ||
-       strcmp(*visblty,"<1/4SM") == 0 ) {
-      Mptr->prevail_vsbySM = 0.0;
+       return FALSE;
+
+   /*
+    * Some visibility strings start with 'M' to indicate that they
+    * are actually some value less than the stated quantity, ie,
+    * < 1/4 SM is 'M1/4SM'.
+    */
+   if (*visblty[0] == 'M') {
+       visblty[0]++;
+       isVisAfterM = isVisibility(visblty, Mptr, NDEX);
+       if (isVisAfterM) {
+           Mptr->visibilityIsUpperBound = TRUE;
+           return isVisAfterM;
+       }
+       visblty[0]--;
+       return isVisAfterM;
+   }
+
+   // CHECK FOR VISIBILITY MEASURED <1/4SM
+
+   if( strcmp(*visblty,"<1/4SM") == 0 ) {
+      Mptr->visibilityIsUpperBound = TRUE;
+      Mptr->prevail_vsbySM = 0.25;
       (*NDEX)++;
       return TRUE;
    }
@@ -2678,8 +2714,15 @@ printf("decode_metar:  token[%d] = %s\n",NDEX,token[NDEX]);
             MetarGroup = visibility;
             break;
          case( visibility ):
-            if( isVisibility( &(token[NDEX]), Mptr, &NDEX ) )
-               SaveStartGroup = StartGroup = visibility;
+            if( isMBeforeVis( &(token[NDEX]), Mptr, &NDEX ) ) {
+                Mptr->visibilityIsUpperBound = TRUE;
+            }
+            if( isVisibility( &(token[NDEX]), Mptr, &NDEX ) ) {
+                SaveStartGroup = StartGroup = visibility;
+            } else if (Mptr->visibilityIsUpperBound) {
+                Mptr->visibilityIsUpperBound = FALSE;
+                NDEX--;
+            }
             MetarGroup = RVR;
             break;
          case( RVR ):

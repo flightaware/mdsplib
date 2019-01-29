@@ -894,6 +894,7 @@ static MDSP_BOOL isPeakWind( char **string, Decoded_METAR *Mptr,
  
       return FALSE;
    }
+   // dddff(f)/(hh)mm
    else if( strlen(*string) >= 8 && strlen(*string) <= 11 &&
              nisdigit(slash+1,strlen(slash+1)) &&
              nisdigit(*string, (slash - *string)) &&
@@ -901,7 +902,7 @@ static MDSP_BOOL isPeakWind( char **string, Decoded_METAR *Mptr,
              (slash - *string) <= 6 )
    {
       memset( buf, '\0', 4);
-      strncpy( buf, *string, slash - *string );
+      strncpy( buf, *string, 3 );
       Mptr->PKWND_dir = atoi( buf );
  
       memset( buf, '\0', 4);

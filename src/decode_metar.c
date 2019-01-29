@@ -1135,11 +1135,11 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
    if (*visblty[0] == 'M') {
        visblty[0]++;
        isVisAfterM = isVisibility(visblty, Mptr, NDEX);
+       visblty[0]--;
        if (isVisAfterM) {
            Mptr->visibilityIsUpperBound = TRUE;
            return isVisAfterM;
        }
-       visblty[0]--;
        return isVisAfterM;
    }
 

@@ -1078,11 +1078,18 @@ static MDSP_BOOL isMBeforeVis( char **m, Decoded_METAR *Mptr,
 {
     (void)Mptr;
 
+    /*
+     * NB: If the visibility string is not preceded by a token with just
+     *     an M, the M may be part of the visibility string itself.
+     *     That case is handled with the rest of the visibility string
+     *     code.
+     */
+
     if (*m == NULL) {
         return FALSE;
     }
 
-    if (strncmp(*m, "M ", 2) == 0) {
+    if (strncmp(*m, "M ", 2) == 0 || strncmp(*m, "< ", 2) == 0) {
         (*NDEX)++;
         return TRUE;
     }
@@ -1130,9 +1137,9 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
    /*
     * Some visibility strings start with 'M' to indicate that they
     * are actually some value less than the stated quantity, ie,
-    * < 1/4 SM is 'M1/4SM'.
+    * < 1/4 SM is 'M1/4SM'. Rarely, '<' appears in place of 'M'.
     */
-   if (*visblty[0] == 'M') {
+   if (*visblty[0] == 'M' || *visblty[0] == '<') {
        visblty[0]++;
        isVisAfterM = isVisibility(visblty, Mptr, NDEX);
        visblty[0]--;
@@ -1141,15 +1148,6 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
            return isVisAfterM;
        }
        return isVisAfterM;
-   }
-
-   // CHECK FOR VISIBILITY MEASURED <1/4SM
-
-   if( strcmp(*visblty,"<1/4SM") == 0 ) {
-      Mptr->visibilityIsUpperBound = TRUE;
-      Mptr->prevail_vsbySM = 0.25;
-      (*NDEX)++;
-      return TRUE;
    }
 
    // CHECK FOR VISIBILITY MISSING

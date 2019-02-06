@@ -210,7 +210,8 @@ typedef struct decoded_METAR {
    MDSP_BOOL OVHD_LTG;
    MDSP_BOOL LightningVCTS;
    MDSP_BOOL LightningTS;
- 
+   MDSP_BOOL visibilityIsUpperBound;
+
    int  TornadicDistance;
    int  ob_hour;
    int  ob_minute;

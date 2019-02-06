@@ -852,7 +852,7 @@ static MDSP_BOOL isPeakWind( char **string, Decoded_METAR *Mptr,
 {
    char buf[ 32 ];
    char *slash;
-   int temp;
+   int timeAsInt;
    MDSP_BOOL PK_WND_FLAG;
  
    /* IF THE CURRENT AND NEXT GROUPS ARE "PK WND", THEN  */
@@ -894,6 +894,7 @@ static MDSP_BOOL isPeakWind( char **string, Decoded_METAR *Mptr,
  
       return FALSE;
    }
+   // dddff(f)/(hh)mm
    else if( strlen(*string) >= 8 && strlen(*string) <= 11 &&
              nisdigit(slash+1,strlen(slash+1)) &&
              nisdigit(*string, (slash - *string)) &&
@@ -901,7 +902,7 @@ static MDSP_BOOL isPeakWind( char **string, Decoded_METAR *Mptr,
              (slash - *string) <= 6 )
    {
       memset( buf, '\0', 4);
-      strncpy( buf, *string, slash - *string );
+      strncpy( buf, *string, 3 );
       Mptr->PKWND_dir = atoi( buf );
  
       memset( buf, '\0', 4);
@@ -910,15 +911,16 @@ static MDSP_BOOL isPeakWind( char **string, Decoded_METAR *Mptr,
  
       memset( buf, '\0', 5);
       strcpy( buf, slash+1 );
-      temp             =  atoi( buf );
+      timeAsInt         =  atoi( buf );
  
-      if( temp > 99 )
+      if( strlen(buf) > 2 )
       {
-         Mptr->PKWND_hour = atoi(buf)/100;
-         Mptr->PKWND_minute = (atoi(buf)) % 100;
+         Mptr->PKWND_hour = timeAsInt/100;
+         Mptr->PKWND_minute = timeAsInt % 100;
       }
-      else
-         Mptr->PKWND_minute =  atoi( buf );
+      else if (timeAsInt < 60) {
+         Mptr->PKWND_minute = timeAsInt;
+      }
                               /* VALID PEAK WIND FOUND.  BUMP */
                               /* PAST PK, WND, AND PEAK WIND  */
                               /* GROUPS AND RETURN TRUE.      */

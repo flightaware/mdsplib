@@ -1093,7 +1093,9 @@ int strhash(char *);
  
 void reverse(char *);
  
+#ifndef __WIN32
 MDSP_BOOL itoa(int, char *, int);
+#endif
  
 int getsnn(char * , int);
  
@@ -1176,9 +1178,7 @@ char *strupr(char *);
 char *strlwr(char *);
 /* char *strdup(char *); */
 //char *strndup(char *, int);
-#ifndef _WIN32
 int strcmpi(char *, char *);
-#endif
  
 /* void *memccpy(void *, void *, int, unsigned); */
  

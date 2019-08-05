@@ -1177,15 +1177,6 @@ MDSP_BOOL ccap2std(char *, Devaddr *, Diskaddr *);
  
 MDSP_BOOL std2ccap(Devaddr *, Diskaddr *, char *);
 
-#ifndef _WIN32
-char *strupr(char *);
-char *strlwr(char *);
-/* char *strdup(char *); */
-//char *strndup(char *, int);
-int strcmpi(char *, char *);
-#endif 
-/* void *memccpy(void *, void *, int, unsigned); */
- 
 char *rptstrip(char *);
 char *rptstrp2(char *);
 char *rptfmt(char *);
@@ -1220,12 +1211,6 @@ time_t odbtime ( void );
  
 int bltnpcnt ( char *, int );
 void bltnpage ( char *, int, int );
- 
-void rot( char *, unsigned int );
-void unrot( char *, unsigned int );
- 
-void encrypt( char *, char * );
-void decrypt( char *, char * );
  
 int HEXTOI( char *, int );
  

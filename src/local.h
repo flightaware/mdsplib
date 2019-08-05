@@ -1093,7 +1093,7 @@ int strhash(char *);
  
 void reverse(char *);
  
-#ifndef __WIN32
+#ifndef _WIN32
 MDSP_BOOL itoa(int, char *, int);
 #endif
  

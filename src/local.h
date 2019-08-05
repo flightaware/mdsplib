@@ -86,7 +86,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define IN_RANGE(n, lo, hi) ((lo) <= (n) && (n) <= (hi))
 #define LOOPDN(r, n) for ((r) = (n)+1; --(r) > 0;)
 #define MAX(x, y)    (((x) < (y)) ? (y) : (x))
+#ifndef _WIN32
 #define max(x, y)    (((x) < (y)) ? (y) : (x))
+#endif
 #define MIN(x, y)    (((x) < (y)) ? (x) : (y))
 #define min(x, y)    (((x) < (y)) ? (x) : (y))
 #define STREQ(s, t)  (strcmp(s, t) == 0)
@@ -1087,7 +1089,9 @@ int strhash(char *);
  
 void reverse(char *);
  
+#ifndef _WIN32
 MDSP_BOOL itoa(int, char *, int);
+#endif
  
 int getsnn(char * , int);
  
@@ -1133,11 +1137,12 @@ char toebcdic(char);
 char *strtoeb(char *);
  
 char *strntoeb(char *, int);
- 
-char *lfind(char *, char *, int, int, int(*)(char *, char *));
- 
+
+#ifndef _WIN32
+char *lfind(char *, char *, int, int, int(*)(char *, char *)); 
 char *lsearch(char *, char *, int *, int, int(*)(char *, char *));
- 
+#endif
+
 MDSP_BOOL strcmpw(char *, char *);
  
 int strccnt(char *, int);
@@ -1163,15 +1168,7 @@ MDSP_BOOL gtoj(int, int, int, int *, int *);
 MDSP_BOOL ccap2std(char *, Devaddr *, Diskaddr *);
  
 MDSP_BOOL std2ccap(Devaddr *, Diskaddr *, char *);
- 
-char *strupr(char *);
-char *strlwr(char *);
-/* char *strdup(char *); */
-//char *strndup(char *, int);
-int strcmpi(char *, char *);
- 
-/* void *memccpy(void *, void *, int, unsigned); */
- 
+
 char *rptstrip(char *);
 char *rptstrp2(char *);
 char *rptfmt(char *);
@@ -1206,12 +1203,6 @@ time_t odbtime ( void );
  
 int bltnpcnt ( char *, int );
 void bltnpage ( char *, int, int );
- 
-void rot( char *, unsigned int );
-void unrot( char *, unsigned int );
- 
-void encrypt( char *, char * );
-void decrypt( char *, char * );
  
 int HEXTOI( char *, int );
  

@@ -7,6 +7,7 @@ IF (MSVC)
     add_definitions("/wd4710")
     add_definitions("/wd4711")
     add_definitions("/wd4068")
+    add_definitions("/wd4109")
 ENDIF()
 
 list(APPEND SRCS src/antoi.c)

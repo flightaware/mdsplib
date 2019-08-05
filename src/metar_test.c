@@ -28,7 +28,7 @@ char *BldSynop( Decoded_METAR * , char * );
 #endif
 
 void print_decoded_metar( Decoded_METAR *);
-int decode_metar( char *, Decoded_METAR * );
+int decode_metar( const char *, Decoded_METAR * );
 
 /********************************************************************/
 /*                                                                  */

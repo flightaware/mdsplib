@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "metar_structs.h"
  
 #define SKY1_len 50
-float fracPart( char * );
+float fracPart( const char * );
  
 #ifdef DEBUGZZ
 # define DEBUG_PRINTF(x) printf x

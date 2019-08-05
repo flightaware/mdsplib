@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/flightaware/mdsplib.svg?branch=master)](https://travis-ci.org/flightaware/mdsplib)
+[![Build status](https://ci.appveyor.com/api/projects/status/b04xo1u432ttg8i4/branch/master?svg=true)](https://ci.appveyor.com/project/snoe925/mdsplib/branch/master)
 
 METAR Decoder Software Package Library
 ===

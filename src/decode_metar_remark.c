@@ -1393,6 +1393,8 @@ static MDSP_BOOL isVariableVisibility( char **string, Decoded_METAR *Mptr,
         *V_char;
    float minimumVsby,
          maximumVsby;
+	
+   slash = slash1 = slash2 = V_char = NULL;
  
    /* IF THE CURRENT GROUP IS  "VIS", THEN DETERMINE  */
    /* WHETHER OR NOT THE GROUPS THAT FOLLOW ARE VALID */
@@ -4316,7 +4318,7 @@ static MDSP_BOOL isPtendency(char *string, Decoded_METAR *Mptr, int *NDEX)
  
    if(strlen(string) != 5)
       return FALSE;
-   else if(*string == '5' && ('0' <= *(string+1) <= '8') &&
+   else if(*string == '5' && ('0' <= *(string+1) && *(string+1) <= '8') &&
              (nisdigit(string+2,3) || strncmp(string+2,"///",3)
                                              == 0) )
    {

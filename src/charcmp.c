@@ -17,16 +17,8 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#pragma comment (compiler)
-#pragma comment (date)
-#pragma comment (timestamp)
-#pragma pagesize(80)
- 
 #include "local.h"    /* standard header file */
  
-#pragma subtitle(" ")
-#pragma page(1)
-#pragma subtitle("charcmp - characters compare with patterns  ")
 /********************************************************************/
 /*                                                                  */
 /*  Title:         charcmp                                          */
@@ -53,8 +45,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*                 None.                                            */
 /*                                                                  */
 /********************************************************************/
-#pragma page(1)
- 
 MDSP_BOOL charcmp(char *str, char *pattern)
 {
  

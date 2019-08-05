@@ -1393,6 +1393,8 @@ static MDSP_BOOL isVariableVisibility( char **string, Decoded_METAR *Mptr,
         *V_char;
    float minimumVsby,
          maximumVsby;
+	
+   slash = slash1 = slash2 = V_char = NULL;
  
    /* IF THE CURRENT GROUP IS  "VIS", THEN DETERMINE  */
    /* WHETHER OR NOT THE GROUPS THAT FOLLOW ARE VALID */

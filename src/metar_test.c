@@ -30,9 +30,6 @@ char *BldSynop( Decoded_METAR * , char * );
 void print_decoded_metar( Decoded_METAR *);
 int decode_metar( char *, Decoded_METAR * );
 
-#pragma page(1)
-#pragma subtitle(" ")
-#pragma subtitle("subtitle - description                       ")
 /********************************************************************/
 /*                                                                  */
 /*  Title:         dRVMETAR                                         */
@@ -59,7 +56,6 @@ int decode_metar( char *, Decoded_METAR * );
 /*                 None.                                            */
 /*                                                                  */
 /********************************************************************/
-#pragma page(1)
 main()
 {
  static char *string[] =

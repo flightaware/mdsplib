@@ -2,6 +2,13 @@ cmake_minimum_required(VERSION 3.1...3.15)
 
 project(mdsplib LANGUAGES C)
 
+IF (MSVC)
+    # MSVC is logs many inline warnings
+    add_definitions("/wd4710")
+    add_definitions("/wd4711")
+    add_definitions("/wd4068")
+ENDIF()
+
 list(APPEND SRCS src/antoi.c)
 list(APPEND SRCS src/charcmp.c)
 list(APPEND SRCS src/decode_metar.c)

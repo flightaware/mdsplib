@@ -38,7 +38,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /********************************************************************/
  
 /* Used in the METAR structs. */
+#ifndef mdsp_bool
+#define mdsp_bool
 typedef unsigned short int MDSP_BOOL;
+#endif
 
 #define MAX_RUNWAYS 12
 #define MAX_CLOUD_GROUPS 6

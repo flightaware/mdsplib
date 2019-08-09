@@ -15,3 +15,4 @@ environment:
 build_script:
   - cmake -G "Visual Studio 15 2017 Win64" ./CMakeLists.txt
   - cmake --build . --config Release -- /property:Prefer32bit=false /p:Platform=x64
+  - metar_test.exe

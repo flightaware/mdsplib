@@ -1,3 +1,4 @@
 *.a
 src/*.o
 metar_test
+metar_test.exe

@@ -135,7 +135,11 @@ void freex(void *, char *, int);
  
 typedef unsigned char byte;
  
+#ifndef mdsp_bool
+#define mdsp_bool
 typedef unsigned short int MDSP_BOOL;
+#endif
+
  
 typedef unsigned short int Devaddr;
  

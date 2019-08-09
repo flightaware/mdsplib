@@ -71,8 +71,7 @@ float fracPart( char * );
 static MDSP_BOOL isTS_LOC( char **string, Decoded_METAR *Mptr,
                            int *NDEX )
 {
-   int i;
- 
+   
    /* COMPARE THE INPUT CHARACTER STRING WITH */
    /* VALID AUTOMATED STATION CODE TYPE.  IF  */
    /* A MATCH IS FOUND, RETURN TRUE.  OTHER-  */
@@ -81,8 +80,7 @@ static MDSP_BOOL isTS_LOC( char **string, Decoded_METAR *Mptr,
    if( *string == NULL )
       return FALSE;
  
-   i = 0;
- 
+   
    if( strcmp( *string, "TS") != 0 )
       return FALSE;
    else {
@@ -1789,11 +1787,10 @@ static MDSP_BOOL isVisibility2ndSite( char **token, Decoded_METAR *Mptr,
  
 MDSP_BOOL static isLightningFrequency( char **string, Decoded_METAR *Mptr, int *NDEX )
 {
-   MDSP_BOOL LTG_FREQ_FLAG,
-        LTG_TYPE_FLAG,
-        LTG_LOC_FLAG,
-        LTG_DIR_FLAG,
-        TYPE_NOT_FOUND;
+   MDSP_BOOL LTG_TYPE_FLAG,
+      LTG_LOC_FLAG,
+      LTG_DIR_FLAG,
+      TYPE_NOT_FOUND;
    char *temp;
  
    // if the current group is "LTG", then determine
@@ -1829,20 +1826,15 @@ MDSP_BOOL static isLightningFrequency( char **string, Decoded_METAR *Mptr, int *
       (--string);
  
  
-      LTG_FREQ_FLAG = FALSE;
-
     // check for lightning frequency
       if( strcmp( *string, "OCNL" ) == 0 ) {
          Mptr->OCNL_LTG = TRUE;
-         LTG_FREQ_FLAG = TRUE;
       }
       else if( strcmp( *string, "FRQ" ) == 0 ) {
          Mptr->FRQ_LTG = TRUE;
-         LTG_FREQ_FLAG = TRUE;
       }
       else if( strcmp( *string, "CONS" ) == 0 ) {
          Mptr->CNS_LTG = TRUE;
-         LTG_FREQ_FLAG = TRUE;
       }
  
  
@@ -2696,8 +2688,7 @@ static MDSP_BOOL isPRESRR( char *string, Decoded_METAR *Mptr, int *NDEX)
  
 static MDSP_BOOL isSLP( char **token, Decoded_METAR *Mptr, int *NDEX )
 {
-   int pressure,
-       ndex;
+   int pressure;
  
    if( *token == NULL )
       return FALSE;
@@ -2765,6 +2756,7 @@ static MDSP_BOOL isSectorVsby( char **string, Decoded_METAR *Mptr,
        tempstrlen = 20;
  
    float vsby;
+   vsby = FLT_MAX;
    char  dd[3],
          temp[20],
          *slash;
@@ -4663,13 +4655,9 @@ void decode_metar_remark(char **token, Decoded_METAR *Mptr)
        FZRANO = 0, TSNO = 0, maintIndicator = 0, CHINO = 0, RVRNO = 0,
        VISNO = 0, PNO = 0, DVR = 0;
  
-	int  NDEX, ndex, i;
+	int  NDEX, i;
 
-	char *slash, *tokenX, *V_char, *temp_token;
- 
-	MDSP_BOOL extra_token, IS_NOT_RMKS;
- 
-	float T_vsby;
+	MDSP_BOOL IS_NOT_RMKS;
  
 	NDEX = 0;
  

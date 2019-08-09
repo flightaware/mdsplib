@@ -61,3 +61,15 @@ install: library
 
 test:	metar_test
 	./metar_test
+
+.PHONY : clean
+clean:
+ifeq ($(OS), Windows_NT)
+	echo off
+	del /q src\*.o
+	del /q metar_test.exe 
+	del /q libmetar.a
+	echo on
+else
+	rm -f libmetar.a src/*.o src/*.a metar_test
+endif

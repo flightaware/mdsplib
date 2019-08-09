@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <string.h>
 #include "metar_structs.h"     /* standard header file */
 
-float fracPart( char * );
+float fracPart( const char * );
 void decode_metar_remark( char **, Decoded_METAR * );
 void print_decoded_metar( Decoded_METAR * );
 
@@ -57,7 +57,7 @@ void print_decoded_metar( Decoded_METAR * );
 /*                                                                  */
 /********************************************************************/
  
-static char **SaveTokenString ( char *string , char *delimeters )
+static char **SaveTokenString ( char *instring , char *delimeters )
 {
    int NDEX;
    static char *token[ MAXTOKENS ], *TOKEN;
@@ -66,7 +66,7 @@ static char **SaveTokenString ( char *string , char *delimeters )
    /* AND SAVE THE TOKENS TO THE token ARRAY */
  
    NDEX = 0;
-   TOKEN = strtok(string, delimeters);
+   TOKEN = strtok(instring, delimeters);
  
    if( TOKEN == NULL )
       return NULL;
@@ -542,39 +542,39 @@ static int CodedHgt2Meters( char *token, Decoded_METAR *Mptr )
 /*                                                                  */
 /********************************************************************/
 
-static MDSP_BOOL isPartialObscuration( char **string, Decoded_METAR *Mptr,
+static MDSP_BOOL isPartialObscuration( char **instring, Decoded_METAR *Mptr,
                           int *NDEX )
 {
  
-   if( *string == NULL )
+   if( *instring == NULL )
       return FALSE;
  
-   if( strcmp( *string, "FEW///" ) == 0 ||
-       strcmp( *string, "SCT///" ) == 0 ||
-       strcmp( *string, "BKN///" ) == 0 ||
-       strcmp( *string, "FEW000" ) == 0 ||
-       strcmp( *string, "SCT000" ) == 0 ||
-       strcmp( *string, "BKN000" ) == 0    ) {
-      strcpy( Mptr->PartialObscurationAmt[0], *string );
+   if( strcmp( *instring, "FEW///" ) == 0 ||
+       strcmp( *instring, "SCT///" ) == 0 ||
+       strcmp( *instring, "BKN///" ) == 0 ||
+       strcmp( *instring, "FEW000" ) == 0 ||
+       strcmp( *instring, "SCT000" ) == 0 ||
+       strcmp( *instring, "BKN000" ) == 0    ) {
+      strcpy( Mptr->PartialObscurationAmt[0], *instring );
       (*NDEX)++;
-      string++;
+      instring++;
  
-      if( *string == NULL )
+      if( *instring == NULL )
          return TRUE;
  
-      if( strcmp( (*string+3), "///") ) {
-          if( strcmp( *string, "FEW000" ) == 0 ||
-              strcmp( *string, "SCT000" ) == 0 ||
-              strcmp( *string, "BKN000" ) == 0    ) {
-            strcpy( Mptr->PartialObscurationAmt[1], *string );
+      if( strcmp( (*instring+3), "///") ) {
+          if( strcmp( *instring, "FEW000" ) == 0 ||
+              strcmp( *instring, "SCT000" ) == 0 ||
+              strcmp( *instring, "BKN000" ) == 0    ) {
+            strcpy( Mptr->PartialObscurationAmt[1], *instring );
             (*NDEX)++;
          }
       }
       else {
-         if( strcmp( *string, "FEW///" ) == 0 ||
-             strcmp( *string, "SCT///" ) == 0 ||
-             strcmp( *string, "BKN///" ) == 0 ) {
-            strcpy( Mptr->PartialObscurationAmt[1], *string );
+         if( strcmp( *instring, "FEW///" ) == 0 ||
+             strcmp( *instring, "SCT///" ) == 0 ||
+             strcmp( *instring, "BKN///" ) == 0 ) {
+            strcpy( Mptr->PartialObscurationAmt[1], *instring );
             (*NDEX)++;
          }
       }
@@ -1337,25 +1337,25 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
 /*                                                                  */
 /********************************************************************/
 
-static MDSP_BOOL isMinMaxWinDir( char *string, Decoded_METAR *Mptr,
+static MDSP_BOOL isMinMaxWinDir( char *instring, Decoded_METAR *Mptr,
      int *NDEX )
 {
 #define buf_len 50
    char buf[ buf_len ];
    char *V_char;
  
-   if( string == NULL )
+   if( instring == NULL )
       return FALSE;
  
-   if( (V_char = strchr(string,'V')) == NULL )
+   if( (V_char = strchr(instring,'V')) == NULL )
       return FALSE;
    else
    {
-      if( nisdigit(string,(V_char - string)) &&
+      if( nisdigit(instring,(V_char - instring)) &&
                nisdigit(V_char+1,3) )
       {
          memset( buf, '\0', buf_len);
-         strncpy( buf, string, V_char - string);
+         strncpy( buf, instring, V_char - instring);
          Mptr->minWnDir = atoi( buf );
  
          memset( buf, '\0', buf_len);
@@ -2298,7 +2298,7 @@ printf("isWindData:  Passed dddff(f) test - wind = %s\n",wind);
 /*                                                                  */
 /********************************************************************/
  
-int decode_metar( char *string , Decoded_METAR *Mptr )
+int decode_metar( const char *instring , Decoded_METAR *Mptr )
 {
    /* DECLARE LOCAL VARIABLES */
  
@@ -2321,9 +2321,9 @@ int decode_metar( char *string , Decoded_METAR *Mptr )
  
    MDSP_BOOL IS_NOT_RMKS;
  
-   /* ONLY PARSE OR DECOCODE NON-NULL METAR REPORT STRINGS */
+   /* ONLY PARSE OR DECODE NON-NULL METAR REPORT STRINGS */
  
-   if( string == NULL || *string == '\0' )
+   if( instring == NULL || *instring == '\0' )
       return 8;
  
  
@@ -2340,8 +2340,8 @@ int decode_metar( char *string , Decoded_METAR *Mptr )
 	 * strtok() don't like that.
 	 */
 	
-	stringCpy = calloc(strlen(string) + 1, sizeof(char));
-	strcpy(stringCpy, string);
+	stringCpy = calloc(strlen(instring) + 1, sizeof(char));
+	strcpy(stringCpy, instring);
 
  
    /* TOKENIZE AND STORE THE INPUT METAR REPORT STRING */
@@ -2581,21 +2581,21 @@ print_decoded_metar( Mptr );
 /*                                                                  */
 /********************************************************************/
 
-int decode_net_metar (char *string, Decoded_METAR *Mptr)
+int decode_net_metar (const char *instring, Decoded_METAR *Mptr)
 {
 	char *string_cpy, *ptr;
 	int result;
 	
 	/* Strip the date, which is the first line. */
-	while (*string != '\n')
+	while (*instring != '\n')
 	{
-		++string;
+		++instring;
 	}
-	++string;
+	++instring;
 	
 	/* make a copy of the string without the date */
-	string_cpy = (char *) calloc(strlen(string), sizeof(char));
-	strcpy(string_cpy, string);
+	string_cpy = (char *) calloc(strlen(instring), sizeof(char));
+	strcpy(string_cpy, instring);
 	
 	/* replace all carrage returns with spaces */
 	ptr = string_cpy;

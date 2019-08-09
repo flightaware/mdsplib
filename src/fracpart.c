@@ -42,7 +42,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*                                                                  */
 /********************************************************************/
  
-float fracPart( char *string )
+float fracPart( const char *instring )
 {
    char buf[ 32 ],
         *slash;
@@ -50,21 +50,22 @@ float fracPart( char *string )
    float numerator,
          denominator;
  
-   slash = strchr(string, '/');
+   slash = strchr(instring, '/');
 
    if (slash == NULL) {
-    return ((float) atoi(string));
+    return ((float) atoi(instring));
    }
  
    memset(buf , '\0', sizeof(buf));
-   strncpy( buf, string, slash-string);
+   if (slash - instring >= sizeof(buf)) {
+     /* prevent buffer overflow */
+     return ((float) MAXINT);
+   }
+   strncpy( buf, instring, slash - instring);
  
    numerator = (float) atoi(buf);
  
-   memset(buf , '\0', sizeof(buf));
-   strcpy( buf, slash+1);
- 
-   denominator = (float) atoi(buf);
+   denominator = (float) atoi(slash + 1);
  
    if( denominator == 0.0 )
       return ((float) MAXINT);

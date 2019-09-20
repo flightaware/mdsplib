@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.1...3.15)
 
 project(mdsplib LANGUAGES C)
 
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+	set(CMAKE_BUILD_TYPE "Release" CACHE
+		STRING "Choose the type of build." FORCE)
+endif()
+
 IF (MSVC)
     # MSVC is logs many inline warnings
     add_definitions("/wd4710")

@@ -30,6 +30,78 @@ char *BldSynop( Decoded_METAR * , char * );
 void print_decoded_metar( Decoded_METAR *);
 int decode_metar( const char *, Decoded_METAR * );
 
+int runTest() {
+  Decoded_METAR Metar;
+  Decoded_METAR *Mptr = &Metar;
+  int ErReturn;
+  char *input1 = "KVBG 120955Z 00000KT 1/4 FG VV001 13/13 A2994 RMK AO2A";
+  if ( (ErReturn = decode_metar( input1, Mptr )) != 0 ) {
+    printf("Failed to decode %s", input1);
+    return 0;
+  }
+  if (strcmp(Mptr->stnid,"KVBG") != 0) {
+    printf("Wrong station id (%s) for metar %s", Mptr->stnid, input1);
+    return 0;
+  }
+  if (Mptr->ob_date != 12) {
+    printf("Wrong observation date (%d) for metar %s", Mptr->ob_date, input1);
+    return 0;
+  }
+  if (Mptr->ob_hour != 9) {
+    printf("Wrong observation hour (%d) for metar %s", Mptr->ob_hour, input1);
+    return 0;
+  }
+  if (Mptr->ob_minute != 55) {
+    printf("Wrong observation minute (%d) for metar %s", Mptr->ob_minute, input1);
+    return 0;
+  }
+  if (Mptr->AUTO != FALSE) {
+    printf("Wrong auto indication (%d) for metar %s", Mptr->AUTO, input1);
+    return 0;
+  }
+  if (Mptr->winData.windDir != 0) {
+    printf("Wrong observation wind direction (%d) for metar %s", Mptr->winData.windDir, input1);
+    return 0;
+  }
+  if (Mptr->winData.windSpeed != 0) {
+    printf("Wrong observation wind speed (%d) for metar %s", Mptr->winData.windSpeed, input1);
+    return 0;
+  }
+  if (strcmp(Mptr->winData.windUnits, "KT") != 0) {
+    printf("Wrong observation wind units (%s) for metar %s", Mptr->winData.windUnits, input1);
+    return 0;
+  }
+  if (Mptr->prevail_vsbySM != 0.25) {
+    printf("Wrong observation visibility (%f) for metar %s", Mptr->prevail_vsbySM, input1);
+    return 0;
+  }
+  if (strcmp(Mptr->WxObstruct[0], "FG") != 0) {
+    printf("Wrong observation obscuration (%s) for metar %s", Mptr->WxObstruct[0], input1);
+    return 0;
+  }
+  if (Mptr->VertVsby != 30) {
+    printf("Wrong observation vertical visibility (%d) for metar %s", Mptr->VertVsby, input1);
+    return 0;
+  }
+  if (Mptr->dew_pt_temp != 13) {
+    printf("Wrong observation dew point (%d) for metar %s", Mptr->dew_pt_temp, input1);
+    return 0;
+  }
+  if (Mptr->temp != 13) {
+    printf("Wrong observation temp (%d) for metar %s", Mptr->temp, input1);
+    return 0;
+  }
+  if (Mptr->inches_altstng != 29.94) {
+    printf("Wrong observation altimeter (%f) for metar %s", Mptr->inches_altstng, input1);
+    return 0;
+  }
+  if (strcmp(Mptr->autoIndicator, "A02A") != 0) {
+    printf("Wrong observation remark auto indicator (%s) for metar %s", Mptr->autoIndicator, input1);
+    return 0;
+  }
+  return 1;
+}
+
 /********************************************************************/
 /*                                                                  */
 /*  Title:         dRVMETAR                                         */
@@ -56,10 +128,13 @@ int decode_metar( const char *, Decoded_METAR * );
 /*                 None.                                            */
 /*                                                                  */
 /********************************************************************/
-main()
+int main()
 {
+  runTest();
+
  static char *string[] =
  {
+  "KVBG 120955Z 00000KT 1/4 FG VV001 13/13 A2994 RMK AO2A",
   "KNFW 072252Z 34015G21KT 10SM CLR 25/03 A3010 RMK AO2 PK WND 34029/2156 SLP176 T02500033 CHINO N VISNO N $",
   "KBIL 101707Z 02012KT 3SM UP BR SCT002 BKN008 OVC029 00/M01 A3008 RMK AO2 UPB07SNE07 P0001 $",
   "KFOD 072355Z AUTO 00000KT 10SM CLR 11/07 A2996 RMK AO2 60003 10130 20100 402100100 57003 PWINO FZRANO RVRNO",
@@ -643,6 +718,7 @@ main()
     j++;
 
   }
+  return 0;
 }
 
 // vim: set ts=4 sw=4 sts=4 noet :

@@ -977,16 +977,19 @@ static MDSP_BOOL isSkyConditions( char **skycond, Decoded_METAR *Mptr,
 /*                                                                  */
 /********************************************************************/
 
-static float prevailingVisibility( char *visibility )
+static float prevailingVisibility( char *visibility, int smNoUnits )
 {
    float Miles_vsby;
    char *temp,
         *Slash_ptr,
-        *SM_KM_ptr;
+        *SM_KM_ptr,
+        *end;
    char numerator[3],
         denominator[3];
 
-   if( (SM_KM_ptr = strstr( visibility, "SM" )) == NULL )
+   SM_KM_ptr = NULL;
+   if( (SM_KM_ptr = strstr( visibility, "SM" )) == NULL &&
+         !smNoUnits )
       SM_KM_ptr = strstr(visibility, "KM");
  
    Slash_ptr = strchr( visibility, '/' );
@@ -1005,6 +1008,7 @@ static float prevailingVisibility( char *visibility )
    {
       memset(numerator,   '\0', sizeof(numerator));
       memset(denominator, '\0', sizeof(denominator));
+
  
       strncpy(numerator, visibility, (Slash_ptr - visibility));
  
@@ -1013,9 +1017,9 @@ static float prevailingVisibility( char *visibility )
          strcpy(denominator, "4");
       else
 <<<<<<<<<<<<<<<<<<<<<<*/
- 
+      end = (SM_KM_ptr == NULL ? visibility + strlen(visibility) : SM_KM_ptr);
       strncpy(denominator,
-              Slash_ptr+1, (SM_KM_ptr - Slash_ptr));
+              Slash_ptr+1, (end - Slash_ptr));
  
       return ( ((float)(atoi(numerator)))/
                ((float)(atoi(denominator))) );
@@ -1115,7 +1119,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
       if( nisdigit(*visblty,(achar - *visblty)) &&
                         (achar - *visblty) > 0 )
       {
-         Mptr->prevail_vsbyKM = prevailingVisibility( *visblty );
+         Mptr->prevail_vsbyKM = prevailingVisibility( *visblty, 0 );
          (*NDEX)++;
          return TRUE;
       }
@@ -1136,7 +1140,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
                (astring - (achar+1)) > 0 &&
                 nisdigit(achar+1, (astring - (achar+1))) )
       {
-         Mptr->prevail_vsbySM = prevailingVisibility (*visblty);
+         Mptr->prevail_vsbySM = prevailingVisibility (*visblty, 0);
          (*NDEX)++;
          return TRUE;
       }
@@ -1152,7 +1156,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
       if( nisdigit(*visblty,(astring - *visblty)) &&
                        (astring- *visblty) > 0 )
       {
-         Mptr->prevail_vsbySM = prevailingVisibility (*visblty);
+         Mptr->prevail_vsbySM = prevailingVisibility (*visblty, 0);
          (*NDEX)++;
          return TRUE;
       }
@@ -1162,6 +1166,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
 
    // check for visibility measured
    // in whole and fractional statute miles
+   // ie 1 1/2SM
  
    else if( nisdigit( *visblty,
                strlen(*visblty)) &&
@@ -1185,7 +1190,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
                  (astring - (achar+1)) > 0 &&
              nisdigit(achar+1, (astring - (achar+1))) )
          {
-            Mptr->prevail_vsbySM = prevailingVisibility (*visblty);
+            Mptr->prevail_vsbySM = prevailingVisibility (*visblty, 0);
             Mptr->prevail_vsbySM +=
                                  (float) (atoi(save_token));
             free( save_token);
@@ -1203,7 +1208,7 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
          return FALSE;
  
    }
- 
+
    // check for visibility measured
    // in meters with or without direction of observation
  
@@ -1309,6 +1314,28 @@ static MDSP_BOOL isVisibility( char **visblty, Decoded_METAR *Mptr,
          return FALSE;
  
    }
+
+   // Sometimes a fractional visibility is given
+   // without units.  But only SM visibilities are
+   // observed with fractional values.
+ 
+   else if( (achar = strchr( *visblty, '/' )) != NULL )
+   {
+      char *end = *visblty + strlen(*visblty);
+      if( nisdigit(*visblty,(achar - *visblty))
+                     &&
+               (achar - *visblty) > 0 &&
+               (end - (achar+1)) > 0 &&
+                nisdigit(achar+1, (end - (achar+1))) )
+      {
+         Mptr->prevail_vsbySM = prevailingVisibility (*visblty, 1);
+         (*NDEX)++;
+         return TRUE;
+      }
+      else
+         return FALSE;
+   }
+
    else
       return FALSE;
  

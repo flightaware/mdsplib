@@ -714,7 +714,7 @@ static void parseCloudData( char *token, Decoded_METAR *Mptr, int next)
  
    if( strlen(token) > 6 )
       strncpy(Mptr->cloudGroup[next].other_cld_phenom,token+6,
-              (strlen(token)-6));
+              min((strlen(token)-6), 3));
  
    strncpy(Mptr->cloudGroup[next].cloud_type,token,3);
  

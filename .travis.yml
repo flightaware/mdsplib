@@ -1,8 +1,0 @@
-language: c
-
-os:
-- linux
-
-script:
-  - make
-  - make test

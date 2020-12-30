@@ -1,0 +1,29 @@
+name: MSBuild
+
+on: [push]
+
+env:
+  # Path to the solution file relative to the root of the project.
+  SOLUTION_FILE_PATH: .
+
+  # Configuration type to build.
+  # You can convert this to a build matrix if you need coverage of multiple configuration types.
+  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+  BUILD_CONFIGURATION: Release
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        cmake -G "Visual Studio 15 2017 Win64" ./CMakeLists.txt
+        cmake --build . --config ${{env.BUILD_CONFIGURATION}} -- /property:Prefer32bit=false /p:Platform=x64
+
+    - name: Test
+      working-directory: ${{env.GITHUB_WORKSPACE}}\${{env.BUILD_CONFIGURATION}}
+      run: metar_test.exe

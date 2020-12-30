@@ -18,12 +18,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Configure
+      run: mkdir build && cd build && cmake ..
+
     - name: Build
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: |
-        cmake -G "Visual Studio 15 2017 Win64" ./CMakeLists.txt
-        cmake --build . --config ${{env.BUILD_CONFIGURATION}} -- /property:Prefer32bit=false /p:Platform=x64
+      run: cmake --build build --config ${{env.BUILD_CONFIGURATION}} -- /property:Prefer32bit=false /p:Platform=x64
 
     - name: Test
-      working-directory: ${{env.GITHUB_WORKSPACE}}\${{env.BUILD_CONFIGURATION}}
+      working-directory: ${{env.GITHUB_WORKSPACE}}\build
       run: metar_test.exe

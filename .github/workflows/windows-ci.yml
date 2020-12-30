@@ -25,5 +25,4 @@ jobs:
       run: cmake --build build --config ${{env.BUILD_CONFIGURATION}} -- /property:Prefer32bit=false /p:Platform=x64
 
     - name: Test
-      working-directory: ${{env.GITHUB_WORKSPACE}}\build
-      run: metar_test.exe
+      run: build\${{env.BUILD_CONFIGURATION}}\metar_test.exe

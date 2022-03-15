@@ -1009,7 +1009,9 @@ static float prevailingVisibility( char *visibility, int smNoUnits )
       memset(numerator,   '\0', sizeof(numerator));
       memset(denominator, '\0', sizeof(denominator));
 
- 
+      if (Slash_ptr - visibility >= sizeof(numerator)) {
+        return 0;
+      }
       strncpy(numerator, visibility, (Slash_ptr - visibility));
  
 /*>>>>>>>>>>>>>>>>>>>>>>
@@ -1018,6 +1020,9 @@ static float prevailingVisibility( char *visibility, int smNoUnits )
       else
 <<<<<<<<<<<<<<<<<<<<<<*/
       end = (SM_KM_ptr == NULL ? visibility + strlen(visibility) : SM_KM_ptr);
+      if (end - Slash_ptr >= sizeof(denominator)) {
+        return 0;
+      }
       strncpy(denominator,
               Slash_ptr+1, (end - Slash_ptr));
  

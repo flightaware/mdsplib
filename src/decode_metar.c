@@ -2172,7 +2172,7 @@ static MDSP_BOOL isWindData( char *wind, Decoded_METAR *Mptr, int *NDEX )
  
    memset(dummy,'\0', sizeof(dummy));
  
-   /* CHECK FOR VARIABLE ("VRB") WIND SPEED */
+   /* CHECK FOR VARIABLE ("VRB") WIND SPEED WITH "KT" UNIT*/
  
    if( charcmp(wind,"'V''R''B'dd'K''T'")) {
       Mptr->winData.windVRB = TRUE;
@@ -2227,6 +2227,60 @@ printf("isWindData:  Passed VRBdddKT test - wind = %s\n",wind);
  
       memset(Mptr->winData.windUnits, '\0', sizeof(Mptr->winData.windUnits));
       strcpy(Mptr->winData.windUnits,"KT");
+      (*NDEX)++;
+      return TRUE;
+   }
+   /* CHECK FOR VARIABLE ("VRB") WIND SPEED WITH "MPS" UNIT*/
+
+   if( charcmp(wind,"'V''R''B'dd'M''P''S'")) {
+      Mptr->winData.windVRB = TRUE;
+      Mptr->winData.windSpeed = antoi(wind+3,2);
+      memset(Mptr->winData.windUnits, '\0', sizeof(Mptr->winData.windUnits));
+      strcpy(Mptr->winData.windUnits,"MPS");
+      (*NDEX)++;
+
+      return TRUE;
+   }
+ 
+   if( charcmp(wind,"'V''R''B'ddd'M''P''S'")) {
+      Mptr->winData.windVRB = TRUE;
+      Mptr->winData.windSpeed = antoi(wind+3,3);
+      memset(Mptr->winData.windUnits, '\0', sizeof(Mptr->winData.windUnits));
+      strcpy(Mptr->winData.windUnits,"MPS");
+      (*NDEX)++;
+
+      return TRUE;
+   }
+ 
+   if( charcmp(wind,"'V''R''B'ddd'G'ddd'M''P''S'")) {
+      Mptr->winData.windVRB = TRUE;
+      Mptr->winData.windSpeed = antoi(wind+3,3);
+      Mptr->winData.windGust = antoi(wind+7,3);
+ 
+      memset(Mptr->winData.windUnits, '\0', sizeof(Mptr->winData.windUnits));
+      strcpy(Mptr->winData.windUnits,"MPS");
+      (*NDEX)++;
+      return TRUE;
+   }
+ 
+   if( charcmp(wind,"'V''R''B'dd'G'dd'M''P''S'")) {
+      Mptr->winData.windVRB = TRUE;
+      Mptr->winData.windSpeed = antoi(wind+3,2);
+      Mptr->winData.windGust = antoi(wind+6,2);
+ 
+      memset(Mptr->winData.windUnits, '\0', sizeof(Mptr->winData.windUnits));
+      strcpy(Mptr->winData.windUnits,"MPS");
+      (*NDEX)++;
+      return TRUE;
+   }
+ 
+   if( charcmp(wind,"'V''R''B'dd'G'ddd'M''P''S'")) {
+      Mptr->winData.windVRB = TRUE;
+      Mptr->winData.windSpeed = antoi(wind+3,2);
+      Mptr->winData.windGust = antoi(wind+6,3);
+ 
+      memset(Mptr->winData.windUnits, '\0', sizeof(Mptr->winData.windUnits));
+      strcpy(Mptr->winData.windUnits,"MPS");
       (*NDEX)++;
       return TRUE;
    }
